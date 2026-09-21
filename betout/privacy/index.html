@@ -81,9 +81,11 @@
   </section>
 
   <section class="card">
-    <h2>7. Publicité et services tiers</h2>
-    <p>Dans le code actuel, aucun SDK publicitaire ni SDK d’analytics tiers n’est activé. Aucun suivi inter-apps n’est donc effectué par BET OUT dans cette version.</p>
-    <p>Si un service publicitaire, de mesure ou un autre traitement tiers est ajouté ultérieurement, cette politique, les informations App Store et les mécanismes de consentement seront mis à jour avant activation lorsque cela est requis.</p>
+    <h2>7. Publicité, consentement Google et services tiers</h2>
+    <p>BET OUT intègre Google User Messaging Platform (UMP) afin de présenter et gérer, lorsqu’ils sont requis, les choix de consentement relatifs à la publicité. La présence de ce gestionnaire de consentement ne signifie pas qu’un suivi inter-apps est activé.</p>
+    <p>Dans la version actuelle, aucun SDK de diffusion publicitaire ni SDK d’analytics tiers n’est activé. Avant toute activation de publicité ou de mesure nécessitant un consentement, BET OUT vérifie les choix disponibles via UMP et adapte la diffusion aux autorisations applicables.</p>
+    <p>Vous pouvez rouvrir les choix Google depuis <strong>Réglages → Confidentialité &amp; données → Publicité &amp; consentement</strong> lorsque Google exige qu’un point d’entrée aux options de confidentialité soit disponible.</p>
+    <p><a href="https://policies.google.com/privacy">Politique de confidentialité de Google →</a></p>
   </section>
 
   <section class="card">
