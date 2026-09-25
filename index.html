@@ -26,6 +26,7 @@
     .actions{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
     .button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 16px;border-radius:13px;background:var(--accent);color:#fff;text-decoration:none;font-weight:720}.button.secondary{background:transparent;color:var(--accent);border:1px solid var(--line)}
     .betout .button{background:#ff1f2d}.betout .button.secondary{background:transparent;color:#ff4651;border-color:#542127}
+    .app-card.lajauge{background:#12042a;border-color:#3b2e50;color:#faf8ff}.lajauge .app-copy p{color:#b6aec8}.lajauge .appicon{box-shadow:none;object-fit:contain}.lajauge .button{background:#22d9ff;color:#12042a}.lajauge a:focus-visible{outline-color:#22d9ff}
     a:hover{text-decoration:underline}.button:hover{text-decoration:none;filter:brightness(.96)}a:focus-visible{outline:3px solid rgba(10,163,79,.35);outline-offset:4px}
     footer{margin-top:42px;color:var(--muted);font-size:14px}footer a{color:var(--accent);font-weight:650}
     @media(max-width:520px){main{padding-top:34px}.studio{margin-bottom:46px}.app-card{grid-template-columns:58px 1fr;padding:19px;gap:15px}.appicon{width:58px;height:58px;border-radius:16px}.actions{display:grid}.button{width:100%}}
@@ -60,6 +61,16 @@
       </div>
       <div class="actions">
         <a class="button secondary" href="betout/privacy/">Politique de confidentialité</a>
+      </div>
+    </section>
+    <section class="app-card lajauge" aria-labelledby="lajauge-title">
+      <img class="appicon" src="lajauge/brand-symbol.png" alt="" width="72" height="72">
+      <div class="app-copy">
+        <h2 id="lajauge-title">La Jauge</h2>
+        <p>Le bon prix, près de vous.</p>
+      </div>
+      <div class="actions">
+        <a class="button" href="lajauge/support/">Assistance La Jauge</a>
       </div>
     </section>
   </div>
