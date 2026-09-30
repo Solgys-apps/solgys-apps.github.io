@@ -30,41 +30,50 @@
   </header>
 
   <h1>Politique de confidentialité</h1>
-  <span class="meta">Dernière mise à jour : 26 septembre 2026</span>
+  <span class="meta">Dernière mise à jour : 30 septembre 2026</span>
   <p class="lead">Cette page décrit les données utilisées par l’application iOS La Jauge, leur finalité et les contrôles disponibles. La Jauge est éditée par Solgys Apps. Pour toute question liée à vos données, vous pouvez écrire à <a href="mailto:solgys.apps@gmail.com?subject=La%20Jauge%20%E2%80%94%20Confidentialit%C3%A9">solgys.apps@gmail.com</a>.</p>
 
   <section class="card">
     <h2>Données conservées sur votre iPhone</h2>
-    <p>La Jauge peut conserver localement vos favoris, trajets enregistrés, historique de recherche et de consultation, préférences de carburant, rayon et tri, paramètres de véhicule, règles d’alertes ainsi qu’un cache des zones de prix récemment consultées.</p>
-    <p>L’historique est limité aux 60 derniers éléments et le cache de prix à 8 zones. Les favoris et alertes restent jusqu’à leur suppression. Les trois favoris ajoutés le plus récemment peuvent être partagés avec le widget La Jauge sur le même appareil via l’App Group de l’application.</p>
+    <p>La Jauge conserve localement vos favoris, trajets enregistrés, recherches récentes, préférences de carburant, rayon et tri, paramètres de véhicule, règles d’alertes ainsi qu’un cache des zones de prix récemment consultées. Les contributeurs que vous choisissez de masquer sont également mémorisés sur cet appareil.</p>
+    <p>Les recherches récentes sont limitées aux <strong>5 dernières recherches de lieu</strong> ; l’application ne conserve pas d’historique de consultation des stations. Le cache de prix est limité à <strong>8 zones</strong>. Les favoris, trajets et alertes restent jusqu’à leur suppression.</p>
+    <p>Les trois favoris ajoutés le plus récemment peuvent être partagés avec le widget La Jauge sur le même appareil, dans un espace de stockage commun à l’application et à son extension. L’affichage des favoris dans le widget nécessite La Jauge+. iOS peut inclure les données locales de l’application dans une sauvegarde de l’appareil.</p>
   </section>
 
   <section class="card">
     <h2>Localisation et recherches</h2>
     <p>La localisation est facultative. Lorsqu’elle est autorisée, elle sert à rechercher des stations autour de vous. Vous pouvez utiliser La Jauge sans GPS en recherchant une ville, un code postal ou une adresse.</p>
-    <p>Pour obtenir les prix officiels, La Jauge envoie au portail public <strong>data.economie.gouv.fr</strong> le centre géographique de la zone recherchée. Lorsque vous publiez une observation communautaire, votre position récente peut être vérifiée localement pour confirmer que vous êtes proche de la station ; elle n’est pas ajoutée à la contribution publiée.</p>
+    <p>Pour obtenir les prix officiels, La Jauge envoie au portail public <strong>data.economie.gouv.fr</strong> le centre géographique de la zone recherchée. Lorsque vous publiez une observation communautaire, votre position récente est vérifiée localement pour confirmer que vous êtes proche de la station. Les coordonnées GPS ne sont pas ajoutées à la contribution publiée ni envoyées à la passerelle de sécurité décrite ci-dessous.</p>
     <p>La Jauge ne demande pas d’accès permanent à votre position et ne suit pas vos déplacements en arrière-plan.</p>
   </section>
 
   <section class="card">
     <h2>Communauté et iCloud</h2>
-    <p>La consultation de la communauté est distincte des prix officiels. Si vous choisissez de publier une observation, le service CloudKit d’Apple utilise votre compte iCloud pour authentifier l’écriture.</p>
+    <p>La consultation des observations communautaires est distincte des prix officiels et utilise le service CloudKit d’Apple, comme la vérification de disponibilité du service. Publier une observation ou gérer vos contributions nécessite un compte iCloud connecté ; CloudKit authentifie ces opérations.</p>
     <p>Une contribution peut contenir l’identifiant de la station, le carburant concerné, le type d’observation, sa valeur et les métadonnées de création fournies par CloudKit. Un identifiant pseudonyme de contributeur issu de CloudKit permet de distinguer les auteurs, gérer vos retraits et appliquer les règles de modération. La Jauge n’ajoute pas votre nom, votre adresse e-mail ni votre position GPS à la contribution publique.</p>
-    <p>Les observations cessent d’être affichées après leur durée d’utilité, mais elles ne sont pas automatiquement supprimées du cloud à cette échéance. Vous pouvez retirer vos contributions depuis <strong>Plus → Communauté</strong>.</p>
+    <p>Les observations sont accessibles dans la communauté. Leur durée d’affichage est de <strong>24 h pour les prix, 4 h pour la disponibilité d’un carburant et 2 h pour l’accès à la station</strong>. Leur expiration met fin à cet affichage ; elle ne supprime pas automatiquement l’enregistrement CloudKit.</p>
+    <p>Vous pouvez retirer vos observations depuis <strong>Mon espace → Mes contributions</strong>. Le retrait d’une observation retire aussi vos autres observations sur le même sujet, la même station et le même carburant, afin qu’elles ne réapparaissent pas.</p>
+    <p>Si vous signalez un abus, La Jauge enregistre l’observation concernée, la station et le motif dans CloudKit. Ces signalements ne sont pas publics : leur accès côté utilisateur est limité à leur auteur ; ils servent au traitement par la modération.</p>
+  </section>
+
+  <section class="card">
+    <h2>Sécurité des contributions</h2>
+    <p>Lorsqu’une passerelle de sécurité est configurée pour la communauté, elle peut vérifier une contribution avant sa publication. Elle reçoit les identifiants de la contribution, de la station et du contributeur, le type d’observation, le carburant et le prix concernés, ainsi que la distance à la station, la précision et l’ancienneté de la mesure de position. Elle reçoit aussi une preuve de sécurité de l’appareil fournie par App Attest et les identifiants techniques nécessaires à sa vérification. <strong>Les coordonnées GPS ne lui sont pas transmises.</strong></p>
+    <p>Ces vérifications servent à prévenir les abus et à autoriser la publication. Une preuve d’autorisation signée peut être ajoutée à l’observation CloudKit ; elle ne contient pas les coordonnées GPS. Les données techniques de sécurité traitées par la passerelle ont une conservation distincte de celle des observations. La suppression des contributions dans l’application ne supprime pas ces données techniques ; vous pouvez contacter Solgys Apps pour toute question ou demande les concernant.</p>
   </section>
 
   <section class="card">
     <h2>Abonnement La Jauge+</h2>
     <p>Les achats et abonnements sont gérés par Apple via StoreKit et votre compte Apple. La Jauge reçoit l’état nécessaire pour déterminer si les fonctions La Jauge+ sont actives, mais ne reçoit pas vos coordonnées bancaires.</p>
-    <p>Supprimer l’application ou ses données locales n’annule pas un abonnement. La gestion et l’annulation d’un abonnement s’effectuent avec les outils Apple.</p>
+    <p>Supprimer l’application ou ses données n’annule pas un abonnement. Depuis <strong>Mon espace → La Jauge+</strong>, vous pouvez ouvrir la gestion Apple pour changer de formule ou arrêter le renouvellement.</p>
   </section>
 
   <section class="card">
     <h2>Publicité dans la version gratuite</h2>
     <p>La version gratuite peut afficher jusqu’à trois encarts publicitaires natifs fournis par Google AdMob : deux dans la liste de comparaison des stations et un dans la fiche d’une station. La Jauge utilise Google User Messaging Platform (UMP) pour recueillir les choix de confidentialité applicables avant de demander une publicité.</p>
-    <p>La Jauge demande d’abord l’autorisation App Tracking Transparency d’Apple. Une fois votre choix effectué, l’application présente, lorsque la réglementation l’exige, le formulaire de consentement Google UMP. Si vous autorisez le suivi puis consentez à la personnalisation, Google peut utiliser l’identifiant publicitaire de l’appareil (IDFA) et d’autres données autorisées pour sélectionner des annonces plus pertinentes et mesurer leur efficacité. Si vous refusez le suivi, La Jauge continue de fonctionner et les demandes publicitaires sont effectuées sans IDFA, dans le mode permis par vos choix UMP.</p>
-    <p>La Jauge ne transmet pas volontairement à AdMob vos favoris, vos trajets enregistrés ni vos coordonnées GPS. Google peut néanmoins traiter des informations nécessaires au fonctionnement publicitaire, par exemple l’adresse IP, des informations sur l’appareil, les interactions publicitaires et des diagnostics, conformément à ses propres règles et aux choix de consentement applicables. Vous pouvez modifier les choix UMP depuis l’app lorsque Google exige ce point d’entrée ; le réglage Suivi d’iOS se gère dans Réglages.</p>
-    <p>La Jauge ne demande pas l’autorisation App Tracking Transparency pour ce fonctionnement publicitaire.</p>
+    <p>Dans la version gratuite, l’autorisation App Tracking Transparency d’Apple est proposée après l’onboarding lorsque le choix n’a pas encore été effectué. Le formulaire Google UMP est préparé plus tard, lorsque vous atteignez un premier emplacement publicitaire, et présenté si le service l’exige. Si vous autorisez le suivi et consentez à la personnalisation, Google peut utiliser l’identifiant publicitaire de l’appareil (IDFA) et d’autres données autorisées pour sélectionner des annonces plus pertinentes et mesurer leur efficacité. Si vous refusez le suivi, La Jauge continue de fonctionner et les demandes publicitaires sont effectuées sans IDFA, dans le mode permis par vos choix UMP.</p>
+    <p>La Jauge ne transmet pas volontairement à AdMob vos favoris, vos trajets enregistrés ni vos coordonnées GPS. Google peut néanmoins traiter des informations nécessaires au fonctionnement publicitaire, par exemple l’adresse IP, des informations sur l’appareil, les interactions publicitaires et des diagnostics, conformément à ses propres règles et aux choix de consentement applicables. Lorsque ce point d’entrée est requis par Google, vous pouvez rouvrir le formulaire depuis <strong>Mon espace → Réglages → Choix publicitaires</strong>. L’autorisation Suivi se modifie dans les réglages iOS.</p>
+    <p>La Jauge+ retire les encarts publicitaires de l’application.</p>
   </section>
 
   <section class="card">
@@ -72,16 +81,20 @@
     <ul>
       <li><strong>DGCCRF / data.economie.gouv.fr</strong> : prix, ruptures, horaires et services déclarés des stations.</li>
       <li><strong>Apple Plans / MapKit</strong> : carte, recherche de lieux et itinéraires.</li>
-      <li><strong>Apple CloudKit</strong> : contributions communautaires lorsque vous participez.</li>
+      <li><strong>Apple CloudKit</strong> : consultation de la communauté, disponibilité du service et gestion des contributions ou signalements d’abus.</li>
+      <li><strong>Passerelle de sécurité de la communauté</strong>, lorsqu’elle est configurée : vérification des contributions et prévention des abus.</li>
       <li><strong>Apple StoreKit</strong> : achat, restauration et vérification de La Jauge+.</li>
       <li><strong>Google AdMob / UMP</strong> : publicité et choix de confidentialité dans la version gratuite lorsque ce service est activé.</li>
     </ul>
+    <p>Pour connaître les traitements propres à ces services, consultez les informations officielles sur <a href="https://www.apple.com/legal/privacy/data/fr/apple-maps/">Apple Plans et la confidentialité</a> et sur <a href="https://policies.google.com/technologies/ads?hl=fr">Google et la publicité</a>.</p>
   </section>
 
   <section class="card">
     <h2>Vos contrôles</h2>
-    <p>Dans <strong>Plus → Données et confidentialité</strong>, vous pouvez effacer l’historique ou supprimer les données et préférences locales de La Jauge. Cette suppression n’efface pas les contributions déjà publiées dans CloudKit et ne modifie pas les autorisations accordées dans Réglages iOS.</p>
-    <p>Les contributions se gèrent dans <strong>Plus → Communauté</strong>. Les autorisations de localisation et de notifications se gèrent dans les réglages de l’iPhone. Lorsque Google l’exige, les choix publicitaires peuvent être rouverts depuis l’application.</p>
+    <p>Le parcours <strong>Mon espace → Réglages → Supprimer mes données</strong> présente les données concernées avant une confirmation définitive. Il efface les favoris, trajets, recherches récentes, alertes, préférences et caches de cet iPhone, ainsi que les masquages locaux de contributeurs.</p>
+    <p>Si le compte iCloud connecté a pu être vérifié avant votre confirmation, le parcours demande également la suppression des contributions et des signalements d’abus accessibles appartenant à ce compte. Une liste vide dans l’application ne dispense pas de cette vérification : les enregistrements accessibles, y compris les observations expirées, sont recherchés lors de la suppression. L’opération reste liée au compte confirmé ; elle ne supprime pas les données d’un autre compte iCloud.</p>
+    <p>Si iCloud ne peut pas être vérifié, vous pouvez confirmer une suppression uniquement locale. Si la suppression CloudKit échoue ou reste incomplète, les données locales sont tout de même effacées et le résultat vous indique que la partie communautaire n’est pas confirmée ; vous pouvez réessayer. Le résultat distingue également le cas où aucun enregistrement communautaire n’a été trouvé.</p>
+    <p>Cette action ne résilie pas La Jauge+, ne modifie pas les autorisations iOS ni les choix publicitaires et n’efface pas les données techniques de sécurité de la passerelle. Les contributions peuvent aussi être retirées séparément depuis <strong>Mon espace → Mes contributions</strong>. La localisation, les notifications et le suivi se modifient dans les réglages de l’iPhone ; les règles et la réception des alertes se gèrent dans <strong>Mon espace → Mes alertes</strong>.</p>
   </section>
 
   <p class="note">La Jauge ne vend pas vos favoris, vos trajets ou votre historique de recherche. Les traitements réalisés par Apple, Google et le portail public relèvent aussi de leurs propres politiques et conditions de service.</p>
