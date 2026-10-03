@@ -3,100 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Assistance officielle La Jauge : contactez Solgys Apps pour une question technique, La Jauge+, la communauté ou vos données.">
-  <meta name="color-scheme" content="dark">
-  <meta name="theme-color" content="#12042a">
-  <title>La Jauge — Assistance et contact</title>
+  <meta name="description" content="Assistance officielle PleinWize : contactez Solgys Apps pour une question technique, PleinWize+, la communauté ou vos données.">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f7f9fc">
+  <title>PleinWize — Assistance et contact</title>
   <link rel="canonical" href="https://solgys-apps.github.io/lajauge/support/">
-  <link rel="icon" type="image/png" href="../brand-symbol.png">
+  <link rel="icon" type="image/png" href="../pleinwize-symbol.svg">
   <style>
-    :root {
-      color-scheme: dark;
-      --night: #12042a;
-      --surface: #1b1230;
-      --elevated: #251c3b;
-      --cyan: #22d9ff;
-      --violet: #7b2bff;
-      --text: #faf8ff;
-      --muted: #b6aec8;
-      --line: #3b2e50;
-    }
-    * { box-sizing: border-box; }
-    [hidden] { display: none !important; }
-    body {
-      margin: 0;
-      background: var(--night);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
-      -webkit-text-size-adjust: 100%;
-    }
-    main { max-width: 1056px; margin: auto; padding: 28px 32px 52px; }
-    a { color: var(--cyan); text-underline-offset: 4px; }
-    a:hover { text-decoration-thickness: 2px; }
-    a:focus-visible, button:focus-visible, summary:focus-visible {
-      outline: 3px solid var(--cyan); outline-offset: 5px; border-radius: 5px;
-    }
-    .skip-link { position: absolute; top: -100px; left: 20px; padding: 12px; background: var(--surface); z-index: 2; }
-    .skip-link:focus { top: 12px; }
-    .studio { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-size: 14px; color: var(--muted); text-decoration: none; }
-    .brand { display: flex; align-items: center; gap: 16px; padding: 35px 0 38px; }
-    .brand img { width: 68px; height: 68px; flex-shrink: 0; }
-    .brand-name { font-size: 24px; font-weight: 750; letter-spacing: -.04em; line-height: 1.25; }
-    .brand p { margin: 4px 0 0; font-size: 14px; color: var(--muted); }
-    .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; align-items: center; padding: 8px 0 42px; }
-    .eyebrow { color: var(--cyan); font-size: 12px; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; margin: 0 0 16px; }
-    h1 { margin: 0; font-size: clamp(40px, 5.6vw, 62px); line-height: 1.07; letter-spacing: -.045em; font-weight: 750; text-wrap: balance; }
-    .lead { max-width: 460px; color: var(--muted); font-size: 17px; margin: 22px 0 0; }
-    h2 { font-size: 23px; line-height: 1.3; letter-spacing: -.025em; margin: 0 0 10px; }
-    .contact { background: linear-gradient(145deg, #2b1944, var(--surface) 70%); padding: 28px; border: 1px solid #554069; border-radius: 24px; }
-    .contact p { margin: 0 0 20px; color: var(--muted); }
-    .email { display: inline-block; color: var(--text); font-size: 19px; overflow-wrap: anywhere; margin-bottom: 20px; }
-    .contact-actions { display: flex; flex-direction: column; gap: 10px; }
-    .button { display: inline-flex; justify-content: center; align-items: center; gap: 12px; min-height: 48px; border-radius: 13px; padding: 12px 17px; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
-    .primary { background: var(--cyan); color: var(--night); border: 1px solid var(--cyan); }
-    .primary:hover { background: #8bebff; }
-    .secondary { background: var(--elevated); color: var(--text); border: 1px solid #534265; }
-    .secondary:hover { background: #352848; }
-    .contact .mail-note { margin: 17px 0 0; font-size: 13px; }
-    .copy-status { margin-top: 10px; font-size: 13px; color: var(--cyan); }
-    .copy-status:empty { display: none; }
-    .topics { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 44px; }
-    .topic { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 24px; }
-    .topic h2 { font-size: 20px; }
-    .topic p { color: var(--muted); margin: 0 0 10px; }
-    .topic .eyebrow { color: var(--cyan); }
-    .topic a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 650; }
-    .faq-heading { margin-bottom: 20px; }
-    .faq-heading p { color: var(--muted); margin: 6px 0 0; }
-    .faq { border-top: 1px solid var(--line); }
-    details { border-bottom: 1px solid var(--line); }
-    summary { display: flex; justify-content: space-between; align-items: center; gap: 20px; list-style: none; cursor: pointer; padding: 20px 4px; font-weight: 650; }
-    summary::-webkit-details-marker { display: none; }
-    summary::after { content: "+"; color: var(--cyan); font-size: 23px; line-height: 1; flex-shrink: 0; font-weight: 400; }
-    details[open] summary::after { content: "−"; }
-    details p { max-width: 840px; color: var(--muted); margin: 0; padding: 0 4px 22px; }
-    details strong { color: var(--text); font-weight: 600; }
-    footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-top: 38px; font-size: 13px; color: var(--muted); }
-    footer a { color: var(--muted); }
-    @media (max-width: 760px) {
-      main { padding: 20px 22px 32px; }
-      .brand { padding: 24px 0 30px; }
-      .brand img { width: 58px; height: 58px; }
-      .hero { grid-template-columns: 1fr; gap: 28px; padding-bottom: 20px; }
-      h1 { max-width: 480px; font-size: clamp(38px, 8.8vw, 54px); }
-      .lead { margin-top: 18px; }
-      .contact { padding: 24px; }
-      .topics { grid-template-columns: 1fr; gap: 12px; margin-bottom: 36px; }
-      .topic { padding: 22px; }
-      footer { flex-direction: column; }
-    }
-    @media (max-width: 360px) {
-      main { padding-right: 16px; padding-left: 16px; }
-      .contact { padding: 20px; }
-      .email { font-size: 17px; }
-    }
+    :root{color-scheme:light;--bg:#f7f9fc;--surface:#fff;--elevated:#f3f6fb;--blue:#276ef1;--blue-soft:#edf3ff;--yellow:#ffb800;--yellow-soft:#fff7dc;--text:#172033;--muted:#667085;--line:#dfe5ef;--shadow:0 18px 48px rgba(23,32,51,.08)}
+    *{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;font-size:16px;line-height:1.6;-webkit-text-size-adjust:100%}
+    main{max-width:1056px;margin:auto;padding:28px 32px 52px}a{color:var(--blue);text-underline-offset:4px}a:hover{text-decoration-thickness:2px}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid rgba(39,110,241,.32);outline-offset:5px;border-radius:6px}
+    .skip-link{position:absolute;top:-100px;left:20px;padding:12px;background:var(--surface);z-index:2}.skip-link:focus{top:12px}.studio{display:inline-flex;align-items:center;gap:10px;min-height:44px;font-size:14px;color:var(--muted);text-decoration:none}
+    .brand{display:flex;align-items:center;gap:16px;padding:35px 0 38px}.brand img{width:68px;height:68px;flex-shrink:0}.brand-name{font-size:27px;font-weight:780;letter-spacing:-.04em;line-height:1.2}.brand p{margin:4px 0 0;font-size:14px;color:var(--muted)}
+    .hero{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center;padding:8px 0 42px}.eyebrow{color:var(--blue);font-size:12px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;margin:0 0 16px}h1{margin:0;font-size:clamp(40px,5.6vw,62px);line-height:1.07;letter-spacing:-.045em;font-weight:780;text-wrap:balance}.lead{max-width:500px;color:var(--muted);font-size:17px;margin:22px 0 0}h2{font-size:23px;line-height:1.3;letter-spacing:-.025em;margin:0 0 10px}
+    .contact{background:linear-gradient(145deg,#fff,#f4f7ff);padding:28px;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}.contact::before{content:"";display:block;width:62px;height:4px;border-radius:99px;background:linear-gradient(90deg,var(--yellow) 0 50%,var(--blue) 50%);margin-bottom:22px}.contact p{margin:0 0 20px;color:var(--muted)}.email{display:inline-block;color:var(--text);font-size:19px;overflow-wrap:anywhere;margin-bottom:20px}
+    .contact-actions{display:flex;flex-direction:column;gap:10px}.button{display:inline-flex;justify-content:center;align-items:center;gap:12px;min-height:48px;border-radius:14px;padding:12px 17px;font:inherit;font-weight:720;text-decoration:none;cursor:pointer}.primary{background:var(--blue);color:#fff;border:1px solid var(--blue)}.primary:hover{filter:brightness(.96)}.secondary{background:var(--surface);color:var(--text);border:1px solid var(--line)}.contact .mail-note{margin:17px 0 0;font-size:13px}.copy-status{margin-top:10px;font-size:13px;color:var(--blue)}.copy-status:empty{display:none}
+    .topics{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:44px}.topic{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:0 10px 28px rgba(23,32,51,.045)}.topic h2{font-size:20px}.topic p{color:var(--muted);margin:0 0 10px}.topic a{display:inline-flex;align-items:center;min-height:44px;font-weight:650}.topics .topic:first-child .eyebrow{color:#b57d00}
+    .faq-heading{margin-bottom:20px}.faq-heading p{color:var(--muted);margin:6px 0 0}.faq{border-top:1px solid var(--line)}details{border-bottom:1px solid var(--line)}summary{display:flex;justify-content:space-between;align-items:center;gap:20px;list-style:none;cursor:pointer;padding:20px 4px;font-weight:650}summary::-webkit-details-marker{display:none}summary::after{content:"+";color:var(--blue);font-size:23px;line-height:1;flex-shrink:0;font-weight:400}details[open] summary::after{content:"−"}details p{max-width:840px;color:var(--muted);margin:0;padding:0 4px 22px}details strong{color:var(--text);font-weight:600}
+    footer{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-top:38px;font-size:13px;color:var(--muted)}footer a{color:var(--muted)}
+    @media(max-width:760px){main{padding:20px 22px 32px}.brand{padding:24px 0 30px}.brand img{width:58px;height:58px}.hero{grid-template-columns:1fr;gap:28px;padding-bottom:20px}h1{max-width:480px;font-size:clamp(38px,8.8vw,54px)}.lead{margin-top:18px}.contact{padding:24px}.topics{grid-template-columns:1fr;gap:12px;margin-bottom:36px}.topic{padding:22px}footer{flex-direction:column}}
+    @media(max-width:360px){main{padding-right:16px;padding-left:16px}.contact{padding:20px}.email{font-size:17px}}
   </style>
 </head>
 <body>
@@ -105,8 +31,8 @@
     <header>
       <a class="studio" href="../../"><span aria-hidden="true">←</span> Solgys Apps</a>
       <div class="brand">
-        <img src="../brand-symbol.png" width="68" height="68" alt="" fetchpriority="high">
-        <div><div class="brand-name">La Jauge</div><p>Le plein, l’esprit tranquille.</p></div>
+        <img src="../pleinwize-symbol.svg" width="68" height="68" alt="" fetchpriority="high">
+        <div><div class="brand-name">PleinWize</div><p>Carburant &amp; électrique, simplement.</p></div>
       </div>
     </header>
 
@@ -114,14 +40,14 @@
       <div>
         <p class="eyebrow">Assistance &amp; communauté</p>
         <h1>Besoin d’un coup de main&nbsp;?</h1>
-        <p class="lead">Une question sur l’app, La Jauge+ ou une contribution&nbsp;? Écrivez-nous, ou retrouvez les réponses utiles ci-dessous.</p>
+        <p class="lead">Une question sur le carburant, les bornes électriques, PleinWize+ ou vos données&nbsp;? Écrivez-nous, ou retrouvez les réponses utiles ci-dessous.</p>
       </div>
       <section class="contact" id="contact" aria-labelledby="contact-title">
-        <h2 id="contact-title">Contacter La Jauge</h2>
+        <h2 id="contact-title">Contacter PleinWize</h2>
         <p>L’équipe Solgys Apps vous accompagne.</p>
-        <a class="email" href="mailto:solgys.apps@gmail.com?subject=La%20Jauge%20%E2%80%94%20Assistance">solgys.apps@gmail.com</a>
+        <a class="email" href="mailto:solgys.apps@gmail.com?subject=PleinWize%20%E2%80%94%20Assistance">solgys.apps@gmail.com</a>
         <div class="contact-actions">
-          <a class="button primary" href="mailto:solgys.apps@gmail.com?subject=La%20Jauge%20%E2%80%94%20Assistance">Écrire au support <span aria-hidden="true">↗</span></a>
+          <a class="button primary" href="mailto:solgys.apps@gmail.com?subject=PleinWize%20%E2%80%94%20Assistance">Écrire au support <span aria-hidden="true">↗</span></a>
           <button class="button secondary" type="button" id="copy-email" hidden>Copier l’adresse e-mail</button>
         </div>
         <div class="copy-status" id="copy-status" role="status" aria-live="polite"></div>
@@ -134,14 +60,14 @@
         <p class="eyebrow">Communauté</p>
         <h2 id="community-title">Une observation à signaler&nbsp;?</h2>
         <p>Précisez la station, le carburant et la date de l’observation pour nous aider à la retrouver.</p>
-        <a href="mailto:solgys.apps@gmail.com?subject=La%20Jauge%20%E2%80%94%20Communaut%C3%A9%20et%20mod%C3%A9ration">Contacter la modération&nbsp;↗</a>
+        <a href="mailto:solgys.apps@gmail.com?subject=PleinWize%20%E2%80%94%20Communaut%C3%A9%20et%20mod%C3%A9ration">Contacter la modération&nbsp;↗</a>
       </section>
       <section class="topic" aria-labelledby="data-title">
         <p class="eyebrow">Confidentialité</p>
         <h2 id="data-title">Une question sur vos données&nbsp;?</h2>
         <p>Contactez l’équipe pour une question de confidentialité ou une demande concernant vos données.</p>
         <a href="../privacy/">Consulter la politique de confidentialité&nbsp;↗</a><br>
-        <a href="mailto:solgys.apps@gmail.com?subject=La%20Jauge%20%E2%80%94%20Confidentialit%C3%A9%20et%20donn%C3%A9es">Faire une demande&nbsp;↗</a>
+        <a href="mailto:solgys.apps@gmail.com?subject=PleinWize%20%E2%80%94%20Confidentialit%C3%A9%20et%20donn%C3%A9es">Faire une demande&nbsp;↗</a>
       </section>
     </div>
 
@@ -153,15 +79,15 @@
       <div class="faq">
         <details>
           <summary>Quelles informations envoyer pour un problème technique&nbsp;?</summary>
-          <p>Indiquez votre modèle d’iPhone, la version d’iOS, la version de La Jauge et les étapes qui déclenchent le problème. Une capture d’écran peut aider&nbsp;: masquez les informations personnelles que vous ne souhaitez pas transmettre.</p>
+          <p>Indiquez votre modèle d’iPhone, la version d’iOS, la version de PleinWize et les étapes qui déclenchent le problème. Une capture d’écran peut aider&nbsp;: masquez les informations personnelles que vous ne souhaitez pas transmettre.</p>
         </details>
         <details>
           <summary>Pourquoi un prix peut-il être différent à la pompe&nbsp;?</summary>
           <p>Les prix officiels affichés proviennent du flux de la DGCCRF. Ils peuvent avoir changé depuis leur dernière mise à jour. Consultez la date du prix dans la fiche de la station. Les observations de la communauté sont présentées séparément. Pour nous signaler un écart, précisez la station, le carburant et le prix constaté.</p>
         </details>
         <details>
-          <summary>Comment restaurer ou gérer La Jauge+&nbsp;?</summary>
-          <p>Ouvrez <strong>Plus → La Jauge+ → Restaurer les achats</strong>, avec le compte Apple utilisé pour l’achat. Pour gérer un abonnement, utilisez <strong>Réglages de l’iPhone → votre nom → Abonnements</strong>. Pour toute question sur l’app, vous pouvez également <a href="mailto:solgys.apps@gmail.com?subject=La%20Jauge%20%E2%80%94%20La%20Jauge%2B%20et%20achats">nous écrire au sujet de La Jauge+</a>.</p>
+          <summary>Comment restaurer ou gérer PleinWize+&nbsp;?</summary>
+          <p>Ouvrez <strong>Plus → PleinWize+ → Restaurer les achats</strong>, avec le compte Apple utilisé pour l’achat. Pour gérer un abonnement, utilisez <strong>Réglages de l’iPhone → votre nom → Abonnements</strong>. Pour toute question sur l’app, vous pouvez également <a href="mailto:solgys.apps@gmail.com?subject=PleinWize%20%E2%80%94%20PleinWize%2B%20et%20achats">nous écrire au sujet de PleinWize+</a>.</p>
         </details>
         <details>
           <summary>Comment signaler une contribution inappropriée&nbsp;?</summary>
@@ -171,11 +97,19 @@
           <summary>Comment supprimer mes contributions&nbsp;?</summary>
           <p>Ouvrez <strong>Plus → Communauté → Supprimer toutes mes contributions</strong> avec votre compte iCloud. Cette action concerne vos observations et vos signalements publiés. Effacer les données locales ou désinstaller l’app ne supprime pas ces contributions du service partagé.</p>
         </details>
+        <details>
+          <summary>D’où viennent les bornes électriques&nbsp;?</summary>
+          <p>Les caractéristiques des bornes proviennent de la base nationale IRVE. La disponibilité dynamique peut être absente ou partielle selon les données publiées. PleinWize n’invente pas une disponibilité lorsqu’aucun état fiable n’est disponible.</p>
+        </details>
+        <details>
+          <summary>Que signifie «&nbsp;kW max&nbsp;»&nbsp;?</summary>
+          <p>Il s’agit de la puissance maximale déclarée parmi les points de charge de la station. La puissance réellement délivrée peut varier selon le véhicule, la borne, l’état de charge et les conditions d’utilisation.</p>
+        </details>
       </div>
     </section>
 
     <footer>
-      <span>© 2026 Solgys Apps · La Jauge</span>
+      <span>© 2026 Solgys Apps · PleinWize</span>
       <span><a href="../privacy/">Confidentialité</a> · <a href="../../">Toutes nos applications</a></span>
     </footer>
   </main>
