@@ -9,13 +9,13 @@ Site GitHub Pages destiné aux pages publiques des applications Solgys Apps.
 
 La racine du dépôt sert de page d’accueil universelle. Chaque application dispose de son propre dossier afin de pouvoir ajouter ensuite BET OUT, Prix Péage et les futures applications sans modifier les URL de MonPV.
 
-## La Jauge
+## PleinVolt
 
 - Assistance et modération : <https://solgys-apps.github.io/lajauge/support/>
-- E-mail : `solgys.apps@gmail.com`, avec un objet préfixé « La Jauge ».
+- E-mail : `solgys.apps@gmail.com`, avec un objet préfixé « PleinVolt ».
 - Dans le record CloudKit `CommunityPolicy` nommé `community-policy-v1`, renseigner cette URL HTTPS dans `supportURL`.
 
-La page ouvre la messagerie de l’utilisateur ; aucun message n’est envoyé automatiquement. Les demandes de confidentialité sont adressées au même support. Le symbole provient des ressources officielles de l’application iOS.
+La page ouvre la messagerie de l’utilisateur ; aucun message n’est envoyé automatiquement. Les demandes de confidentialité sont adressées au même support. Le symbole publié provient directement de la ressource `BrandSymbol` officielle de l’application iOS PleinVolt.
 
 ## Publication
 
