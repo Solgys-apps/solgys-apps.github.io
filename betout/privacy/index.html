@@ -46,7 +46,7 @@
 
   <span class="pill">Confidentialité</span>
   <h1>Politique de confidentialité</h1>
-  <p class="lead">Dernière mise à jour : 23 septembre 2026.</p>
+  <p class="lead">Dernière mise à jour : 4 octobre 2026.</p>
 
   <section class="card">
     <h2>1. Principe</h2>
@@ -85,11 +85,14 @@
   </section>
 
   <section class="card">
-    <h2>7. Publicité, consentement Google et services tiers</h2>
-    <p>La version gratuite de BET OUT peut afficher des bannières publicitaires fournies par Google Mobile Ads sur les écrans Accueil et Progrès. Sur Accueil, la bannière peut être affichée plus haut de manière occasionnelle afin de rester visible sans interrompre les fonctions essentielles. Les utilisateurs disposant de BET OUT+ ne voient pas ces publicités.</p>
-    <p>BET OUT utilise Google User Messaging Platform (UMP) pour recueillir et gérer, lorsqu’ils sont requis, les choix de consentement relatifs à la publicité. Aucune demande publicitaire n’est envoyée tant que Google n’indique pas qu’une demande d’annonce peut être effectuée.</p>
-    <p>BET OUT désactive la personnalisation publicitaire pour ses demandes Google Mobile Ads. Les annonces ne sont donc pas choisies à partir d’un profil comportemental établi par BET OUT. L’application n’implémente pas de mécanisme App Tracking Transparency destiné au suivi entre applications et sites.</p>
-    <p>Vous pouvez rouvrir les choix Google depuis <strong>Réglages → Confidentialité &amp; données → Publicité &amp; consentement</strong> lorsque les options de confidentialité Google sont disponibles.</p>
+    <h2>7. Publicité, consentement Google et suivi iOS</h2>
+    <p>La version gratuite de BET OUT peut afficher des bannières publicitaires fournies par Google Mobile Ads sur les écrans Accueil et Progrès. Aucune publicité n’est affichée dans le mode OUT, les écrans de Protection ou les ressources d’aide. Les utilisateurs disposant de BET OUT+ ne voient pas ces publicités.</p>
+    <p>BET OUT utilise Google User Messaging Platform (UMP) pour recueillir et gérer, lorsqu’ils sont requis, les choix de confidentialité et de consentement relatifs à la publicité. BET OUT respecte le signal <em>canRequestAds</em> fourni par Google avant toute demande d’annonce.</p>
+    <p>Sur iOS, BET OUT utilise également App Tracking Transparency (ATT). Lorsque l’autorisation de suivi Apple n’a pas encore été déterminée et que Google permet une demande publicitaire, BET OUT présente la demande ATT avant le démarrage de Google Mobile Ads. Si vous autorisez le suivi et que vos choix Google le permettent également, Google Mobile Ads peut utiliser l’identifiant publicitaire de l’appareil (IDFA) et proposer des publicités personnalisées. Si vous refusez le suivi, si iOS le restreint ou si l’autorisation n’est pas accordée, l’IDFA n’est pas disponible et BET OUT désactive la personnalisation publicitaire côté éditeur. Des publicités peuvent néanmoins continuer à être affichées lorsque les choix Google applicables l’autorisent.</p>
+    <p>Google Mobile Ads peut traiter des informations techniques et publicitaires nécessaires à la diffusion, à la mesure, à la sécurité et à l’amélioration du service, notamment l’adresse IP (qui peut permettre d’estimer une localisation générale), un identifiant d’appareil ou l’IDFA lorsqu’il est disponible et autorisé, les annonces vues, certaines interactions avec le produit, ainsi que des données de performance et de diagnostic. Les traitements effectivement applicables dépendent de vos choix, de votre région et de la configuration de Google Mobile Ads.</p>
+    <p>BET OUT conserve l’identifiant éditeur de première partie Google désactivé et applique des filtres de contenu publicitaire destinés à exclure notamment les catégories liées aux paris, jeux d’argent et casino social.</p>
+    <p>Vous pouvez gérer séparément ces choix depuis <strong>Réglages → Confidentialité &amp; données</strong> : <strong>Suivi publicitaire</strong> ouvre le réglage ATT d’iOS, tandis que <strong>Publicité</strong> permet de revoir les choix Google lorsque cette option est requise et disponible.</p>
+    <p>Les pages web publiques BET OUT de confidentialité et de support sont des pages statiques : elles n’intègrent ni publicité, ni outil d’analyse, ni script de suivi, ni cookie de suivi volontaire.</p>
     <p>Pour les rappels avant match, BET OUT envoie les identifiants des équipes que vous avez choisies à une infrastructure Cloudflare exploitée pour BET OUT. Ce service interroge football-data.org et met en cache des calendriers sportifs publics. BET OUT désactive la persistance Workers Logs afin de ne pas conserver volontairement les URL de requête contenant ces identifiants. Cloudflare traite néanmoins les métadonnées réseau nécessaires à la fourniture du service. Ce backend n’est pas utilisé pour stocker votre prénom, votre parcours sans pari, vos montants estimés, vos objectifs ou l’historique du tchat.</p>
     <p><a href="https://policies.google.com/privacy">Politique de confidentialité de Google →</a></p>
     <p><a href="https://www.cloudflare.com/privacypolicy/">Politique de confidentialité de Cloudflare →</a></p>
