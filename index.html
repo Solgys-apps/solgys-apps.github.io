@@ -22,7 +22,7 @@
     .appicon{width:72px;height:72px;border-radius:20px;display:block;object-fit:cover;box-shadow:0 12px 30px rgba(10,163,79,.20)}
     .betout .appicon{box-shadow:0 12px 34px rgba(255,31,45,.28)}
     .app-copy h2{font-size:24px;line-height:1.15;margin:2px 0 6px}.app-copy p{color:var(--muted);margin:0}
-    .betout .app-copy p{color:#aaaeb5}.betout-wordmark{width:190px;max-width:100%;height:auto;display:block;margin:3px 0 7px}
+    .betout .app-copy p{color:#aaaeb5}.betout-wordmark{width:190px;max-width:100%;height:auto;display:block;margin:3px 0 7px}.jauge-wordmark{width:185px;max-width:100%;height:auto;display:block;margin:3px 0 7px}
     .actions{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
     .button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 16px;border-radius:13px;background:var(--accent);color:#fff;text-decoration:none;font-weight:720}.button.secondary{background:transparent;color:var(--accent);border:1px solid var(--line)}
     .betout .button{background:#ff1f2d}.betout .button.secondary{background:transparent;color:#ff4651;border-color:#542127}
@@ -55,7 +55,8 @@
     <section class="app-card jauge" aria-labelledby="jauge-title">
       <img class="appicon" src="lajauge/brand-symbol.png" alt="Logo officiel Jauge" width="72" height="72">
       <div class="app-copy">
-        <h2 id="jauge-title">Jauge</h2>
+        <h2 id="jauge-title" style="position:absolute;left:-9999px">Jauge</h2>
+        <img class="jauge-wordmark" src="lajauge/brand-wordmark.png" alt="Jauge">
         <p>Le plein de bonnes décisions.</p>
       </div>
       <div class="actions">
