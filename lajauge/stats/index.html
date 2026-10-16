@@ -300,7 +300,10 @@ button.link{font:600 13px var(--font);background:none;border:0;color:var(--muted
 
   function render(r, before, days, from, to) {
     var dd = deviceDays(r), ddBefore = deviceDays(before);
-    $("tDevices").textContent = fmt(dd / days);
+    // A small average keeps one decimal: 1 phone over 7 days is 0,1, not 0.
+    var perDay = dd / days;
+    $("tDevices").textContent = perDay > 0 && perDay < 10
+      ? perDay.toLocaleString("fr-FR", { maximumFractionDigits: 1, minimumFractionDigits: 1 }) : fmt(perDay);
     delta($("dDevices"), dd, ddBefore);
     var opens = count(r, "app.open");
     $("tOpens").textContent = fmt(opens);
