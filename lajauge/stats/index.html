@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self' data:; connect-src https://qxqpbgmcrsufmcxbopwf.supabase.co https://ymszzxedzdaiipjfeptv.supabase.co; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<title>Jauge — Statistiques</title>
+<style>
+/* Navy band with the period chips, summary tiles, then two-column sections that stack on phones. */
+:root{
+  --navy:#0B1F44; --yellow:#FFC629; --blue:#3B82F6;
+  --bg:#F8F6F1; --card:#FFFFFF; --fg:#0B1F44; --muted:#5B6478; --line:#E6E1D6; --track:#EFEBE2;
+  --good:#16A34A; --warn:#D97706; --bad:#DC2626;
+  --band:#0B1F44; --band-fg:#F5F7FB; --band-muted:#A9B4CC; --chip:#16305F; --button:#0B1F44;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#08142C; --card:#10203F; --fg:#EEF2F9; --muted:#9FAAC2; --line:#1F3360; --track:#1A2C52;
+    --band:#050E20; --band-fg:#EEF2F9; --band-muted:#8F9BB6; --chip:#132A55; --button:#3B82F6; color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 var(--font);font-variant-numeric:tabular-nums}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.band{background:var(--band);color:var(--band-fg);padding-top:env(safe-area-inset-top,0px)}
+.band .wrap{padding-block:22px 18px;display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between}
+h1{margin:0;font-size:24px;font-weight:800;letter-spacing:-.01em}
+h1 b{color:var(--yellow)}
+.band p{margin:4px 0 0;color:var(--band-muted);font-size:13px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{font:600 13px var(--font);color:var(--band-fg);background:var(--chip);border:1px solid transparent;border-radius:99px;padding:7px 13px;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--yellow);color:#0B1F44}
+.chips button:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--yellow);outline-offset:2px}
+.staging{background:var(--yellow);color:#0B1F44;font-weight:700;font-size:13px;text-align:center;padding:7px 12px}
+main.wrap{padding-block:20px 40px;display:grid;gap:18px}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.tile .l{font-size:12px;color:var(--muted);font-weight:600}
+.tile .v{font-size:26px;font-weight:800;margin-top:2px}
+.tile .d{font-size:12px;font-weight:700;color:var(--muted)}
+.up{color:var(--good)!important} .down{color:var(--bad)!important}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+h2{margin:0 0 4px;font-size:16px;font-weight:800}
+h3{margin:16px 0 6px;font-size:15px;font-weight:800}
+.sub{margin:0 0 12px;font-size:12.5px;color:var(--muted)}
+svg{display:block;width:100%;height:auto}
+.row{display:grid;grid-template-columns:minmax(0,10em) 1fr auto;gap:10px;align-items:center;margin:7px 0;font-size:14px}
+.bar{height:9px;background:var(--track);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--blue);border-radius:6px}
+.bar.y i{background:var(--yellow)}
+.num{font-size:13px;color:var(--muted);text-align:right;white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:700;padding:0 0 6px}
+td{padding:7px 0;border-top:1px solid var(--line)}
+td.n,th.n{text-align:right;white-space:nowrap}
+.split{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--track)}
+.split span{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;font-size:13px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}
+.step{margin:9px 0}
+.step .lab{display:flex;justify-content:space-between;gap:8px;font-size:14px;margin-bottom:4px}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;border-radius:99px;padding:2px 9px;background:var(--track);color:var(--muted)}
+.pill.warn{background:rgba(217,119,6,.16);color:var(--warn)}
+.pill.good{background:rgba(22,163,74,.15);color:var(--good)}
+.note{font-size:13px;color:var(--muted);margin:10px 0 0}
+.empty{color:var(--muted);font-size:14px;margin:6px 0}
+.lockcard{max-width:520px}
+.lock{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
+.lock input{font:600 15px var(--font);padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);min-width:0;flex:1 1 220px}
+button.primary{font:700 14px var(--font);padding:10px 16px;border-radius:10px;border:0;background:var(--button);color:#fff;cursor:pointer}
+button.link{font:600 13px var(--font);background:none;border:0;color:var(--muted);cursor:pointer;padding:4px 0;text-decoration:underline;text-underline-offset:3px}
+.message{font-size:14px;font-weight:600;margin:10px 0 0}
+.message.error{color:var(--bad)}
+.status{font-size:13px;color:var(--muted);margin:0}
+.status:empty{display:none}
+</style>
+</head>
+<body>
+<div class="band"><div class="wrap">
+  <div>
+    <h1>Jauge <b>·</b> statistiques</h1>
+    <p id="range">Totaux anonymes, mis à jour chaque nuit</p>
+  </div>
+  <div class="chips" role="group" aria-label="Période" id="chips" hidden>
+    <button type="button" id="p1" data-days="1" aria-pressed="false">Hier</button>
+    <button type="button" id="p7" data-days="7" aria-pressed="true">7 jours</button>
+    <button type="button" id="p30" data-days="30" aria-pressed="false">30 jours</button>
+    <button type="button" id="p365" data-days="365" aria-pressed="false">12 mois</button>
+  </div>
+</div></div>
+<div class="staging" id="stagingBanner" hidden>Serveur d’essai · ces chiffres ne viennent pas des vrais utilisateurs</div>
+
+<main class="wrap">
+  <section class="lockcard" id="lockcard" hidden>
+    <h2>Code personnel</h2>
+    <p class="sub">Saisis ton code une fois : cet appareil s’en souviendra. Sans lui, rien ne s’affiche.</p>
+    <form class="lock" id="lock">
+      <input id="code" type="password" autocomplete="current-password" spellcheck="false" aria-label="Code personnel" placeholder="Code personnel">
+      <button class="primary" type="submit">Ouvrir</button>
+    </form>
+    <p class="message error" id="lockMessage" role="alert" hidden></p>
+  </section>
+
+  <p class="status" id="status" role="status"></p>
+
+  <div id="dashboard" hidden>
+    <div class="tiles">
+      <div class="tile"><div class="l">Téléphones actifs par jour</div><div class="v" id="tDevices">–</div><div class="d" id="dDevices"></div></div>
+      <div class="tile"><div class="l">Ouvertures de l’app</div><div class="v" id="tOpens">–</div><div class="d" id="dOpens"></div></div>
+      <div class="tile"><div class="l">Durée moyenne d’une ouverture</div><div class="v" id="tDuration">–</div><div class="d" id="dDuration"></div></div>
+      <div class="tile"><div class="l">Nouvelles installations</div><div class="v" id="tInstalls">–</div><div class="d" id="dInstalls"></div></div>
+    </div>
+
+    <section id="trendSection" style="margin-top:18px">
+      <h2>Téléphones actifs chaque jour</h2>
+      <p class="sub">Un téléphone compte une fois par jour où l’app a été ouverte</p>
+      <svg id="trend" viewBox="0 0 640 170" role="img" aria-label="Évolution des téléphones actifs"></svg>
+    </section>
+
+    <div class="grid2" style="margin-top:18px">
+      <section>
+        <h2>Rubriques</h2>
+        <p class="sub">Visites et temps moyen par visite</p>
+        <table><thead><tr><th>Rubrique</th><th class="n">Visites</th><th class="n">Temps moyen</th></tr></thead><tbody id="screens"></tbody></table>
+      </section>
+      <section>
+        <h2>Boutons et actions</h2>
+        <p class="sub">Nombre de fois sur la période</p>
+        <div id="actions"></div>
+        <p class="note" id="filtersNote"></p>
+      </section>
+    </div>
+
+    <div class="grid2" style="margin-top:18px">
+      <section>
+        <h2>Carburant ou électrique</h2>
+        <p class="sub">Mode utilisé à chaque ouverture</p>
+        <div class="split" id="modeSplit"></div>
+        <div class="legend" id="modeLegend"></div>
+        <table style="margin-top:14px"><thead><tr><th>Carburant choisi</th><th class="n">Part</th></tr></thead><tbody id="fuels"></tbody></table>
+      </section>
+      <section>
+        <h2>Jauge ONE</h2>
+        <p class="sub">Du coup d’œil sur l’offre jusqu’à l’abonnement</p>
+        <div id="funnel"></div>
+        <table style="margin-top:12px"><tbody id="oneExtras"></tbody></table>
+        <p class="note">Les montants encaissés, les annulations et le retour des utilisateurs après 7 jours sont dans App Store Connect.</p>
+      </section>
+    </div>
+
+    <div class="grid2" style="margin-top:18px">
+      <section>
+        <h2>Comment l’app est ouverte</h2>
+        <p class="sub">En plus de l’icône</p>
+        <div id="ways"></div>
+        <h3>Autorisations</h3>
+        <table><thead><tr><th>Question posée</th><th class="n">Acceptée</th><th class="n">Refusée</th></tr></thead><tbody id="permissions"></tbody></table>
+      </section>
+      <section>
+        <h2>Problèmes rencontrés</h2>
+        <p class="sub">Comparés à la période d’avant, rapportés au nombre de téléphones</p>
+        <table><thead><tr><th>Problème</th><th class="n">Fois</th><th class="n">État</th></tr></thead><tbody id="problems"></tbody></table>
+        <h3>Versions</h3>
+        <table><thead><tr><th>Version de l’app</th><th class="n">Téléphones</th></tr></thead><tbody id="versions"></tbody></table>
+        <table style="margin-top:10px"><thead><tr><th>Version d’iOS</th><th class="n">Téléphones</th></tr></thead><tbody id="os"></tbody></table>
+      </section>
+    </div>
+    <p class="note" style="text-align:right"><button class="link" type="button" id="forget">Oublier le code sur cet appareil</button></p>
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  // #essai reads the staging server, to try the page before real data exists.
+  var staging = location.hash === "#essai";
+  var ENDPOINT = staging
+    ? "https://ymszzxedzdaiipjfeptv.supabase.co/functions/v1/usage-stats/report"
+    : "https://qxqpbgmcrsufmcxbopwf.supabase.co/functions/v1/usage-stats/report";
+  var CODE_KEY = staging ? "jauge.stats.code.essai" : "jauge.stats.code";
+  var PERIOD_KEY = "jauge.stats.period";
+  var $ = function (id) { return document.getElementById(id); };
+  document.getElementById("stagingBanner").hidden = !staging;
+
+  function store(key, value) {
+    try { if (value === null) localStorage.removeItem(key); else localStorage.setItem(key, value); } catch (e) {}
+  }
+  function stored(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+
+  // Days are Paris calendar days, like the server's.
+  function parisToday() {
+    var parts = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+    return new Date(parts + "T12:00:00Z");
+  }
+  function iso(d) { return d.toISOString().slice(0, 10); }
+  function addDays(d, n) { var c = new Date(d.getTime()); c.setUTCDate(c.getUTCDate() + n); return c; }
+  var longDate = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+  function fmt(n) { return Math.round(n).toLocaleString("fr-FR"); }
+  function duration(seconds) {
+    if (!isFinite(seconds) || seconds <= 0) return "–";
+    var s = Math.round(seconds);
+    if (s < 60) return s + " s";
+    var m = Math.floor(s / 60), r = s % 60;
+    return m + " min " + (r < 10 ? "0" : "") + r;
+  }
+  function pct(part, total) { return total > 0 ? Math.round(part * 100 / total) + " %" : "–"; }
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  function count(r, m) { return (r.metrics[m] && Number(r.metrics[m].count)) || 0; }
+  function seconds(r, m) { return (r.metrics[m] && Number(r.metrics[m].seconds)) || 0; }
+  function deviceDays(r) { return count(r, "app.summary"); }
+
+  function ask(from, to, code) {
+    return fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-stats-code": code },
+      body: JSON.stringify({ from: iso(from), to: iso(to) }),
+      cache: "no-store",
+      credentials: "omit",
+      referrerPolicy: "no-referrer"
+    }).then(function (response) {
+      if (response.ok) return response.json();
+      var error = new Error("http_" + response.status);
+      error.status = response.status;
+      throw error;
+    });
+  }
+
+  function delta(el, now, before, unit) {
+    if (!(before > 0)) { el.textContent = "Pas de période d’avant à comparer"; el.className = "d"; return; }
+    var change = (now - before) / before;
+    var sign = change > 0 ? "+" : "";
+    el.textContent = sign + Math.round(change * 100) + " % vs période d’avant" + (unit || "");
+    el.className = "d " + (change > 0.02 ? "up" : change < -0.02 ? "down" : "");
+  }
+
+  function rows(container, items, total, yellow) {
+    var max = Math.max.apply(null, items.map(function (i) { return i[1]; }).concat([1]));
+    container.innerHTML = items.map(function (i) {
+      return '<div class="row"><span>' + esc(i[0]) + '</span><div class="bar' + (yellow ? " y" : "") + '"><i style="width:' +
+        Math.round(i[1] * 100 / max) + '%"></i></div><span class="num">' + fmt(i[1]) + "</span></div>";
+    }).join("");
+  }
+
+  var lastTrend = null;
+  window.addEventListener("resize", function () { if (lastTrend) drawTrend.apply(null, lastTrend); });
+  function drawTrend(days, from, to) {
+    lastTrend = [days, from, to];
+    var section = $("trendSection");
+    var byDay = {};
+    days.forEach(function (d) { byDay[d.day] = Number(d.devices) || 0; });
+    var points = [];
+    for (var d = new Date(from.getTime()); d <= to; d = addDays(d, 1)) points.push(byDay[iso(d)] || 0);
+    section.hidden = points.length < 7;
+    if (section.hidden) return;
+    // Drawn at the size it is shown, so labels stay 11 px on a phone too.
+    var W = Math.max(300, Math.round($("trend").getBoundingClientRect().width) || 640), H = 170, L = 44, R = 12, T = 12, B = 26;
+    $("trend").setAttribute("viewBox", "0 0 " + W + " " + H);
+    var top = Math.max.apply(null, points.concat([1]));
+    var step = Math.pow(10, Math.floor(Math.log10(top)));
+    if (top / step < 2) step /= 5; else if (top / step < 5) step /= 2;
+    step = Math.max(1, step);
+    var max = Math.ceil(top / step) * step;
+    var x = function (i) { return L + (W - L - R) * (points.length === 1 ? 0.5 : i / (points.length - 1)); };
+    var y = function (v) { return T + (H - T - B) * (1 - v / max); };
+    var svg = "";
+    for (var g = 0; g <= max + 1e-9; g += step) {
+      svg += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(g) + '" y2="' + y(g) + '" stroke="var(--line)" stroke-width="1"/>' +
+        '<text x="' + (L - 6) + '" y="' + (y(g) + 4) + '" text-anchor="end" font-size="11" fill="var(--muted)">' + fmt(g) + "</text>";
+    }
+    var line = points.map(function (v, i) { return (i ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1); }).join(" ");
+    svg += '<path d="' + line + " L" + x(points.length - 1) + " " + (H - B) + " L" + x(0) + " " + (H - B) + ' Z" fill="var(--blue)" fill-opacity="0.12"/>';
+    svg += '<path d="' + line + '" fill="none" stroke="var(--blue)" stroke-width="2.5" stroke-linejoin="round"/>';
+    var last = points.length - 1;
+    svg += '<circle cx="' + x(last) + '" cy="' + y(points[last]) + '" r="4.5" fill="var(--yellow)" stroke="var(--fg)" stroke-width="1.5"/>';
+    svg += '<text x="' + L + '" y="' + (H - 6) + '" font-size="11" fill="var(--muted)">' + esc(longDate.format(from)) + "</text>";
+    svg += '<text x="' + (W - R) + '" y="' + (H - 6) + '" font-size="11" fill="var(--muted)" text-anchor="end">hier · ' + fmt(points[last]) + "</text>";
+    $("trend").innerHTML = svg;
+  }
+
+  var SCREENS = [["Carte", "screen.map"], ["Fiche d’une station", "screen.station"], ["Liste Stations", "screen.stations"],
+    ["Liste Bornes", "screen.chargers"], ["Fiche d’une borne", "screen.charger"], ["Mon bilan", "screen.my_report"],
+    ["Jaugeurs", "screen.jaugeurs"], ["Page Jauge ONE", "screen.one_offer"], ["Réglages", "screen.settings"], ["Aide", "screen.help"]];
+  var ACTIONS = [["Itinéraire", "tap.directions"], ["Recherche d’un lieu", "tap.search"], ["Favori ajouté", "tap.favorite"],
+    ["Plein enregistré", "tap.fill_up"], ["Alerte de prix créée", "tap.alert"], ["Prix confirmé", "tap.price_confirm"],
+    ["Prix corrigé", "tap.price_correct"], ["Partage", "tap.share"]];
+  var FUELS = [["Gazole", "fuel.diesel"], ["E10", "fuel.e10"], ["SP98", "fuel.sp98"], ["SP95", "fuel.sp95"], ["E85", "fuel.e85"], ["GPL", "fuel.gpl"]];
+  var PROBLEMS = [["Serveur injoignable (réseau)", "error.server_unreachable"], ["Prix indisponibles", "error.prices_unavailable"],
+    ["Aucune station trouvée", "error.no_station"], ["Recherche sans résultat", "search.no_result"]];
+
+  function render(r, before, days, from, to) {
+    var dd = deviceDays(r), ddBefore = deviceDays(before);
+    $("tDevices").textContent = fmt(dd / days);
+    delta($("dDevices"), dd, ddBefore);
+    var opens = count(r, "app.open");
+    $("tOpens").textContent = fmt(opens);
+    delta($("dOpens"), opens, count(before, "app.open"));
+    var avg = opens ? seconds(r, "app.open") / opens : 0;
+    var avgBefore = count(before, "app.open") ? seconds(before, "app.open") / count(before, "app.open") : 0;
+    $("tDuration").textContent = duration(avg);
+    delta($("dDuration"), avg, avgBefore);
+    var installs = count(r, "app.first_launch");
+    $("tInstalls").textContent = fmt(installs);
+    $("dInstalls").textContent = installs ? "dont " + fmt(count(r, "onboarding.completed")) + " accueils terminés (" + pct(count(r, "onboarding.completed"), installs) + ")" : "Aucune sur la période";
+    $("dInstalls").className = "d";
+
+    drawTrend(r.days || [], from, to);
+
+    $("screens").innerHTML = SCREENS.map(function (s) {
+      var c = count(r, s[1]);
+      return "<tr><td>" + s[0] + '</td><td class="n">' + fmt(c) + '</td><td class="n">' + duration(c ? seconds(r, s[1]) / c : 0) + "</td></tr>";
+    }).join("");
+    var filters = count(r, "filter.brand") + count(r, "filter.operator") + count(r, "filter.premium");
+    rows($("actions"), ACTIONS.map(function (a) { return [a[0], count(r, a[1])]; }).concat([["Filtres changés", filters]])
+      .sort(function (a, b) { return b[1] - a[1]; }), 0, true);
+    $("filtersNote").textContent = "Filtres : " + fmt(count(r, "filter.brand")) + " enseignes, " + fmt(count(r, "filter.operator")) +
+      " opérateurs, " + fmt(count(r, "filter.premium")) + " autres critères (ouvert maintenant, services, puissance…).";
+
+    var fuel = count(r, "mode.fuel"), electric = count(r, "mode.electric"), modes = fuel + electric;
+    $("modeSplit").innerHTML = modes ? '<span style="width:' + (fuel * 100 / modes) + '%;background:var(--yellow)"></span><span style="width:' +
+      (electric * 100 / modes) + '%;background:var(--blue)"></span>' : "";
+    $("modeLegend").innerHTML = '<span><i class="dot" style="background:var(--yellow)"></i>Carburant ' + pct(fuel, modes) +
+      '</span><span><i class="dot" style="background:var(--blue)"></i>Électrique ' + pct(electric, modes) + "</span>";
+    var fuelTotal = FUELS.reduce(function (t, f) { return t + count(r, f[1]); }, 0);
+    $("fuels").innerHTML = FUELS.map(function (f) { return [f[0], count(r, f[1])]; }).sort(function (a, b) { return b[1] - a[1]; })
+      .map(function (f) { return "<tr><td>" + f[0] + '</td><td class="n">' + pct(f[1], fuelTotal) + "</td></tr>"; }).join("");
+
+    var offer = count(r, "screen.one_offer"), trial = count(r, "one.trial_started"), paid = count(r, "one.purchased");
+    var steps = [["Page de l’offre vue", offer, ""], ["Essai gratuit commencé", trial, offer ? " · " + pct(trial, offer) : ""],
+      ["Abonnement payé", paid, offer ? " · " + pct(paid, offer) : ""]];
+    $("funnel").innerHTML = steps.map(function (s) {
+      return '<div class="step"><div class="lab"><span>' + s[0] + "</span><b>" + fmt(s[1]) + s[2] + '</b></div><div class="bar"><i style="width:' +
+        (offer ? Math.min(100, s[1] * 100 / offer) : 0) + '%"></i></div></div>';
+    }).join("");
+    $("oneExtras").innerHTML = [["Historique des prix vu par un abonné", "one.price_history"], ["Alerte « bon moment » activée", "one.good_moment"],
+      ["Nouveaux Jaugeurs", "jaugeurs.signup"]].map(function (e) {
+      return "<tr><td>" + e[0] + '</td><td class="n">' + fmt(count(r, e[1])) + "</td></tr>";
+    }).join("");
+
+    rows($("ways"), [["Depuis un widget", count(r, "open.widget")], ["Depuis une notification", count(r, "open.alert")],
+      ["Siri ou raccourci", count(r, "open.shortcut")]], 0, false);
+    $("permissions").innerHTML = [["Localisation", "permission.location_granted", "permission.location_denied"],
+      ["Notifications", "permission.notifications_granted", "permission.notifications_denied"]].map(function (p) {
+      var yes = count(r, p[1]), no = count(r, p[2]);
+      return "<tr><td>" + p[0] + '</td><td class="n">' + fmt(yes) + (yes + no ? " · " + pct(yes, yes + no) : "") + '</td><td class="n">' + fmt(no) + "</td></tr>";
+    }).join("");
+
+    $("problems").innerHTML = PROBLEMS.map(function (p) {
+      var now = count(r, p[1]), was = count(before, p[1]);
+      var rateNow = dd ? now / dd : 0, rateWas = ddBefore ? was / ddBefore : 0;
+      var pill = '<span class="pill">habituel</span>';
+      if (!ddBefore) pill = '<span class="pill">à suivre</span>';
+      else if (rateNow > rateWas * 1.25 && now >= 5) pill = '<span class="pill warn">à surveiller</span>';
+      else if (rateNow < rateWas * 0.8) pill = '<span class="pill good">en baisse</span>';
+      return "<tr><td>" + p[0] + '</td><td class="n">' + fmt(now) + '</td><td class="n">' + pill + "</td></tr>";
+    }).join("");
+
+    var versionTotal = (r.versions || []).reduce(function (t, v) { return t + Number(v.devices); }, 0);
+    $("versions").innerHTML = (r.versions || []).map(function (v) {
+      return "<tr><td>" + esc(v.app) + '</td><td class="n">' + pct(Number(v.devices), versionTotal) + "</td></tr>";
+    }).join("") || '<tr><td colspan="2" class="empty">Aucune donnée</td></tr>';
+    var osTotal = (r.os || []).reduce(function (t, v) { return t + Number(v.devices); }, 0);
+    $("os").innerHTML = (r.os || []).map(function (v) {
+      return "<tr><td>iOS " + esc(v.os) + '</td><td class="n">' + pct(Number(v.devices), osTotal) + "</td></tr>";
+    }).join("") || '<tr><td colspan="2" class="empty">Aucune donnée</td></tr>';
+  }
+
+  var labels = { 1: "Hier", 7: "7 jours", 30: "30 jours", 365: "12 mois" };
+  var current = Number(stored(PERIOD_KEY)) || 7;
+  if (!labels[current]) current = 7;
+  var request = 0;
+
+  function showLock(message) {
+    $("dashboard").hidden = true;
+    $("chips").hidden = true;
+    $("lockcard").hidden = false;
+    $("status").textContent = "";
+    $("lockMessage").hidden = !message;
+    $("lockMessage").textContent = message || "";
+    $("code").focus();
+  }
+
+  function load(days) {
+    var code = stored(CODE_KEY);
+    if (!code) { showLock(""); return; }
+    current = days;
+    store(PERIOD_KEY, String(days));
+    [].forEach.call(document.querySelectorAll("#chips button"), function (b) {
+      b.setAttribute("aria-pressed", String(Number(b.dataset.days) === days));
+    });
+    var to = addDays(parisToday(), -1), from = addDays(to, -(days - 1));
+    var beforeTo = addDays(from, -1), beforeFrom = addDays(beforeTo, -(days - 1));
+    $("range").textContent = (days === 1 ? "Hier, " + longDate.format(to) : "Du " + longDate.format(from) + " au " + longDate.format(to)) +
+      " · totaux anonymes, mis à jour chaque nuit";
+    $("status").textContent = "Chargement…";
+    var id = ++request;
+    ask(from, to, code).then(function (now) {
+      return ask(beforeFrom, beforeTo, code).then(function (before) { return [now, before]; });
+    }).then(function (pair) {
+      if (id !== request) return;
+      $("lockcard").hidden = true;
+      $("chips").hidden = false;
+      $("dashboard").hidden = false;
+      $("status").textContent = deviceDays(pair[0]) ? "" : "Pas encore de données sur cette période : les résumés arrivent le lendemain de l’utilisation.";
+      render(pair[0], pair[1], days, from, to);
+    }).catch(function (error) {
+      if (id !== request) return;
+      if (error.status === 401) { store(CODE_KEY, null); showLock("Ce code n’est pas le bon. Vérifie-le et réessaie."); }
+      else if (error.status === 429) $("status").textContent = "Trop de lectures d’affilée. Réessaie dans une minute.";
+      else if (error.status === 503) $("status").textContent = "Le tableau de bord n’est pas encore activé sur le serveur, ou le serveur ne répond pas. Réessaie plus tard.";
+      else $("status").textContent = "Impossible de joindre le serveur. Vérifie ta connexion et réessaie.";
+    });
+  }
+
+  $("lock").addEventListener("submit", function (event) {
+    event.preventDefault();
+    var value = $("code").value.trim();
+    if (value.length < 32) { showLock("Le code fait au moins 32 caractères. Copie-le en entier."); return; }
+    store(CODE_KEY, value);
+    $("code").value = "";
+    load(current);
+  });
+  $("forget").addEventListener("click", function () { store(CODE_KEY, null); showLock(""); });
+  [].forEach.call(document.querySelectorAll("#chips button"), function (b) {
+    b.addEventListener("click", function () { load(Number(b.dataset.days)); });
+  });
+  load(current);
+})();
+</script>
+</body>
+</html>
