@@ -2,70 +2,113 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Solgys Apps — Applications et assistance</title>
-  <meta name="description" content="Retrouvez les applications publiées par Solgys Apps, leur assistance et leurs politiques de confidentialité.">
+  <meta name="description" content="Jauge et BET OUT : les applications de Solgys Apps, avec leurs pages d’assistance et de confidentialité.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#F7F4EE" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#14120F" media="(prefers-color-scheme: dark)">
   <link rel="canonical" href="https://solgys-apps.github.io/">
+  <link rel="preload" href="assets/fonts/fraunces-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin>
   <style>
-    :root{color-scheme:light dark;--accent:#0aa34f;--bg:#f7faf8;--card:#fff;--text:#172033;--muted:#667085;--line:#e4e9e6;--shadow:0 18px 50px rgba(15,23,42,.07)}
-    @media(prefers-color-scheme:dark){:root{--bg:#07100b;--card:#0d1711;--text:#f4f7f5;--muted:#a6b0aa;--line:#233029;--shadow:0 18px 50px rgba(0,0,0,.22)}}
+    @font-face{font-family:"Fraunces";font-weight:500;font-style:normal;font-display:swap;src:url(assets/fonts/fraunces-latin-500-normal.woff2) format("woff2")}
+    @font-face{font-family:"Inter";font-weight:400;font-style:normal;font-display:swap;src:url(assets/fonts/inter-latin-400-normal.woff2) format("woff2")}
+    @font-face{font-family:"Inter";font-weight:600;font-style:normal;font-display:swap;src:url(assets/fonts/inter-latin-600-normal.woff2) format("woff2")}
+    @font-face{font-family:"Inter";font-weight:700;font-style:normal;font-display:swap;src:url(assets/fonts/inter-latin-700-normal.woff2) format("woff2")}
+    :root{color-scheme:light dark;--bg:#F7F4EE;--ink:#14213D;--mut:#5B5F6B;--eyebrow:#6E6453;--line:#E7E2D6;--soft:#EDE8DB;--soft-ink:#5F5842;
+      --serif:"Fraunces",Georgia,"Times New Roman",serif;--sans:"Inter",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Arial,sans-serif}
+    @media(prefers-color-scheme:dark){:root{--bg:#14120F;--ink:#F3EFE6;--mut:#B4AE9F;--eyebrow:#B0A58F;--line:#2B2720;--soft:#2A261F;--soft-ink:#CFC7B2}}
     *{box-sizing:border-box}
-    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Inter,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.55}
-    main{max-width:820px;margin:0 auto;padding:54px 20px 72px}
-    .studio{display:flex;align-items:center;gap:10px;margin-bottom:62px;font-size:17px;font-weight:760;letter-spacing:-.01em}.studio-mark{width:13px;height:13px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 7px rgba(10,163,79,.11)}
-    .eyebrow{color:var(--accent);font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin:0 0 12px}
-    h1{max-width:640px;font-size:clamp(38px,7vw,58px);line-height:1.02;letter-spacing:-.045em;margin:0 0 18px}
-    .lead{max-width:610px;font-size:19px;color:var(--muted);margin:0 0 44px}
-    .apps{display:grid;gap:18px}
-    .app-card{display:grid;grid-template-columns:auto 1fr;gap:20px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:var(--shadow)}
-    .app-card.betout{background:#0a0a0c;border-color:#2b171a;box-shadow:0 18px 50px rgba(255,31,45,.10)}
-    .appicon{width:72px;height:72px;border-radius:20px;display:block;object-fit:cover;box-shadow:0 12px 30px rgba(10,163,79,.20)}
-    .betout .appicon{box-shadow:0 12px 34px rgba(255,31,45,.28)}
-    .app-copy h2{font-size:24px;line-height:1.15;margin:2px 0 6px}.app-copy p{color:var(--muted);margin:0}
-    .betout .app-copy p{color:#aaaeb5}.betout-wordmark{width:190px;max-width:100%;height:auto;display:block;margin:3px 0 7px}.jauge-wordmark{width:185px;max-width:100%;height:auto;display:block;margin:3px 0 7px}
-    .actions{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
-    .button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 16px;border-radius:13px;background:var(--accent);color:#fff;text-decoration:none;font-weight:720}.button.secondary{background:transparent;color:var(--accent);border:1px solid var(--line)}
-    .betout .button{background:#ff1f2d}.betout .button.secondary{background:transparent;color:#ff4651;border-color:#542127}
-    .app-card.jauge{position:relative;overflow:hidden;background:linear-gradient(145deg,#fff 0%,#fffdf7 62%,#fff9e8 100%);border-color:#E8E9ED;color:#0B1F44}.app-card.jauge::before{content:"";position:absolute;inset:0 0 auto;height:4px;background:linear-gradient(90deg,#FFC629 0 50%,#0B1F44 50% 100%)}.jauge .app-copy p{color:#64748B}.jauge .appicon{box-shadow:0 12px 30px rgba(11,31,68,.12);object-fit:contain}.app-card.jauge{grid-template-columns:1fr}.jauge .actions{gap:10px}.jauge .button{background:#0B1F44;color:#fff}.jauge .button.secondary{background:#fff;color:#0B1F44;border-color:#E8E9ED}.jauge a:focus-visible{outline-color:#3B82F6}
-    a:hover{text-decoration:underline}.button:hover{text-decoration:none;filter:brightness(.96)}a:focus-visible{outline:3px solid rgba(10,163,79,.35);outline-offset:4px}
-    footer{margin-top:42px;color:var(--muted);font-size:14px}footer a{color:var(--accent);font-weight:650}
-    @media(max-width:520px){main{padding-top:34px}.studio{margin-bottom:46px}.app-card{grid-template-columns:58px 1fr;padding:19px;gap:15px}.appicon{width:58px;height:58px;border-radius:16px}.actions{display:grid}.button{width:100%}}
+    html{-webkit-text-size-adjust:100%}
+    body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55}
+    .wrap{max-width:920px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+    .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+    a{color:inherit}
+    a:focus-visible,[tabindex]:focus-visible{outline:3px solid #3B82F6;outline-offset:3px;border-radius:6px}
+    .top{display:flex;align-items:center;gap:9px;padding-top:max(26px,env(safe-area-inset-top,0px));font-weight:700;font-size:15px;letter-spacing:-.01em}
+    .dot{width:11px;height:11px;border-radius:50%;background:var(--ink)}
+    .hero{padding:clamp(40px,9vw,88px) 0 clamp(28px,6vw,52px)}
+    .eyebrow{margin:0 0 14px;font-weight:600;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--eyebrow)}
+    h1{margin:0 0 16px;max-width:15ch;font:500 clamp(38px,8.4vw,68px)/1.03 var(--serif);letter-spacing:-.025em;text-wrap:balance}
+    .lead{margin:0;max-width:44ch;color:var(--mut);font-size:clamp(16px,2.4vw,19px)}
+    .app{position:relative;margin:0 0 16px;border-radius:28px;padding:clamp(22px,4vw,40px)}
+    .app .cta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+    .pill{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 20px;border-radius:99px;font-weight:700;font-size:15px;text-decoration:none}
+    .lnk{display:inline-flex;align-items:center;min-height:44px;padding:0 6px;font-weight:600;font-size:14px;text-decoration:underline;text-underline-offset:4px}
+    /* Jauge */
+    .jauge{background:#fff;color:#14213D;border:1px solid #E7E2D6;box-shadow:0 12px 34px rgba(20,33,61,.07);overflow:hidden}
+    .jauge .wm{display:block;width:clamp(150px,34vw,200px);height:auto;margin:0 0 8px}
+    .jauge .tag{margin:0 0 18px;font:500 clamp(21px,4.4vw,28px)/1.2 var(--serif);letter-spacing:-.01em}
+    .jauge ul{list-style:none;margin:0 0 22px;padding:0;display:grid;gap:12px;max-width:52ch}
+    .jauge li{display:grid;grid-template-columns:20px 1fr;gap:12px;font-size:15px;color:#3B4252}
+    .jauge li i{width:20px;height:20px;margin-top:2px;border-radius:50%;background:#FFF1C2;border:2px solid #FFC629}
+    .jauge .pill.soon{background:#EDE8DB;color:#5F5842}
+    .jauge .lnk{color:#14213D}
+    .shots{display:flex;gap:12px;margin:26px calc(-1 * clamp(22px,4vw,40px)) 0;padding:6px clamp(22px,4vw,40px) 8px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+    .shots::-webkit-scrollbar{display:none}
+    .shots img{display:block;flex:none;width:min(54vw,190px);height:auto;border-radius:20px;scroll-snap-align:start;box-shadow:0 10px 26px rgba(11,31,68,.2)}
+    @media(min-width:760px){.shots{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible;margin:30px 0 0;padding:0}.shots img{width:100%}}
+    /* BET OUT */
+    .betout{background:#0B0B0E;color:#fff;border:1px solid #2B171A;box-shadow:0 14px 40px rgba(255,31,45,.10)}
+    .betout .row{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+    .betout .ic{flex:none;width:64px;height:64px;border-radius:17px}
+    .betout .bw{display:block;width:clamp(150px,34vw,200px);height:auto}
+    .betout p{margin:0 0 18px;max-width:44ch;color:#BDC0C8;font-size:16px}
+    .betout .pill{background:#D92B33;color:#fff}
+    .betout .lnk{color:#FF7A80}
+    footer{padding:26px 0 max(40px,env(safe-area-inset-bottom,0px));color:var(--mut);font-size:13px}
+    footer a{color:var(--ink);font-weight:600}
+    .sep{display:block;height:0}
   </style>
 </head>
 <body>
-<main>
-  <div class="studio"><span class="studio-mark" aria-hidden="true"></span>solgys.apps</div>
-  <p class="eyebrow">Applications utiles, simplement</p>
-  <h1>Des apps claires, pensées pour le quotidien.</h1>
-  <p class="lead">Retrouvez ici les pages officielles d’assistance et de confidentialité des applications Solgys Apps.</p>
+<div class="wrap">
+  <div class="top"><span class="dot" aria-hidden="true"></span>solgys.apps</div>
 
-  <div class="apps">
-    <section class="app-card betout" aria-labelledby="betout-title">
-      <img class="appicon" src="betout/betout-icon.svg" alt="Icône officielle BET OUT">
-      <div class="app-copy">
-        <h2 id="betout-title" style="position:absolute;left:-9999px">BET OUT</h2>
-        <img class="betout-wordmark" src="betout/betout-wordmark.svg" alt="BET OUT">
-        <p>Reprendre le contrôle des paris sportifs, à son rythme.</p>
+  <header class="hero">
+    <p class="eyebrow">Solgys Apps</p>
+    <h1>Des apps simples, pour mieux décider.</h1>
+    <p class="lead">Deux applications iPhone, conçues avec soin. Retrouvez ici leurs pages d’assistance et de confidentialité.</p>
+  </header>
+
+  <main>
+    <article class="app jauge" aria-labelledby="jauge-title">
+      <h2 id="jauge-title" class="sr-only">Jauge</h2>
+      <img class="wm" src="lajauge/brand-wordmark.png" alt="Jauge" width="330" height="117">
+      <p class="tag">Le plein de bonnes décisions.</p>
+      <ul>
+        <li><i aria-hidden="true"></i><span>Le carburant le moins cher près de vous, d’après les prix publiés par l’État.</span></li>
+        <li><i aria-hidden="true"></i><span>Jamais un vieux prix en tête : au-delà de 24 h, un prix est mis à part.</span></li>
+        <li><i aria-hidden="true"></i><span>Des bornes de recharge adaptées à votre voiture.</span></li>
+      </ul>
+      <div class="cta">
+        <span class="pill soon">Bientôt sur l’App Store</span>
+        <a class="lnk" href="lajauge/support/" aria-label="Assistance Jauge">Assistance</a>
+        <a class="lnk" href="lajauge/privacy/" aria-label="Politique de confidentialité de Jauge">Confidentialité</a>
       </div>
-      <div class="actions">
-        <a class="button" href="betout/support/">Assistance BET OUT</a>
-        <a class="button secondary" href="betout/privacy/">Politique de confidentialité</a>
+      <div class="shots" tabindex="0" role="region" aria-label="Captures d’écran de Jauge">
+        <img src="lajauge/screens/le-moins-cher.jpg" srcset="lajauge/screens/le-moins-cher.jpg 360w, lajauge/screens/le-moins-cher@2x.jpg 720w" sizes="(min-width:760px) 22vw, 54vw" width="360" height="782" alt="Jauge : le moins cher, près de vous, avec le prix du gazole sur la carte" loading="lazy" decoding="async">
+        <img src="lajauge/screens/bon-moment.jpg" srcset="lajauge/screens/bon-moment.jpg 360w, lajauge/screens/bon-moment@2x.jpg 720w" sizes="(min-width:760px) 22vw, 54vw" width="360" height="782" alt="Jauge : le plein au bon moment, avec une alerte quand le prix baisse" loading="lazy" decoding="async">
+        <img src="lajauge/screens/trajet.jpg" srcset="lajauge/screens/trajet.jpg 360w, lajauge/screens/trajet@2x.jpg 720w" sizes="(min-width:760px) 22vw, 54vw" width="360" height="782" alt="Jauge : sur la route, le bon arrêt, avec les prix du trajet dans l’ordre" loading="lazy" decoding="async">
+        <img src="lajauge/screens/bornes.jpg" srcset="lajauge/screens/bornes.jpg 360w, lajauge/screens/bornes@2x.jpg 720w" sizes="(min-width:760px) 22vw, 54vw" width="360" height="782" alt="Jauge : à chaque voiture ses bornes de recharge" loading="lazy" decoding="async">
       </div>
-    </section>
-    <section class="app-card jauge" aria-labelledby="jauge-title">
-      <div class="app-copy">
-        <h2 id="jauge-title" style="position:absolute;left:-9999px">Jauge</h2>
-        <img class="jauge-wordmark" src="lajauge/brand-wordmark.png" alt="Jauge">
-        <p>Le plein de bonnes décisions.</p>
+    </article>
+
+    <article class="app betout" aria-labelledby="betout-title">
+      <h2 id="betout-title" class="sr-only">BET OUT</h2>
+      <div class="row">
+        <img class="ic" src="betout/betout-icon.svg" alt="Icône de BET OUT" width="64" height="64">
+        <img class="bw" src="betout/betout-wordmark.svg" alt="BET OUT" width="608" height="90">
       </div>
-      <div class="actions">
-        <a class="button" href="lajauge/support/">Assistance Jauge</a>
-        <a class="button secondary" href="lajauge/privacy/">Politique de confidentialité</a>
+      <p>Reprendre le contrôle des paris sportifs, à son rythme.</p>
+      <div class="cta">
+        <a class="pill" href="betout/support/" aria-label="Assistance BET OUT">Assistance</a>
+        <a class="lnk" href="betout/privacy/" aria-label="Politique de confidentialité de BET OUT">Confidentialité</a>
       </div>
-    </section>
-  </div>
+    </article>
+  </main>
 
   <footer>© 2026 Solgys Apps · <a href="mailto:solgys.apps@gmail.com">solgys.apps@gmail.com</a></footer>
-</main>
+</div>
 </body>
 </html>
