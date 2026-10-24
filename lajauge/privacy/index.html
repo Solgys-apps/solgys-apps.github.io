@@ -31,7 +31,7 @@
 <p class="eyebrow">Confidentialité</p>
 <h1>Politique de confidentialité</h1>
 <p class="sub">Les données utilisées par Jauge, pourquoi, et vos choix.</p>
-<span class="badge">Dernière mise à jour : 22 octobre 2026</span>
+<span class="badge">Dernière mise à jour : 24 octobre 2026</span>
 <details class="ver"><summary>Historique des versions</summary><ul>
 <li>22 octobre 2026 — version actuelle : statistiques internes sur les données communautaires (section 11)</li>
 <li>17 octobre 2026</li>
@@ -83,7 +83,7 @@
 <p>La position GPS de l’utilisateur <strong>n’est jamais ajoutée à la fiche publique d’une contribution</strong>. Jauge ne demande pas de localisation en arrière-plan et ne constitue pas d’historique de déplacements pour ces fonctions. Les infrastructures réseau peuvent néanmoins traiter des métadonnées techniques, comme l’adresse IP, lors des requêtes.</p>
 <p>Vous pouvez retirer l’autorisation de localisation dans les Réglages iOS.</p></section>
 <section><h2 id="s2">2. Données enregistrées sur l’iPhone</h2>
-<p>Selon les fonctions utilisées, Jauge enregistre localement le mode Carburant ou Électrique, le carburant et le rayon sélectionnés, les filtres, les véhicules et leurs caractéristiques, les recherches récentes, les favoris, les trajets, les règles d’alerte, les préférences de notifications, les compteurs de statistiques pas encore envoyés (section 10), ainsi que des caches temporaires de prix carburant et de données IRVE.</p>
+<p>Selon les fonctions utilisées, Jauge enregistre localement le mode Carburant ou Électrique, le carburant et le rayon sélectionnés, les filtres, les véhicules et leurs caractéristiques, les recherches récentes, les favoris, les trajets, les règles d’alerte, les préférences de notifications, les compteurs de statistiques pas encore envoyés (section 10), les jours d’utilisation et la dernière demande de note App Store (pour ne pas la demander trop souvent), ainsi que des caches temporaires de prix carburant et de données IRVE.</p>
 <p>Le <strong>journal privé de pleins</strong>, contenant notamment dates, stations, quantités, montants et références de comparaison, est conservé dans les fichiers de l’application avec une protection de fichier iOS. Il n’est ni publié dans la communauté ni synchronisé automatiquement par CloudKit ou Supabase. Cependant, <strong>une sauvegarde générale de l’iPhone, locale ou iCloud selon les réglages du système, peut inclure les fichiers de l’application</strong>. Une suppression effectuée dans Jauge ne garantit donc pas la suppression immédiate d’anciennes sauvegardes gérées par Apple ou par l’utilisateur.</p>
 <p>Le partage volontaire du bilan produit une synthèse (période et totaux) plutôt qu’une liste de pleins individuels. Si vous l’envoyez à une autre personne ou l’enregistrez dans Photos, les règles du destinataire ou du service utilisé s’appliquent à cette copie.</p>
 <p>L’application et ses widgets utilisent un <strong>groupe d’applications Apple</strong> pour partager localement de petits instantanés d’affichage : jusqu’à trois stations carburant favorites et trois stations de recharge de la dernière zone consultée, avec leurs informations et distances calculées. Les widgets ne demandent pas eux-mêmes le GPS ni ne reçoivent vos coordonnées GPS. L’effacement des données invalide ces instantanés ; leur disparition visuelle dépend ensuite des rafraîchissements autorisés par iOS.</p></section>
@@ -118,7 +118,7 @@
 <section><h2 id="s6">6. Suppression des données : opérations et limites</h2>
 <p>Dans <strong>Mon espace › Réglages › Confidentialité › Supprimer mes données</strong>, Jauge présente une confirmation distinguant trois catégories :</p>
 <ol>
-<li><strong>Données locales</strong> : le journal de pleins, les favoris, les trajets, les recherches, les véhicules, certaines préférences, les caches, les instantanés de widgets concernés et les compteurs de statistiques pas encore envoyés sont effacés ou réinitialisés. Le choix de partager ou non les statistiques anonymes est conservé.</li>
+<li><strong>Données locales</strong> : le journal de pleins, les favoris, les trajets, les recherches, les véhicules, certaines préférences, les caches, les instantanés de widgets concernés, les compteurs de statistiques pas encore envoyés, ainsi que les jours d’utilisation et la dernière demande de note App Store, sont effacés ou réinitialisés. Le choix de partager ou non les statistiques anonymes est conservé.</li>
 <li><strong>Compte Jaugeur associé à cet appareil</strong>, s’il existe : l’application demande la suppression au service Supabase du compte, de ses contributions et de sa progression. Si le compte est associé à Apple, la confirmation de ce compte Apple est demandée et son accès est révoqué. L’opération est déclarée réussie uniquement après confirmation distante. En cas d’échec, elle est signalée et un nouvel essai est proposé.</li>
 <li><strong>Signalements iCloud</strong>, lorsqu’un compte iCloud peut être vérifié : l’application supprime vos signalements et vos signalements d’abus accessibles. Si la vérification ou la suppression échoue, le résultat est indiqué séparément.</li>
 </ol>
