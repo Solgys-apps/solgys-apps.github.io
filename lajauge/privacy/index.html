@@ -31,9 +31,10 @@
 <p class="eyebrow">Confidentialité</p>
 <h1>Politique de confidentialité</h1>
 <p class="sub">Les données utilisées par Jauge, pourquoi, et vos choix.</p>
-<span class="badge">Dernière mise à jour : 2 novembre 2026</span>
+<span class="badge">Dernière mise à jour : 4 novembre 2026</span>
 <details class="ver"><summary>Historique des versions</summary><ul>
-<li>2 novembre 2026 — version actuelle : annonce d’un nouveau statut Jaugeur par notification à partir de la version 1.3.1 (sections 5, 8 et 11)</li>
+<li>4 novembre 2026 — version actuelle : alertes « bon moment » prises en charge par le serveur à partir de la version 1.3.2 (résumé et section 8)</li>
+<li>2 novembre 2026 — annonce d’un nouveau statut Jaugeur par notification à partir de la version 1.3.1 (sections 5, 8 et 11)</li>
 <li>1er novembre 2026 — notifications envoyées par le serveur à partir de la version 1.3, pour les alertes de prix cible et les ruptures des favoris (sections 2, 6, 8, 11 et 12)</li>
 <li>31 octobre 2026 — signalements de station par Les Jaugeurs, fin des Signalements iCloud et d’App Attest à partir de la version 1.2 (sections 1, 2, 4, 5, 6, 11, 12 et 13)</li>
 <li>24 octobre 2026 — jours d’utilisation et demande de note App Store (sections 2 et 9)</li>
@@ -49,7 +50,7 @@
 <li>La localisation est facultative. Elle sert à trouver les stations proches et à vérifier que vous êtes sur place pour contribuer ; votre position n’est jamais publiée.</li>
 <li>Votre journal de pleins (Mon bilan) reste sur votre iPhone.</li>
 <li>Les contributions des Jaugeurs (prix et signalements) passent par un compte anonyme, sans nom ni e-mail, ni compte iCloud.</li>
-<li>Pour vous prévenir même app fermée, les alertes de prix cible et vos favoris passent par notre serveur, avec le jeton de notification d’Apple, sans position. Si vous êtes Jaugeur, cette inscription est reliée à votre compte anonyme pour vous annoncer un nouveau statut (depuis la version 1.3.1).</li>
+<li>Pour vous prévenir même app fermée, les alertes de prix (prix cible et, depuis la version 1.3.2, « bon moment ») et vos favoris passent par notre serveur, avec le jeton de notification d’Apple, sans position. Si vous êtes Jaugeur, cette inscription est reliée à votre compte anonyme pour vous annoncer un nouveau statut (depuis la version 1.3.1).</li>
 <li>Des statistiques anonymes, sans identifiant, peuvent être coupées à tout moment.</li>
 <li>La version gratuite affiche des annonces (Google), selon votre choix de consentement ; Jauge ONE les retire.</li>
 <li>Tout s’efface dans Mon espace › Réglages › Confidentialité › Supprimer mes données.</li>
@@ -146,16 +147,16 @@
 <li><strong>bilan du mois</strong>, le 1er du mois, calculé sur l’iPhone à partir de votre journal de pleins (activé par défaut, uniquement s’il y a eu un plein) ;</li>
 <li><strong>conseils et grands départs</strong> (conduite, carburant, recharge, week-ends prolongés et vacances scolaires), désactivés tant que vous ne les activez pas, au plus une fois par semaine.</li>
 </ul>
-<p><strong>Notifications envoyées par le serveur (depuis la version 1.3).</strong> Pour que les alertes de prix cible, les ruptures de vos favoris et l’annonce d’un nouveau statut Jaugeur arrivent même lorsque l’application est fermée, l’iPhone s’inscrit auprès de notre serveur Supabase (région de Paris) quand les notifications sont activées dans Jauge et autorisées dans iOS. Il envoie uniquement :</p>
+<p><strong>Notifications envoyées par le serveur (depuis la version 1.3).</strong> Pour que les alertes de prix cible, les alertes « bon moment » (depuis la version 1.3.2), les ruptures de vos favoris et l’annonce d’un nouveau statut Jaugeur arrivent même lorsque l’application est fermée, l’iPhone s’inscrit auprès de notre serveur Supabase (région de Paris) quand les notifications sont activées dans Jauge et autorisées dans iOS. Il envoie uniquement :</p>
 <ul>
 <li>le <strong>jeton de notification</strong> qu’Apple attribue à Jauge sur cet iPhone, le type d’environnement Apple (production ou test) et un <strong>numéro d’installation tiré au hasard</strong> par l’application ;</li>
-<li>vos <strong>alertes de prix cible</strong> (station, nom et adresse affichés, carburant et seuil) et vos <strong>stations favorites</strong> (station, nom et adresse affichés, carburant choisi).</li>
+<li>vos <strong>alertes de prix cible</strong> (station, nom et adresse affichés, carburant et seuil), vos <strong>alertes « bon moment »</strong> (station, nom et adresse affichés, carburant, type d’alerte — sous la moyenne ou au plus bas du mois — et si l’iPhone vous a déjà prévenu) et vos <strong>stations favorites</strong> (station, nom et adresse affichés, carburant choisi).</li>
 </ul>
 <p>Aucun nom, adresse e-mail, identifiant publicitaire ni position n’est envoyé.</p>
 <p><strong>Si un compte Jaugeur existe déjà sur cet iPhone</strong> (section 5), l’inscription est reliée à ce compte anonyme depuis la version 1.3.1, avec la session du compte, pour annoncer un nouveau statut. Le serveur garde pour cela le statut le plus élevé déjà connu : chaque statut n’est annoncé qu’une fois, et ni celui du moment de la liaison ni celui que l’application vous montre déjà à l’écran ne sont annoncés. Les alertes et les favoris de l’inscription se trouvent alors associés à ce compte. Aucun compte n’est créé pour les notifications : sans compte Jaugeur, l’inscription reste sans compte. La liaison est effacée avec l’inscription (cas ci-dessous) ou avec le compte Jaugeur.</p>
-<p>Chaque minute, le serveur compare ces alertes aux prix officiels et aux ruptures, et le statut des comptes Jaugeurs reliés à celui déjà annoncé. Quand l’une d’elles est atteinte, il prépare la notification et la transmet au <strong>service de notifications d’Apple (APNs)</strong>, qui la remet à l’iPhone. Il envoie au plus trois notifications de prix cible par jour et par iPhone, et aucune entre 22 h et 7 h (heure de Paris) : elles attendent le matin.</p>
+<p>Chaque minute, le serveur compare ces alertes aux prix officiels, à l’historique des prix officiels qu’il conserve déjà (pour le « bon moment ») et aux ruptures, et le statut des comptes Jaugeurs reliés à celui déjà annoncé. Quand l’une d’elles est atteinte, il prépare la notification et la transmet au <strong>service de notifications d’Apple (APNs)</strong>, qui la remet à l’iPhone. Il envoie au plus trois notifications de prix cible et trois « bon moment » par jour et par iPhone, au plus une « bon moment » par jour et par alerte, et aucune entre 22 h et 7 h (heure de Paris) : elles attendent le matin.</p>
 <p>L’inscription est mise à jour quand vos alertes ou vos favoris changent, et renouvelée au plus une fois par jour à l’ouverture de l’application. Elle est effacée quand vous désactivez les notifications dans Jauge, quand l’autorisation iOS est retirée (à la prochaine ouverture de l’application), quand vous supprimez vos données (section 6), quand Apple indique que le jeton n’est plus valide (par exemple après une désinstallation), et automatiquement après <strong>30 jours</strong> sans renouvellement. Pour limiter les abus, le serveur tient une <strong>empreinte pseudonymisée (salée) de l’adresse réseau</strong> (adresse IP, ou bloc IPv6 /64), jamais l’adresse elle-même, effacée au plus tard 35 minutes après la dernière inscription.</p>
-<p>Les autres notifications (« bon moment », bilan du mois, conseils et grands départs), comme les alertes que le serveur ne peut pas prendre en charge, restent créées sur l’iPhone, sans serveur.</p>
+<p>Les autres notifications (bilan du mois, conseils et grands départs), comme les alertes que le serveur ne peut pas prendre en charge, restent créées sur l’iPhone, sans serveur.</p>
 <p>Les choix de catégories sont conservés même lorsque l’autorisation iOS est refusée. La zone scolaire, choisie par vous ou déduite de la localisation, permet de sélectionner les rappels de vacances et n’est pas un historique de déplacement. La suppression des données personnelles efface cette zone et l’historique de planification, sans modifier vos refus explicites de catégories ni l’autorisation iOS.</p>
 <p>Les rafraîchissements et programmations faits sur l’iPhone dépendent des mécanismes autorisés par Apple : l’application <strong>ne garantit pas une surveillance continue en arrière-plan</strong>. Les notifications envoyées par le serveur dépendent de la publication des prix officiels et de leur remise par Apple.</p></section>
 <section><h2 id="s9">9. Jauge ONE et achats Apple</h2>
