@@ -542,6 +542,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
   // A ratio that is not a share of a list (failure rate, price age, offer).
   function ratio(part, total) {
     if (!(total > 0)) return "—";
+    if (part === 0) return "0" + NN + "%";
     const U = total < 1000 ? 1000 : 100;
     const units = Math.round(part * U / total);
     return shareText(part, units, U);
@@ -1655,7 +1656,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       const errRows = errs.map((e) => {
         const n = C(e[1]), d = e[2].reduce((t, m) => t + C(m), 0), rate = d ? n / d : null;
         const k = rate == null ? "" : rate < 0.03 ? "ok" : rate < 0.1 ? "wa" : "ko";
-        return [e[0], fmt(n), rate == null ? (n ? "—" : '<span class="pill ok">0</span>') : '<span class="pill ' + k + '">' + pct(n, d) + "</span>"];
+        return [e[0], fmt(n), rate == null ? "—" : '<span class="pill ' + k + '">' + pct(n, d) + "</span>"];
       });
       const left = mini("Erreurs par fonction <span class=\"new\">NOUVEAU</span>") + table(["Fonction", "Échecs", "Taux"], errRows, { label: "Erreurs par fonction" }) +
         '<p class="note">Taux : échecs ÷ (essais réussis + échecs) de la même fonction, quand l’app compte les deux.</p>' +
@@ -1682,7 +1683,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         ["Hors ligne / serveur injoignable", fmt(C("app.offline")) + " / " + fmt(C("error.server_unreachable"))]], { label: "Santé côté iPhone" });
       right += '<p class="note">« Hors ligne » : l’iPhone n’avait pas de réseau. « Serveur injoignable » : le réseau marchait mais le serveur n’a pas répondu.</p>';
       body += '<div class="two" style="margin-top:6px"><div>' + left + "</div><div>" + right + "</div></div>";
-      body += '<p class="note">Seuils : liste des bornes en orange après 2 jours sans publication, en rouge après 7 ; imports en orange au-delà de 2 % de cycles en échec sur 7 jours, en rouge au-delà de 10 % ; prix officiels en orange après 1 h sans import réussi ou dès un échec, en rouge après 6 h ou import coupé ; base de données en orange à 70 %, en rouge à 90 %.</p>';
+      body += '<p class="note">Seuils : liste des bornes (publiée chaque lundi) en orange après 8 jours sans publication, en rouge après 14 ; imports en orange au-delà de 2 % de cycles en échec sur 7 jours, en rouge au-delà de 10 % ; prix officiels en orange après 1 h sans import réussi ou dès un échec, en rouge après 6 h ou import coupé ; base de données en orange à 70 %, en rouge à 90 %.</p>';
       out.push(card({ id: "sante", title: "Santé", full: true, hint: watch.length ? nw(watch.length, "point", "points") + " à surveiller : " + watch.map((i) => i.short).join(", ") + "." : "Ce qui marche, ce qui casse : côté serveur et côté iPhone. Rien à signaler.", body }));
     }
 
@@ -1847,7 +1848,8 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     else {
       const pub = instant(ch.last_published_at);
       const age = pub ? Math.floor((ref - pub) / 86400000) : null;
-      const level = age == null || age >= 7 ? "bad" : age >= 2 ? "warn" : "good";
+      // Published every Monday since 17/10: a week old is normal.
+      const level = age == null || age >= 14 ? "bad" : age >= 8 ? "warn" : "good";
       let text = pub ? "Dernière publication " + when(pub, ref) + " (" + nw(ch.last_published_points || 0, "point", "points") + ")." : "Aucune publication réussie gardée.";
       const at = ch.last_attempt;
       if (at && at.status !== "published") {
@@ -1856,7 +1858,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         text += " Essai du " + (d ? dayMonth(parisDay(d)) : "?") + " : " + what + ".";
       }
       items.push({ key: "chargers", title: "Liste des bornes de recharge", level, count: true,
-        pill: age == null ? "Jamais publiée" : age < 2 ? "À jour" : "Il y a " + nw(age, "jour", "jours"),
+        pill: age == null ? "Jamais publiée" : age < 2 ? "À jour" : age < 8 ? "À jour · " + nw(age, "jour", "jours") : "Il y a " + nw(age, "jour", "jours"),
         short: age == null ? "liste des bornes jamais publiée" : "liste des bornes publiée il y a " + nw(age, "jour", "jours"), text });
     }
     // Official import cycles over 7 days
