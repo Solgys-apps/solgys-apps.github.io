@@ -833,7 +833,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     "screen.charger": "Fiche d’une borne", "screen.my_report": "Mon bilan", "screen.jaugeurs": "Jaugeurs", "screen.settings": "Réglages",
     "screen.help": "Aide", "screen.one_offer": "Page Jauge ONE",
     "tap.directions": "Itinéraire", "tap.search": "Recherche", "tap.favorite": "Favori ajouté", "tap.alert": "Alerte de prix créée",
-    "tap.fill_up": "Plein noté", "tap.price_confirm": "Prix confirmé", "tap.price_correct": "Prix corrigé", "tap.share": "Partage",
+    "tap.fill_up": "Plein noté", "tap.price_confirm": "Prix confirmé", "tap.price_correct": "Prix corrigé", "tap.share": "Page de partage ouverte",
     "one.trial_started": "Essai Jauge ONE commencé", "one.purchased": "Abonnement Jauge ONE payé", "jaugeurs.signup": "Inscriptions Jaugeurs",
     "open.widget": "Ouverture depuis un widget", "open.shortcut": "Ouverture par Siri ou un raccourci", "open.alert": "Ouverture depuis une notification",
     "error.prices_unavailable": "Prix indisponibles", "error.server_unreachable": "Serveur injoignable", "error.no_station": "Aucune station trouvée",
@@ -1036,6 +1036,13 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     const m = mergeReports(a, b);
     m.version = a.version;
     if (a.threshold != null) m.threshold = a.threshold;
+    // Production still on v2, staging on v3: the live parts come from staging alone
+    // (production apps send only the next day's totals, so they add nothing live).
+    if (a.version !== 3 && b.version === 3) {
+      m.version = 3; m.cohorts = b.cohorts; m.hours = b.hours; m.live = b.live; m.today_totals = b.today_totals;
+      m.liveTestsOnly = true;
+      return m;
+    }
     if (a.version !== 3) return m;
     m.cohorts = a.cohorts;
     const add = (x, y) => (x || []).map((v, i) => (v || 0) + (((y || [])[i]) || 0));
@@ -1284,7 +1291,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         const tot = sumArr(vals);
         body += mini(isToday ? "Ouvertures par heure, aujourd’hui" : "Ouvertures par heure, sur la période") +
           (tot ? hoursHTML(vals, isToday ? parisHour(new Date()) : -1, isToday ? "Ouvertures par heure aujourd’hui" : "Ouvertures par heure sur la période") : later("Aucune ouverture par heure reçue sur cette période (versions récentes de l’app seulement)."));
-        body += '<p class="note">« Maintenant » : iPhone qui ont l’app à l’écran dans le créneau de 5 minutes en cours (versions récentes de l’app). Les chiffres du jour suivent l’heure de Paris et ne dépendent pas de la période.' + (state.tests ? " Serveur d’essai compris." : "") + "</p>";
+        body += '<p class="note">« Maintenant » : iPhone qui ont l’app à l’écran dans le créneau de 5 minutes en cours (versions récentes de l’app). Les chiffres du jour suivent l’heure de Paris et ne dépendent pas de la période.' + (r.liveTestsOnly ? " Serveur d’essai seul : la production n’a pas encore ces mesures." : state.tests ? " Serveur d’essai compris." : "") + "</p>";
       }
       out.push(card({ id: "direct", title: "En direct", live: true, isNew: true, full: true,
         hint: "Les chiffres d’aujourd’hui, " + dayShort(today) + (g ? ", lus à " + clock(g) : "") + ". Actualisés toutes les 5 minutes quand la page est ouverte.", body }));
@@ -1342,7 +1349,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
             cohortCell(s.w0, a.w0, c.week, 1), cohortCell(s.w1, a.w1, c.week, 7), cohortCell(s.w2, a.w2, c.week, 14), cohortCell(s.w4, a.w4, c.week, 28)];
         }), { label: "Rétention par semaine d’installation" });
         body += '<p class="note">Part des iPhone installés cette semaine-là qui ouvrent l’app chaque jour, en moyenne : 1re semaine = jours 1 à 6 après le lundi, 2e = jours 7 à 13, 3e = 14 à 20, 5e = 28 à 34. Seules les installations faites avec la nouvelle version de l’app ont une semaine ; une réinstallation compte comme une installation. « — » : masqué sous 5 iPhone.' +
-          (r.cohortsProdOnly ? " Production seule." : "") + "</p>";
+          (r.cohortsProdOnly ? " Production seule." : "") + (r.liveTestsOnly ? " Serveur d’essai seul : la production n’a pas encore cette mesure." : "") + "</p>";
       }
       out.push(card({ id: "retention", title: "Rétention", isNew: true, hint: "Part des iPhone installés une semaine donnée qui reviennent ensuite. Sans identifiant : seule la semaine d’installation est connue.", body }));
     }
