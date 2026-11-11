@@ -1770,6 +1770,21 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     el.innerHTML = colsHTML(r.days.length > 31 ? weekly(pts) : pts, { fmt: fmtValue, short: kind === "seconds" ? durShort : null, label: name + " par " + (r.days.length > 31 ? "semaine" : "jour") });
   }
 
+  // Statuses today (report v3, 11/11): every profile at the status its
+  // retained contributions give, independent of the period. A server
+  // without it (v2) shows nothing here.
+  function ranksHTML(byRank) {
+    if (!byRank || typeof byRank !== "object") return "";
+    const x = shareItems([
+      { l: "Jaugeur", n: byRank.jaugeur || 0, s: "moins de 10 retenues" },
+      { l: "Éclaireur", n: byRank.eclaireur || 0, s: "dès 10 retenues" },
+      { l: "Guide", n: byRank.guide || 0, s: "dès 50 retenues" },
+      { l: "Pilier", n: byRank.pilier || 0, s: "dès 200 retenues" }]);
+    return '<h4 class="mini">Statuts aujourd’hui <span class="new">NOUVEAU</span></h4>' +
+      '<div class="rows" data-total-units="' + x.sh.U + '">' + rowsHTML(x.items) + "</div>" +
+      '<p class="note">Selon les contributions retenues depuis le début' + NB + ": ne suit pas la période.</p>";
+  }
+
   function renderCommunity(com) {
     const sec = $("communaute");
     $("comTests").textContent = ESSAI ? "Chiffres du serveur d’essai." : "L’interrupteur des tests ne s’applique pas ici : chiffres du serveur, vos propres contributions comprises.";
@@ -1784,7 +1799,8 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
 
     let html = '<h3 class="mini">Contributions Jaugeurs</h3><p class="hint">Chiffres du serveur, complets : un 0 est un vrai 0.</p>' +
       '<div class="kpis k3">' + kpi(fmt(k.total), pl(k.total, "contribution", "contributions")) + kpi(fmt(k.distinct_contributors), pl(k.distinct_contributors, "contributeur différent", "contributeurs différents")) +
-      kpi(fmt(prof.total || 0), pl(prof.total || 0, "profil Jaugeur", "profils Jaugeurs") + " · " + fmt(prof.new_in_period || 0) + " " + pl(prof.new_in_period || 0, "créé", "créés") + " sur la période, " + fmt(prof.blocked || 0) + " " + pl(prof.blocked || 0, "bloqué", "bloqués")) + "</div>";
+      kpi(fmt(prof.total || 0), pl(prof.total || 0, "profil Jaugeur", "profils Jaugeurs") + " · " + fmt(prof.new_in_period || 0) + " " + pl(prof.new_in_period || 0, "créé", "créés") + " sur la période, " + fmt(prof.blocked || 0) + " " + pl(prof.blocked || 0, "bloqué", "bloqués")) + "</div>" +
+      ranksHTML(prof.by_rank);
     if (k.detail_shown && Array.isArray(k.by_day)) {
       const days = state.base.days;
       let pts = days.map((d, i) => ({ day: d, from: d, to: d, value: k.by_day[i] == null ? 0 : k.by_day[i], key: "value", text: "" }));
