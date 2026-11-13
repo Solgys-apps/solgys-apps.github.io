@@ -1357,18 +1357,27 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
 
     /* Parcours premier lancement */
     {
-      const steps = [["Bienvenue", ["onboarding.step_welcome"]], ["Écran d’arrivée", ["onboarding.step_arrival"]], ["Énergie choisie", ["onboarding.step_energy"]],
-        ["Carburant ou prise", ["onboarding.step_fuel", "onboarding.step_connector"]], ["Localisation", ["onboarding.step_location"]], ["Accueil terminé", ["onboarding.step_full"]]];
-      const vals = steps.map((s) => s[1].reduce((t, m) => t + C(m), 0));
+      // Every line counts a screen that appeared (once per iPhone and day); the last one, the answer to the last
+      // question. « Vos données sont là. » (a copy found in iCloud) is no step everyone meets: it replaces the
+      // energy and fuel questions, so it stands for them. « Les deux » shows the fuel and the plug questions: once.
+      const restored = C("onboarding.step_arrival");
+      const fuelQ = C("onboarding.step_fuel"), plugQ = C("onboarding.step_connector");
+      const names = ["Bienvenue", "Question énergie", "Carburant ou prise", "Question lieu", "Accueil terminé"];
+      const reached = [C("onboarding.step_welcome"), C("onboarding.step_energy") + restored,
+        fuelQ + plugQ - Math.min(C("onboarding.energy_both"), fuelQ, plugQ) + restored, C("onboarding.step_location"), C("onboarding.step_full")];
+      // No screen is reached by more iPhone than the one before it.
+      const vals = reached.map((v, i) => Math.min.apply(null, reached.slice(0, i + 1)));
       const b0 = vals[0];
       let body;
       if (!b0) body = later(LATER_APP) + (C("app.first_launch") ? '<p class="note">' + nw(C("onboarding.completed"), "accueil terminé", "accueils terminés") + " sur " + nw(C("app.first_launch"), "installation", "installations") + " (mesure d’avant).</p>" : "");
       else {
-        body = '<div class="funnel">' + steps.map((s, i) => '<div class="fn"><span>' + s[0] + '</span><span class="bar" aria-hidden="true"><i style="width:' + Math.min(100, vals[i] * 100 / b0).toFixed(1) + '%"></i></span><span class="pct" title="' + fmtF(vals[i], true) + '">' + pct0(vals[i] / b0) + "</span></div>").join("") + "</div>";
+        body = '<div class="funnel">' + names.map((n, i) => '<div class="fn"><span>' + n + '</span><span class="bar" aria-hidden="true"><i style="width:' + Math.min(100, vals[i] * 100 / b0).toFixed(1) + '%"></i></span><span class="pct" title="' + fmtF(vals[i], true) + '">' + pct0(vals[i] / b0) + "</span></div>").join("") + "</div>";
         let worst = -1, drop = 0;
         for (let i = 1; i < vals.length; i++) { const d = (vals[i - 1] - vals[i]) * 100 / b0; if (d > drop) { drop = d; worst = i; } }
-        if (worst > 0 && Math.round(drop) >= 1) body += '<div class="drop">Plus grosse perte : à l’étape « ' + steps[worst][0] + " » (−" + Math.round(drop) + NB + "points).</div>";
-        body += '<p class="note">' + fmtF(b0, true) + " " + pl(b0, "iPhone a vu", "iPhone ont vu") + " l’écran de bienvenue sur la période (chaque étape compte une fois par iPhone et par jour).</p>";
+        // The loss belongs to the screen seen without going further: the one before the line that falls.
+        if (worst > 0 && Math.round(drop) >= 1) body += '<div class="drop">Plus grosse perte : sur l’écran « ' + names[worst - 1] + " », quitté sans aller plus loin (−" + Math.round(drop) + NB + "points).</div>";
+        body += '<p class="note">' + fmtF(b0, true) + " " + pl(b0, "iPhone a vu", "iPhone ont vu") + " l’écran de bienvenue sur la période. Chaque ligne compte un écran affiché, une fois par iPhone et par jour ; la dernière, la réponse à la dernière question." +
+          (restored ? " Sauvegarde iCloud retrouvée sur " + fmtF(restored, true) + NB + "iPhone : " + pl(restored, "il saute", "ils sautent") + " les questions d’énergie et de carburant." : "") + "</p>";
       }
       out.push(card({ id: "parcours", title: "Parcours · Premier lancement", isNew: true, hint: "Où les nouveaux utilisateurs s’arrêtent pendant l’accueil.", body }));
     }
