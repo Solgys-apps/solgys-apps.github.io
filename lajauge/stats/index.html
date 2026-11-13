@@ -825,7 +825,8 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     "device.voiceover device.ipad perm.location_on perm.location_approx perm.location_off perm.notif_on perm.notif_off favorites.n0 " +
     "favorites.n1 favorites.n2_5 favorites.n6 vehicles.n1 vehicles.n2 vehicles.ev ad.consent_personal ad.consent_limited ad.att_granted " +
     "ad.att_denied install.fresh install.update install.restored acq.apple_ads acq.other backup.on notif.setting_bilan " +
-    "widget.installed_fuel widget.installed_ev").split(" "));
+    "widget.installed_fuel widget.installed_ev onboarding.step_city onboarding.step_search onboarding.step_reveal " +
+    "onboarding.step_notify first_steps.shown").split(" "));
   const LABELS = {
     "app.open": "Ouvertures", "app.first_launch": "Nouvelles installations", "onboarding.completed": "Accueils terminés",
     "mode.fuel": "Ouvertures en mode carburant", "mode.electric": "Ouvertures en mode électrique",
@@ -1379,7 +1380,50 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         body += '<p class="note">' + fmtF(b0, true) + " " + pl(b0, "iPhone a vu", "iPhone ont vu") + " l’écran de bienvenue sur la période. Chaque ligne compte un écran affiché, une fois par iPhone et par jour ; la dernière, la réponse à la dernière question." +
           (restored ? " Sauvegarde iCloud retrouvée sur " + fmtF(restored, true) + NB + "iPhone : " + pl(restored, "il saute", "ils sautent") + " les questions d’énergie et de carburant." : "") + "</p>";
       }
+      // The introduction of November 2026 goes on after the place: the wait, what the sector is worth, the
+      // notifications. Only the iPhone that carry it count here, so it is read from its own first screen
+      // (the wait) and never mixed with the lines above, which every version fills.
+      const sought = C("onboarding.step_search");
+      body += mini("Nouvel accueil · après la question du lieu");
+      if (!sought) body += later("Pas encore de mesure sur cette période : elle arrive avec la version de l’app qui porte le nouvel accueil.");
+      else {
+        const shown = Math.min(sought, C("onboarding.step_reveal"));
+        const skipped = C("onboarding.search_skip"), late = C("onboarding.search_timeout");
+        body += '<div class="funnel">' + [["Recherche lancée", sought], ["Résultat affiché", shown]].map((x) =>
+          '<div class="fn"><span>' + x[0] + '</span><span class="bar" aria-hidden="true"><i style="width:' + Math.min(100, x[1] * 100 / sought).toFixed(1) +
+          '%"></i></span><span class="pct" title="' + fmtF(x[1], true) + '">' + pct0(x[1] / sought) + "</span></div>").join("") + "</div>";
+        if (skipped + late) body += pills([skipped ? pill("« Passer à la carte » " + fmtF(skipped, true), "wa") : "", late ? pill("Réponse trop lente, carte ouverte " + fmtF(late, true), "wa") : ""]);
+        const seen = sharePills([{ l: "Un écart de prix", n: C("onboarding.reveal_gap"), k: "ok" }, { l: "Des prix proches", n: C("onboarding.reveal_close"), k: "ok" },
+          { l: "Des stations de recharge", n: C("onboarding.reveal_ev"), k: "ok" }, { l: "Rien à montrer", n: C("onboarding.reveal_none"), k: "wa" }]);
+        if (seen) body += mini("Ce que l’écran a montré") + seen;
+        const kept = C("onboarding.reveal_keep"), toMap = C("onboarding.reveal_map"), tank = C("onboarding.reveal_tank");
+        const choice = sharePills([{ l: "« Garder cette station »", n: kept, k: "ok" }, { l: "« Voir la carte »", n: toMap, k: "wa" }]);
+        if (choice) body += mini("Ce qu’ils ont choisi") + choice + (tank ? pills([pill("Réservoir modifié " + fmtF(tank, true) + NB + "fois")]) : "");
+        const asked = C("onboarding.step_notify");
+        const answer = sharePills([{ l: "« Oui, me prévenir »", n: C("onboarding.notify_yes"), k: "ok" }, { l: "« Non merci »", n: C("onboarding.notify_no"), k: "wa" }]);
+        if (asked) body += mini("« Voulez-vous être prévenu ? »") + (answer || '<p class="hint">—</p>') +
+          '<p class="note">Proposé à ' + fmtF(asked, true) + NB + "iPhone, après « Garder cette station ».</p>";
+        const cityScreen = C("onboarding.step_city"), cityPicked = C("onboarding.city_picked");
+        if (cityScreen) body += mini("« Dans quelle ville ? »") + pills([pill("Écran vu " + fmtF(cityScreen, true)), pill("Ville choisie " + fmtF(cityPicked, true), "ok")]);
+        body += '<p class="note">' + fmtF(sought, true) + " " + pl(sought, "iPhone a lancé", "iPhone ont lancé") + " la recherche sur la période. Les écrans sont comptés une fois par iPhone et par jour ; les réponses, à chaque fois.</p>";
+      }
       out.push(card({ id: "parcours", title: "Parcours · Premier lancement", isNew: true, hint: "Où les nouveaux utilisateurs s’arrêtent pendant l’accueil.", body }));
+
+      /* Votre Jauge : les premiers pas, dans Mon tableau de bord */
+      {
+        const shownDays = C("first_steps.shown");
+        const steps = [{ l: "Station gardée", n: C("first_steps.saved") }, { l: "Alerte de prix créée", n: C("first_steps.alert") },
+          { l: "Véhicule renseigné", n: C("first_steps.vehicle") }, { l: "Premier plein noté", n: C("first_steps.fill") }];
+        let b;
+        if (!shownDays && !steps.some((x) => x.n)) b = later("Pas encore de mesure sur cette période : elle arrive avec la version de l’app qui porte le nouvel accueil.");
+        else {
+          b = rowsHTML(steps.map((x) => Object.assign({ r: fmtF(x.n, true) }, x)));
+          b += pills([pill("Les cinq étapes terminées " + fmtF(C("first_steps.complete"), true), "ok"), pill("Étape touchée " + fmtF(C("first_steps.open"), true)),
+            C("first_steps.dismiss") ? pill("Carte fermée à la main " + fmtF(C("first_steps.dismiss"), true), "wa") : ""]);
+          b += '<p class="note">Carte « Votre Jauge » vue ' + fmtF(shownDays, true) + NB + "fois (une fois par iPhone et par jour). Chaque étape est comptée une seule fois par iPhone.</p>";
+        }
+        out.push(card({ id: "premierspas", title: "Premiers pas · Votre Jauge", isNew: true, hint: "Ce que les nouveaux utilisateurs font après l’accueil, dans Mon tableau de bord.", body: b }));
+      }
     }
 
     /* Jauge ONE · parcours d’achat */
@@ -1609,6 +1653,10 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       } else body += later(LATER_APP);
       body += mini("Type d’installation") + (sharePills([{ l: "Nouvelle", n: C("install.fresh"), k: "ok" }, { l: "Mise à jour", n: C("install.update"), k: "ok" }, { l: "Restaurée", n: C("install.restored"), k: "ok" }]) || '<p class="hint">—</p>');
       body += mini("Premier contact") + (sharePills([{ l: "Visite guidée terminée", n: C("tour.done"), k: "ok" }, { l: "Passée", n: C("tour.skipped"), k: "wa" }]) || '<p class="hint">—</p>');
+      {
+        const left = sharePills([{ l: "Quittée à la bulle 1", n: C("tour.skip_1"), k: "wa" }, { l: "À la bulle 2", n: C("tour.skip_2"), k: "wa" }, { l: "À la bulle 3", n: C("tour.skip_3"), k: "wa" }]);
+        if (left) body += left;
+      }
       body += mini("Choix à l’accueil") + (pills([sharePills([{ l: "Carburant", n: C("onboarding.energy_fuel"), k: "ok" }, { l: "Électrique", n: C("onboarding.energy_ev"), k: "ok" }, { l: "Les deux", n: C("onboarding.energy_both"), k: "ok" }]).replace(/^<div class="pills">|<\/div>$/g, ""),
         sharePills([{ l: "« Autour de moi »", n: C("onboarding.around_me"), k: "ok" }, { l: "Une ville", n: C("onboarding.city"), k: "ok" }]).replace(/^<div class="pills">|<\/div>$/g, "")]) || '<p class="hint">—</p>');
       body += '<p class="note">' + nw(C("app.first_launch"), "nouvelle installation", "nouvelles installations") + " sur la période. Vues de la fiche et sources de l’App Store : App Store Connect.</p>";
