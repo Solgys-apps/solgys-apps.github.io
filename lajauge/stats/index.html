@@ -401,6 +401,8 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
 
   const NB = " ", NN = " ";
   const PROD = "https://qxqpbgmcrsufmcxbopwf.supabase.co/functions/v1/usage-stats/report";
+  // Supabase Pro plan (subscribed 14/11): 8 GB of database per project.
+  const DB_LIMIT_BYTES = 8 * 1073741824;
   const STAGING = "https://ymszzxedzdaiipjfeptv.supabase.co/functions/v1/usage-stats/report";
   // #essai reads the staging server only, to try the page on test data.
   const ESSAI = location.hash === "#essai";
@@ -1727,9 +1729,9 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         const db = base.health.database, tables = db.tables || {};
         const names = [["irve_points", "bornes"], ["official_prices", "prix officiels"], ["price_history", "historique des prix"], ["projections", "projections"]]
           .filter((x) => tables[x[0]] != null).map((x, i) => (i ? x[1] : cap(x[1])) + " " + mo(tables[x[0]]));
-        right += '<div data-health="database" data-level="' + dbi.level + '"><div class="meter-h"><span>Base de données</span><b>' + mo(db.bytes) + " sur " + mo(db.limit_bytes || 524288000) + "</b></div>" +
+        right += '<div data-health="database" data-level="' + dbi.level + '"><div class="meter-h"><span>Base de données</span><b>' + mo(db.bytes) + " sur 8" + NB + "Go</b></div>" +
           '<div class="meter ' + dbi.level + '" role="img" aria-label="' + Math.round(dbi.share * 100) + ' % de la base utilisée"><i style="width:' + Math.min(100, dbi.share * 100).toFixed(1) + '%"></i></div>' +
-          st(dbi.level, dbi.pill) + '<p class="note">Offre gratuite de Supabase : 500' + NB + "Mo." + (names.length ? " " + names.join(", ") + "." : "") + "</p></div>";
+          st(dbi.level, dbi.pill) + '<p class="note">Offre Pro de Supabase : 8' + NB + "Go par projet ; le disque s’agrandit tout seul au-delà." + (names.length ? " " + names.join(", ") + "." : "") + "</p></div>";
       }
       const basePd = base.app.phone_days || 0;
       right += '<p class="note">Résumés de statistiques reçus et comptés sur la période' + (ESSAI ? "" : " (production)") + " : " + fmt(basePd) + (state.tests ? ", plus " + fmt(state.tests.app.phone_days) + " sur le serveur d’essai" : "") + ".</p>";
@@ -1982,10 +1984,11 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     else items.push({ key: "age", title: "Âge des prix déclarés", level: "info", pill: "Selon les stations", count: false,
       text: "Date officielle de plus de 3 jours pour " + ratio(op.older_than_3d, op.available_prices) + " des prix (" + fmt(op.older_than_3d) + "), de plus de 7 jours pour " +
         ratio(op.older_than_7d, op.available_prices) + " (" + fmt(op.older_than_7d) + "). Ces dates sont celles des stations." });
-    // Database size against the free plan
+    // Database size against the Pro plan's 8 GB (14/11: the server still
+    // reports the free plan's 500 MB; the page knows the plan instead).
     const db = h.database || {};
     if (db.bytes != null) {
-      const limit = db.limit_bytes || 524288000, share = db.bytes / limit;
+      const limit = DB_LIMIT_BYTES, share = db.bytes / limit;
       const level = share >= 0.9 ? "bad" : share >= 0.7 ? "warn" : "good";
       items.push({ key: "database", title: "Base de données", level, count: true, share, pill: (level === "good" ? "Large marge" : level === "warn" ? "À surveiller" : "Presque pleine") + " · " + Math.round(share * 100) + NN + "%",
         short: "base de données remplie à " + Math.round(share * 100) + NN + "%", text: "" });
