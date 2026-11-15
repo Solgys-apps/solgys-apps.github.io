@@ -139,6 +139,12 @@ button.ghost{min-height:40px;font:600 14px var(--font-text);padding:0 14px;borde
 .later{margin:0;padding:12px 14px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:13px;background:var(--soft)}
 .later + .later{margin-top:8px}
 .two{display:grid;grid-template-columns:minmax(0,1fr);gap:4px}
+.fgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:6px 28px}
+@media (min-width:640px){.fgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.kv{margin:0 0 6px;padding:0;list-style:none}
+.kv li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.kv li b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.kv li.none{color:var(--muted);border-bottom:0}
 @media (min-width:640px){.two{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}
 .two > div{min-width:0}
 
@@ -365,7 +371,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
 <footer class="foot" id="foot" hidden>
   <div class="wrap">
     <h2>Confidentialité</h2>
-    <p><strong>Totaux anonymes</strong> par jour, par heure et par créneau de 5 minutes, par version de l’app et d’iOS. Aucun identifiant, aucune position, aucune station, aucun texte saisi, aucun montant. Effacés après 25 mois (créneaux « en direct » : 2 jours). Chacun peut couper la collecte dans Mon espace › Réglages › Confidentialité › Statistiques anonymes.</p>
+    <p><strong>Totaux anonymes</strong> par jour, par heure et par créneau de 5 minutes, par version de l’app et d’iOS. Aucun identifiant, aucune position, aucune station, aucun texte saisi, aucun montant. Effacés après 25 mois (créneaux « en direct » : 2 jours). Chacun peut couper la collecte dans Mon tableau de bord › Réglages › Confidentialité › Statistiques anonymes.</p>
     <p>Rétention : sans identifiant, seule la semaine d’installation est connue. Une semaine de moins de 5 installations, ou une case sous 5 iPhone en moyenne, reste masquée par le serveur ; un nombre sous 5 pour toute la période peut s’afficher « < 5 ».</p>
     <p>Communauté et Santé : totaux et états calculés par le serveur à chaque lecture, jamais un profil, un contributeur ni une station.</p>
     <button type="button" class="forget" id="forget">Oublier le code sur cet appareil</button>
@@ -1296,7 +1302,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
 
       const drawer = C("one.offer_drawer");
       const origins = [["Historique des prix bloqué", C("one.offer_price_history")], ["Limite de favoris atteinte", C("one.offer_favorites")], ["Tendance bloquée", C("one.offer_trend")],
-        ["Bouton « sans publicité »", C("one.offer_ad_free")], ["Alertes", C("one.offer_alerts")], ["Tiroir « Mon espace »", drawer], ["Trajet", C("one.offer_trips")], ["Widget", C("one.offer_widget")],
+        ["Bouton « sans publicité »", C("one.offer_ad_free")], ["Alertes", C("one.offer_alerts")], ["Tableau de bord", drawer], ["Trajet", C("one.offer_trips")], ["Widget", C("one.offer_widget")],
         ["Jauge ONE (autre)", Math.max(0, C("one.offer_membership") - drawer)]];
       const tot = origins.reduce((t, o) => t + o[1], 0);
       let want = mini("D’où vient l’envie");
@@ -1386,78 +1392,66 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         body: '<div class="two"><div>' + ads + "</div><div>" + consent + "</div></div>" }));
     }
 
-    /* Fonctions: each main feature, the home-work line, sharing, then the rest */
+    /* Fonctions (15/11): one line per thing, the number on the right, zeros hidden. */
     {
       let body;
       if (empty) body = later(EMPTY_TEXT);
       else {
-        const st0 = ["station.from_map", "station.from_list", "station.from_favorite", "station.from_widget", "station.from_notification", "station.from_trip"];
-        const stv = st0.map((m) => C(m)), sts = shares(stv);
-        const stNames = ["carte", "liste", "favori", "widget", "notification", "trajet"];
-        const searches = C("search.place") + C("search.trip");
-        const favT = ["favorites.n0", "favorites.n1", "favorites.n2_5", "favorites.n6"].map((m) => C(m)), fs = shares(favT);
-        const rowsD = [
-          ["Carte et accueil", ["map.drawer", "map.locate", "map.market_gauge", "map.trend_locked", "map.outside_france"],
-            [["Tiroir « Mon espace » ouvert", "map.drawer"], ["« Me localiser »", "map.locate"], ["jauge du marché touchée", "map.market_gauge"], ["tendance bloquée", "map.trend_locked"], ["hors de France", "map.outside_france"]]],
-          ["Recherche et filtres", ["search.place", "search.trip", "search.recent", "filter.open24h", "filter.fresh", "filter.available", "filter.open_now", "filter.services", "filter.radius", "filter.brand", "filter.premium"],
-            [["Lieu", "search.place"], ["trajet", "search.trip"], ["recherche récente rouverte", "search.recent"], searches ? "sans résultat " + pct(C("search.no_result"), searches) : "",
-              ["filtres : 24 h/24", "filter.open24h"], ["prix frais", "filter.fresh"], ["disponible", "filter.available"], ["ouvert maintenant", "filter.open_now"], ["services", "filter.services"], ["rayon", "filter.radius"], ["enseigne", "filter.brand"], ["autres", "filter.premium"]]],
-          ["Fiche station", st0.concat(["station.other_fuel", "station.alternative"]),
-            [sts.total ? "Ouverte depuis : " + stNames.map((n, i) => stv[i] ? n + " " + sts.items[i].text : "").filter(Boolean).join(", ") : "", ["autre carburant regardé", "station.other_fuel"], ["alternative moins chère ouverte", "station.alternative"],
-              C("screen.station") && S("screen.station") ? "temps moyen " + duration(S("screen.station") / C("screen.station")) : ""]],
-          ["Trajets", ["trip.ok", "trip.failed", "trip.saved", "trip.reopened", "trip.finished", "trip.stop_chosen"],
-            [C("trip.ok") + C("trip.failed") ? "Calculés " + fmt(C("trip.ok") + C("trip.failed")) + " (réussis " + fmt(C("trip.ok")) + ")" : "", ["enregistrés", "trip.saved"], ["rouverts", "trip.reopened"], ["terminés", "trip.finished"], ["station choisie sur le trajet", "trip.stop_chosen"]]],
-          ["Alertes", ["tap.alert", "alert.deleted", "alert.check_now", "alert.page", "alert.target_price"],
-            [["Créées", "tap.alert"], ["prix cible", "alert.target_price"], ["supprimées", "alert.deleted"], ["« vérifier maintenant »", "alert.check_now"], ["page Alertes ouverte", "alert.page"]]],
-          ["Favoris", ["tap.favorite", "favorite.removed", "favorite.limit", "favorites.n0", "favorites.n1", "favorites.n2_5", "favorites.n6"],
-            [["Ajoutés", "tap.favorite"], ["retirés", "favorite.removed"], ["limite gratuite atteinte", "favorite.limit"],
-              fs.total ? "iPhone avec : 0 favori " + fs.items[0].text + ", 1 favori " + fs.items[1].text + ", 2 à 5 " + fs.items[2].text + ", 6 et plus " + fs.items[3].text : ""]],
-          ["Carnet et bilan", ["tap.fill_up", "journal.edit", "journal.delete", "journal.abandon", "bilan.notif_yes", "bilan.notif_no", "screen.my_report"],
-            [C("tap.fill_up") ? "Pleins notés " + fmt(C("tap.fill_up")) + " (" + line(r, [["depuis la fiche", "journal.from_station"], ["l’icône", "journal.from_icon"], ["Siri", "journal.from_siri"]]) + ")" : "", ["modifiés", "journal.edit"], ["supprimés", "journal.delete"], ["formulaire abandonné", "journal.abandon"], ["Mon bilan ouvert", "screen.my_report"], ["notification du bilan acceptée", "bilan.notif_yes"], ["refusée", "bilan.notif_no"]]],
-          ["Jaugeurs", ["tap.price_confirm", "tap.price_correct", "jaugeurs.signup", "jaugeurs.retained", "jaugeurs.rejected", "jaugeurs.linked_apple", "jaugeurs.progress", "jaugeurs.report_shortage"],
-            [C("tap.price_confirm") ? "Prix confirmés " + fmt(C("tap.price_confirm")) + " (retenus " + fmt(C("jaugeurs.retained")) + ", refusés " + fmt(C("jaugeurs.rejected")) + ")" : "", ["corrections", "tap.price_correct"], ["comptes créés", "jaugeurs.signup"], ["liés à Apple", "jaugeurs.linked_apple"],
-              ["signalements : rupture", "jaugeurs.report_shortage"], ["retour", "jaugeurs.report_available"], ["fermée", "jaugeurs.report_closed"], ["ouverte", "jaugeurs.report_open"], ["autre", "jaugeurs.report_other"], ["trop loin de la station", "jaugeurs.too_far"],
-              ["nouveaux statuts : Éclaireur", "jaugeurs.rank_scout"], ["Guide", "jaugeurs.rank_guide"], ["Pilier", "jaugeurs.rank_pillar"], ["« comment progresser » ouvert", "jaugeurs.progress"]]],
-          ["Réglages", ["screen.settings", "settings.data_delete"],
-            [["Page ouverte", "screen.settings"], ["« Supprimer mes données »", "settings.data_delete"]]]
+        // [label, number] (hidden when 0) or [label, text] (hidden when empty).
+        const N = (l, m) => [l, C(m)];
+        const share = (l, part, total) => [l, total > 0 && part > 0 ? pct(part, total) : ""];
+        const group = (title, items, none) => {
+          const shown = items.filter((x) => typeof x[1] === "number" ? x[1] > 0 : !!x[1]);
+          return "<div>" + mini(title) + '<ul class="kv">' + (shown.length
+            ? shown.map((x) => "<li><span>" + x[0] + "</span><b>" + (typeof x[1] === "number" ? fmt(x[1]) : x[1]) + "</b></li>").join("")
+            : '<li class="none">' + (none || "Rien sur la période") + "</li>") + "</ul></div>";
+        };
+        const from = [["la carte", "station.from_map"], ["la liste", "station.from_list"], ["les favoris", "station.from_favorite"],
+          ["un widget", "station.from_widget"], ["une notification", "station.from_notification"], ["un trajet", "station.from_trip"]];
+        const fromTotal = sumArr(from.map((x) => C(x[1])));
+        const filters = sumArr(["filter.open24h", "filter.fresh", "filter.available", "filter.open_now", "filter.services", "filter.radius", "filter.brand", "filter.premium"].map(C));
+        const favDays = sumArr(["favorites.n0", "favorites.n1", "favorites.n2_5", "favorites.n6"].map(C));
+        const groups = [
+          group("Carte et accueil", [N("Tableau de bord ouvert", "map.drawer"), N("« Me localiser » touché", "map.locate"),
+            N("Jauge du marché touchée", "map.market_gauge"), N("Tendance bloquée (sans Jauge ONE)", "map.trend_locked"), N("Carte déplacée hors de France", "map.outside_france")]),
+          group("Recherche et filtres", [N("Recherches d’un lieu", "search.place"), N("Recherches d’un trajet", "search.trip"),
+            N("Recherche récente rouverte", "search.recent"), N("Recherches sans résultat", "search.no_result"), ["Filtres changés", filters]]),
+          group("Fiche station", from.map((x) => share("Ouverte depuis " + x[0], C(x[1]), fromTotal)).concat([
+            N("Autre carburant regardé", "station.other_fuel"), N("Station moins chère ouverte", "station.alternative"),
+            ["Temps moyen sur la fiche", C("screen.station") && S("screen.station") ? duration(S("screen.station") / C("screen.station")) : ""]])),
+          group("Trajets", [["Trajets calculés", C("trip.ok") + C("trip.failed")], N("Trajets en échec", "trip.failed"), N("Trajets enregistrés", "trip.saved"),
+            N("Trajets rouverts", "trip.reopened"), N("Trajets terminés", "trip.finished"), N("Station choisie sur le trajet", "trip.stop_chosen")]),
+          group("Alertes", [N("Alertes créées", "tap.alert"), N("dont prix cible", "alert.target_price"), N("Alertes supprimées", "alert.deleted"),
+            N("« Vérifier maintenant » touché", "alert.check_now"), N("Page Alertes ouverte", "alert.page")]),
+          group("Favoris", [N("Favoris ajoutés", "tap.favorite"), N("Favoris retirés", "favorite.removed"), N("Limite gratuite atteinte", "favorite.limit"),
+            share("Utilisateurs avec au moins un favori", favDays - C("favorites.n0"), favDays)]),
+          group("Carnet et bilan", [N("Pleins notés", "tap.fill_up"), N("Pleins modifiés", "journal.edit"), N("Pleins supprimés", "journal.delete"), N("Saisie de plein abandonnée", "journal.abandon"),
+            N("Mon bilan ouvert", "screen.my_report"), N("Notification du bilan acceptée", "bilan.notif_yes"), N("Notification du bilan refusée", "bilan.notif_no")]),
+          group("Jaugeurs", [N("Prix confirmés", "tap.price_confirm"), N("Prix retenus", "jaugeurs.retained"), N("Prix refusés", "jaugeurs.rejected"),
+            N("Prix corrigés", "tap.price_correct"), N("Comptes Jaugeur créés", "jaugeurs.signup"), N("Comptes liés à Apple", "jaugeurs.linked_apple"),
+            N("Rupture signalée", "jaugeurs.report_shortage"), N("Carburant revenu signalé", "jaugeurs.report_available"), N("Station fermée signalée", "jaugeurs.report_closed"),
+            N("Station ouverte signalée", "jaugeurs.report_open"), N("Autre problème signalé", "jaugeurs.report_other"), N("Trop loin de la station", "jaugeurs.too_far"),
+            N("Nouveaux Éclaireurs", "jaugeurs.rank_scout"), N("Nouveaux Guides", "jaugeurs.rank_guide"), N("Nouveaux Piliers", "jaugeurs.rank_pillar"),
+            N("« Comment progresser » ouvert", "jaugeurs.progress")]),
+          group("Véhicules", [N("Véhicules ajoutés", "vehicles.add"), N("Véhicules modifiés", "vehicles.edit"), N("Véhicules supprimés", "vehicles.delete"),
+            N("Véhicule changé", "vehicles.activate"), N("Mes véhicules ouvert", "vehicles.page"), share("Utilisateurs avec 2 véhicules ou plus", C("vehicles.n2"), pd)]),
+          group("Widgets", [share("Utilisateurs avec un widget", C("widget.installed_fuel"), pd), N("Ouvertures depuis un widget", "open.widget")]),
+          group("Siri et raccourcis", [N("« Autour de moi »", "siri.nearby"), N("« Noter un plein »", "siri.fill_up"), N("« Planifier un trajet »", "siri.trip"),
+            N("« Enregistrés »", "siri.saved"), N("« Mon bilan »", "siri.bilan"), N("Raccourci sur l’icône de l’app", "shortcut.icon")]),
+          group("Sauvegarde iCloud", [share("Utilisateurs avec la sauvegarde", C("backup.on"), pd), N("Restaurations", "backup.restore"),
+            N("Erreurs de sauvegarde", "backup.error"), N("Page Sauvegarde ouverte", "backup.page")]),
+          group("Réglages et aide", [N("Réglages ouverts", "screen.settings"), N("« Supprimer mes données » touché", "settings.data_delete"),
+            N("Aide ouverte", "screen.help"), N("Assistance ouverte", "help.support"), N("« Nous écrire » touché", "help.write"), N("« Noter Jauge » touché", "review.rate_tap")]),
+          group("Trajet domicile-travail", [N("Ligne affichée sur le tableau de bord", "commute.shown"), N("Ligne touchée", "commute.tap"),
+            N("Itinéraire lancé", "commute.go"), N("Page Trajet ouverte", "commute.trip_page"), N("Offre Jauge ONE ouverte", "commute.offer"),
+            N("Adresses enregistrées", "commute.set"), N("Adresses retirées", "commute.removed")], "Pas encore de mesure : arrive avec la version 1.8"),
+          group("Partages", [N("Fiche station partagée", "share.station"), N("App Jauge partagée", "share.app"), N("Plein partagé", "share.fill_up"),
+            N("Mon bilan partagé", "share.report"), N("Statut Jaugeur partagé", "share.rank")], "Aucun partage sur la période")
         ];
-        const nothing = '<span style="color:var(--muted)">Rien sur la période</span>';
-        body = mini("Les grandes fonctions") + table(["Fonction", "Ce qu’on voit"], rowsD.map((x) => ["<b>" + x[0] + "</b>", anyOf(r, x[1]) ? line(r, x[2]) : nothing]), { wide: true, label: "Les grandes fonctions" }) +
-          '<p class="note">Nombre de fois sur la période. « Ouverte depuis » et la répartition des favoris sont des parts ; les favoris comptent les iPhone une fois par jour.</p>';
-
-        const rowsA = [
-          ["Véhicules", anyOf(r, ["vehicles.add", "vehicles.edit", "vehicles.delete", "vehicles.activate", "vehicles.page", "vehicles.n1", "vehicles.n2"]) ? line(r, [["Ajoutés", "vehicles.add"], ["modifiés", "vehicles.edit"], ["supprimés", "vehicles.delete"], ["activés", "vehicles.activate"], ["page ouverte", "vehicles.page"]]) +
-            (pd ? " · 2 véhicules ou plus : " + pct(C("vehicles.n2"), pd) + " des jours-iPhone" : "") : ""],
-          ["Widgets", anyOf(r, ["widget.installed_fuel", "widget.open_fuel", "open.widget"]) ? line(r, [["Installés (jours-iPhone)", "widget.installed_fuel"], ["ouvertures carburant", "widget.open_fuel"], ["ouvertures par widget", "open.widget"]]) : ""],
-          ["Siri et raccourcis", anyOf(r, ["siri.nearby", "siri.fill_up", "siri.trip", "siri.saved", "siri.bilan", "shortcut.icon", "open.shortcut"]) ? line(r, [["« Autour de moi »", "siri.nearby"], ["« Noter un plein »", "siri.fill_up"], ["trajet", "siri.trip"], ["enregistrés", "siri.saved"], ["« Mon bilan »", "siri.bilan"], ["raccourci de l’icône", "shortcut.icon"]]) : ""],
-          ["Sauvegarde iCloud", anyOf(r, ["backup.on", "backup.restore", "backup.error", "backup.page"]) ? "Activée " + pct(C("backup.on"), pd) + " des jours-iPhone · " + line(r, [["restaurations", "backup.restore"], ["erreurs", "backup.error"], ["page ouverte", "backup.page"]]) : ""],
-          ["Aide", anyOf(r, ["screen.help", "help.support", "help.write"]) ? line(r, [["Aide ouverte", "screen.help"], ["assistance", "help.support"], ["« Nous écrire »", "help.write"]]) : ""],
-          ["Avis App Store", C("review.rate_tap") ? "« Noter » touché " + fmt(C("review.rate_tap")) : ""]
-        ];
-        body += mini("Autres fonctions") + (rowsA.some((x) => x[1]) ? table(["Fonction", "Ce qu’on voit"], rowsA.map((x) => ["<b>" + x[0] + "</b>", x[1] || nothing]), { wide: true, label: "Autres fonctions" }) : later(LATER_APP));
-
-        // « Maison et Travail »: the home-work line on Mon tableau de bord.
-        const commute = ["commute.shown", "commute.tap", "commute.go", "commute.trip_page", "commute.offer", "commute.set", "commute.removed"];
-        let home = mini("Trajet domicile-travail");
-        if (!anyOf(r, commute)) home += later("Pas encore de mesure sur cette période : elle arrive avec la version de l’app qui porte « Maison et Travail ».");
-        else {
-          home += rowsHTML([{ l: "Ligne affichée", n: C("commute.shown"), r: fmtF(C("commute.shown"), true) }, { l: "Ligne touchée", n: C("commute.tap") },
-            { l: "Itinéraire lancé", n: C("commute.go") }, { l: "Page du trajet ouverte", n: C("commute.trip_page") }, { l: "Offre Jauge ONE ouverte", n: C("commute.offer") }]);
-          home += pills([pill("Maison et Travail enregistrés " + fmt(C("commute.set")), "ok"), C("commute.removed") ? pill("Retirés " + fmt(C("commute.removed")), "wa") : ""]);
-          home += '<p class="note">« Ligne affichée » : une fois par iPhone et par jour (jours-iPhone) ; le reste, à chaque fois.</p>';
-        }
-
-        const kinds = [["Fiche station", "station"], ["L’app Jauge (QR code, lien)", "app"], ["Un plein (économie réalisée)", "fill_up"], ["Mon bilan", "report"], ["Statut Jaugeur", "rank"]];
-        const pages = kinds.map((k) => C("share." + k[1])), tp = sumArr(pages);
-        let shared = mini("Partages");
-        if (!tp) shared += later(LATER_APP) + (C("tap.share") ? '<p class="note">Bouton « Partager » touché ' + nw(C("tap.share"), "fois", "fois") + " (mesure d’avant).</p>" : "");
-        else {
-          shared += rowsHTML(shareItems(kinds.map((k, i) => ({ l: k[0], n: pages[i] }))).items) +
-            '<p class="note">' + nw(tp, "page de partage ouverte", "pages de partage ouvertes") + " : la feuille de partage d’iOS s’est affichée ; l’app ne sait pas si quelque chose a été envoyé.</p>";
-        }
-        body += '<div class="two"><div>' + home + "</div><div>" + shared + "</div></div>";
+        body = '<div class="fgrid">' + groups.join("") + "</div>" +
+          '<p class="note">Nombre de fois sur la période ; les zéros ne sont pas affichés. « Utilisateurs avec… » : part des iPhone actifs, jour par jour.</p>';
       }
-      out.push(card({ id: "fonctions", title: "Fonctions", full: true, hint: "Chaque fonction de l’app, une ligne par fonction (période choisie).", body }));
+      out.push(card({ id: "fonctions", title: "Fonctions", full: true, hint: "Ce que les gens font dans l’app, sur la période choisie.", body }));
     }
 
     /* Appareils et moments */
