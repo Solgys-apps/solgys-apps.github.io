@@ -749,6 +749,14 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     "search.no_result": "Recherche sans résultat", "active.week_first": "Première visite de la semaine", "active.month_first": "Première visite du mois"
   };
   const ORDER = Object.keys(LABELS);
+  const MENU = [
+    ["Utilisation", [["app.open", "Ouvertures de l’app"], ["app.first_launch", "Nouveaux utilisateurs"], ["active.week_first", "Utilisateurs revenus cette semaine"]]],
+    ["Pages vues", [["screen.map", "Carte"], ["screen.station", "Fiche d’une station"], ["screen.stations", "Liste des stations"], ["screen.my_report", "Mon bilan"], ["screen.jaugeurs", "Mon espace Jaugeur"]]],
+    ["Actions", [["tap.directions", "Itinéraire lancé"], ["tap.fill_up", "Plein noté"], ["tap.favorite", "Favori ajouté"], ["tap.alert", "Alerte de prix créée"], ["tap.price_confirm", "Prix confirmé"]]],
+    ["Jauge ONE", [["one.trial_started", "Essais gratuits commencés"], ["one.purchased", "Abonnements payés"]]],
+    ["Problèmes", [["error.server_unreachable", "Pas de connexion"], ["error.prices_unavailable", "Prix indisponibles"], ["error.no_station", "Aucune station trouvée"]]]
+  ];
+  const MENU_NAME = Object.fromEntries(MENU.flatMap((g) => g[1]));
   const SCREENS = ["screen.map", "screen.station", "screen.stations", "screen.my_report",
     "screen.jaugeurs", "screen.one_offer", "screen.settings", "screen.help"];
   const ACTIONS = ["tap.directions", "tap.search", "tap.favorite", "tap.fill_up", "tap.price_confirm", "tap.price_correct", "tap.alert", "tap.share"];
@@ -1578,14 +1586,12 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
   // « Chaque jour »: active iPhones (line) and any metric (columns).
   function renderDays(r) {
     const app = r.app;
-    const keys = Object.keys(app.series || {});
-    const known = ORDER.filter((m) => keys.includes(m)).concat(keys.filter((m) => !ORDER.includes(m)).sort());
-    const timed = known.filter((m) => app.series[m].seconds);
-    if (!known.includes(state.metric.split("|")[0])) state.metric = known.includes("app.open") ? "app.open" : (known[0] || "app.open");
-    $("metric").innerHTML = '<optgroup label="Nombre de fois">' + known.map((m) => '<option value="' + esc(m) + '">' + esc(label(m)) + "</option>").join("") + "</optgroup>" +
-      (timed.length ? '<optgroup label="Durées">' + timed.map((m) => '<option value="' + esc(m) + '|seconds">' + esc(m === "app.open" ? "Temps passé dans l’app" : "Durée : " + label(m)) + "</option>").join("") + "</optgroup>" : "");
+    // The « Mesure » menu: a short list in plain French (15/11), the details stay in the cards below.
+    const known = MENU.flatMap((g) => g[1].map((i) => i[0]));
+    if (!known.includes(state.metric)) state.metric = "app.open";
+    $("metric").innerHTML = MENU.map((g) => '<optgroup label="' + esc(g[0]) + '">' +
+      g[1].map((i) => '<option value="' + esc(i[0]) + '">' + esc(i[1]) + "</option>").join("") + "</optgroup>").join("");
     $("metric").value = state.metric;
-    if ($("metric").value !== state.metric) { state.metric = "app.open"; $("metric").value = "app.open"; }
     $("metric").addEventListener("change", () => { state.metric = $("metric").value; renderMetric(state.view); typo($("ouvertures")); });
 
     const weeklyView = r.days.length > 31;
@@ -1621,12 +1627,12 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     const s = (app.series || {})[m];
     const el = $("colsMetric");
     if (!el) return;
-    if (!s) { el.innerHTML = ""; $("metricSub").textContent = ""; return; }
+    if (!s) { el.innerHTML = ""; $("metricSub").textContent = "Rien sur la période."; return; }
     const values = kind === "seconds" ? s.seconds : s.count;
     const fmtValue = kind === "seconds" ? duration : fmt;
     const total = kind === "seconds" ? sec(r, m) : cnt(r, m);
     const pts = dayPoints(r, values);
-    const name = kind === "seconds" ? (m === "app.open" ? "Temps passé dans l’app" : "Durée : " + label(m)) : label(m);
+    const name = kind === "seconds" ? (m === "app.open" ? "Temps passé dans l’app" : "Durée : " + label(m)) : (MENU_NAME[m] || label(m));
     $("metricSub").textContent = fmtValue(total) + " sur la période" + (app.phone_days > 0 ? ", " + (kind === "seconds" ? duration(total / app.phone_days) : dec1(total / app.phone_days)) + " par jour-iPhone" : "") +
       (r.days.length > 31 ? ". Sommes par semaine." : ".");
     if (r.days.length === 1) {
