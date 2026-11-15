@@ -91,16 +91,10 @@ h1 b{color:var(--yellow)}
 .switch[aria-checked="true"]{color:var(--fg)}
 .switch[aria-checked="true"] .sw{background:var(--good)}
 .switch[aria-checked="true"] .sw::after{transform:translateX(12px)}
-.sub-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding-bottom:8px}
-.sub-bar:empty{display:none}
 .dates{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;padding-bottom:9px}
 .dates label{font-size:13px;font-weight:600;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
 .dates input{min-height:36px;font:600 14px var(--font-text);padding:0 8px;border-radius:10px;border:1px solid var(--line);background:var(--field);color:var(--fg);max-width:160px}
 .tcount{margin:0;font-size:12.5px;color:var(--muted)}
-.tcount b{color:var(--fg)}
-.tform{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;padding-bottom:9px}
-.tform label{font-size:13px;color:var(--muted);font-weight:600;flex:1 1 100%}
-.tform input{flex:1 1 200px;min-width:0;min-height:40px;font:600 15px var(--font-text);padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--field);color:var(--fg)}
 .bar-msg{margin:0;padding-bottom:8px;font-size:13px;color:var(--warn);font-weight:600}
 button.primary{min-height:40px;font:700 14px var(--font-text);padding:0 16px;border-radius:10px;border:0;background:var(--button);color:var(--on-button);cursor:pointer}
 button.ghost{min-height:40px;font:600 14px var(--font-text);padding:0 14px;border-radius:10px;border:1px solid currentColor;background:transparent;color:inherit;cursor:pointer}
@@ -124,7 +118,6 @@ button.ghost{min-height:40px;font:600 14px var(--font-text);padding:0 14px;borde
 #dashboard[aria-busy="true"]{opacity:.55}
 
 /* Notices */
-.notice{margin:12px 0 0;padding:10px 14px;border-radius:12px;background:var(--note-bg);border:1px solid var(--note-line);font-size:13.5px}
 .strip{display:flex;align-items:center;gap:10px;min-height:44px;margin-top:12px;padding:8px 12px;border-radius:12px;background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--fg);text-decoration:none;font-size:13.5px}
 .strip.bad{background:var(--bad-bg);border-color:var(--bad)}
 .strip-i{flex:none;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--warn);color:var(--card);font:800 13px/1 var(--font-text)}
@@ -310,12 +303,10 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       <a href="#parcours">Parcours</a>
       <a href="#one">Jauge ONE</a>
       <a href="#utilisation">Utilisation</a>
-      <a href="#detail">Détail</a>
-      <a href="#origine">Origine</a>
       <a href="#notifications">Notifications</a>
       <a href="#communaute">Communauté</a>
-      <a href="#partages">Partages</a>
       <a href="#publicite">Publicité</a>
+      <a href="#fonctions">Fonctions</a>
       <a href="#appareils">Appareils</a>
       <a href="#sante" id="navSante">Santé</a>
       <a href="#ailleurs">Ailleurs</a>
@@ -332,7 +323,6 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       <button type="button" class="chipb" data-p="all" aria-pressed="false">Depuis le début</button>
       <button type="button" class="chipb" data-p="custom" aria-pressed="false" aria-controls="dates">Dates…</button>
       <button type="button" class="switch first" id="compare" role="switch" aria-checked="false"><span class="sw" aria-hidden="true"></span>Comparer à la période d’avant</button>
-      <button type="button" class="switch" id="tests" role="switch" aria-checked="false"><span class="sw" aria-hidden="true"></span>Avec mes appareils de test</button>
     </div>
     <div class="wrap">
       <form class="dates" id="dates" hidden>
@@ -341,14 +331,6 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         <button class="primary" type="submit">Afficher</button>
         <span class="tcount" id="datesMsg" role="alert"></span>
       </form>
-      <form class="tform" id="testsForm" hidden>
-        <label for="testsCode">Code du serveur d’essai (une seule fois sur cet appareil)</label>
-        <input id="testsCode" type="password" autocomplete="off" spellcheck="false" autocapitalize="off">
-        <button class="primary" type="submit">Ajouter</button>
-        <button class="ghost" type="button" id="testsCancel">Annuler</button>
-        <p class="bar-msg" id="testsMsg" role="alert" hidden></p>
-      </form>
-      <div class="sub-bar" id="subBar"><p class="tcount" id="tcount"></p></div>
       <p class="bar-msg" id="barMsg" role="status" hidden></p>
     </div>
   </div>
@@ -374,7 +356,6 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
 
   <div id="dashboard" hidden>
     <div class="wrap">
-      <p class="notice" id="testNotice" hidden></p>
       <a class="strip" id="strip" href="#sante" hidden></a>
       <div class="grid" id="grid"></div>
     </div>
@@ -396,7 +377,8 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
   "use strict";
 
   // Publication day of the app version that sends test installs to staging
-  // ("YYYY-MM-DD"). Until then, production also holds the owner's test devices.
+  // ("YYYY-MM-DD"). Until then, production also holds the owner's test devices:
+  // a period is never compared with one on the other side of that day.
   const TESTS_IN_PRODUCTION_UNTIL = "2026-10-31";
 
   const NB = " ", NN = " ";
@@ -409,7 +391,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
   const CODE_KEY = "jauge.stats.code", ESSAI_KEY = "jauge.stats.code.essai";
   const BASE_KEY = ESSAI ? ESSAI_KEY : CODE_KEY;
   const BASE = ESSAI ? STAGING : PROD;
-  const PERIOD_KEY = "jauge.stats.period", TESTS_KEY = "jauge.stats.tests", COMPARE_KEY = "jauge.stats.compare";
+  const PERIOD_KEY = "jauge.stats.period", COMPARE_KEY = "jauge.stats.compare";
   const FIRST_KEY = "jauge.stats.first", DATES_KEY = "jauge.stats.dates";
   const $ = (id) => document.getElementById(id);
   const root = document.documentElement;
@@ -564,8 +546,8 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     return { key: "value", text: "", value: value == null ? 0 : value };
   }
 
-  // Comparisons: previous period complete, and with the switch off the two
-  // periods on the same side of the day test devices left production.
+  // Comparisons: previous period complete, and (production) the two periods
+  // on the same side of the day test devices left production.
   function comparable(report, opts) {
     const prev = report.previous || {};
     if (!prev.complete) return { ok: false, reason: prev.reason || "provisional" };
@@ -577,24 +559,6 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     return { ok: false, reason: "tests_cutoff" };
   }
 
-  function addArrays(a, b) {
-    return a.map((x, i) => {
-      const y = b[i];
-      if (x == null && y == null) return null;
-      return (x || 0) + (y || 0);
-    });
-  }
-  function emptyLike(byDay) { return byDay.map((v) => (v === null ? null : 0)); }
-  function mergeTotals(a, b) {
-    const out = {};
-    new Set(Object.keys(a || {}).concat(Object.keys(b || {}))).forEach((m) => {
-      const x = (a || {})[m] || {}, y = (b || {})[m] || {};
-      const t = { count: (x.count || 0) + (y.count || 0) };
-      if (x.seconds != null || y.seconds != null) t.seconds = (x.seconds || 0) + (y.seconds || 0);
-      out[m] = t;
-    });
-    return out;
-  }
   function versionKey(v) { return String(v).split(".").map((x) => Number(x) || 0); }
   function versionDesc(a, b) {
     const x = versionKey(a.app), y = versionKey(b.app);
@@ -604,65 +568,6 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     }
     return 0;
   }
-  // Production + staging, additive. A metric or version present on one side is
-  // first rebuilt on the other from that side's own days: a day that server
-  // received summaries counts 0 there, never « no data ».
-  function mergeReports(prod, staging) {
-    const pa = prod.app, sa = staging.app;
-    const series = {};
-    new Set(Object.keys(pa.series || {}).concat(Object.keys(sa.series || {}))).forEach((m) => {
-      const x = (pa.series || {})[m], y = (sa.series || {})[m];
-      const timed = (x && x.seconds) || (y && y.seconds);
-      const fill = (side, s) => s || Object.assign({ count: emptyLike(side.phone_days_by_day) }, timed ? { seconds: emptyLike(side.phone_days_by_day) } : {});
-      const xs = fill(pa, x), ys = fill(sa, y);
-      series[m] = { count: addArrays(xs.count, ys.count) };
-      if (timed) series[m].seconds = addArrays(xs.seconds || emptyLike(pa.phone_days_by_day), ys.seconds || emptyLike(sa.phone_days_by_day));
-    });
-    const versions = new Map();
-    const take = (side, list) => (list || []).forEach((v) => {
-      const cur = versions.get(v.app) || { prod: null, staging: null };
-      cur[side] = v; versions.set(v.app, cur);
-    });
-    take("prod", pa.by_app_version); take("staging", sa.by_app_version);
-    const blank = (sideApp) => ({ phone_days: 0, phone_days_by_day: emptyLike(sideApp.phone_days_by_day), totals: {} });
-    const byVersion = Array.from(versions.entries()).map(([app, v]) => {
-      const x = v.prod || blank(pa), y = v.staging || blank(sa);
-      return { app, phone_days: (x.phone_days || 0) + (y.phone_days || 0),
-        phone_days_by_day: addArrays(x.phone_days_by_day, y.phone_days_by_day), totals: mergeTotals(x.totals, y.totals) };
-    }).sort(versionDesc);
-    const oses = new Map();
-    (pa.by_os || []).concat(sa.by_os || []).forEach((o) => {
-      const cur = oses.get(o.os) || { os: o.os, phone_days: 0, totals: {} };
-      cur.phone_days += o.phone_days || 0; cur.totals = mergeTotals(cur.totals, o.totals);
-      oses.set(o.os, cur);
-    });
-    const starts = [pa.collection_start, sa.collection_start].filter(Boolean).sort();
-    const pp = prod.previous || {}, sp = staging.previous || {};
-    return {
-      version: 2, generated_at: prod.generated_at, today: prod.today, from: prod.from, to: prod.to, days: prod.days.slice(),
-      app: {
-        collection_start: starts.length ? starts[0] : null,
-        provisional_from: pa.provisional_from,
-        phone_days: (pa.phone_days || 0) + (sa.phone_days || 0),
-        phone_days_by_day: addArrays(pa.phone_days_by_day, sa.phone_days_by_day),
-        totals: mergeTotals(pa.totals, sa.totals),
-        series,
-        by_app_version: byVersion,
-        by_os: Array.from(oses.values()).sort((a, b) => b.os - a.os)
-      },
-      previous: {
-        from: pp.from, to: pp.to,
-        complete: !!(pp.complete && sp.complete),
-        reason: pp.complete && sp.complete ? null : (pp.reason || sp.reason || "provisional"),
-        phone_days: (pp.phone_days || 0) + (sp.phone_days || 0),
-        totals: mergeTotals(pp.totals, sp.totals)
-      },
-      community: prod.community,
-      health: prod.health,
-      tests: { phone_days: sa.phone_days || 0, totals: sa.totals || {} }
-    };
-  }
-
   /* ---------- Day series ---------- */
   // Points of one series on the period axis, with their state; 12 months are
   // summed by calendar week (Monday to Sunday).
@@ -821,20 +726,20 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
 
   /* ---------- Metrics ---------- */
   // Daily flags (ceiling 1 per phone and day): a phone counts once per day.
-  const FLAGS = new Set(("active.week_first active.month_first onboarding.step_welcome onboarding.step_arrival onboarding.step_energy " +
-    "onboarding.step_fuel onboarding.step_connector onboarding.step_location onboarding.step_full one.funnel_offer one.funnel_plan " +
-    "one.funnel_pay one.funnel_success shared.station shared.app shared.fill_up shared.report shared.rank device.dark device.large_text " +
+  const FLAGS = new Set(("active.week_first active.month_first onboarding.step_welcome onboarding.step_arrival " +
+    "onboarding.step_fuel onboarding.step_location onboarding.step_full one.funnel_offer one.funnel_plan " +
+    "one.funnel_pay one.funnel_success device.dark device.large_text " +
     "device.voiceover device.ipad perm.location_on perm.location_approx perm.location_off perm.notif_on perm.notif_off favorites.n0 " +
-    "favorites.n1 favorites.n2_5 favorites.n6 vehicles.n1 vehicles.n2 vehicles.ev ad.consent_personal ad.consent_limited ad.att_granted " +
-    "ad.att_denied install.fresh install.update install.restored acq.apple_ads acq.other backup.on notif.setting_bilan " +
-    "widget.installed_fuel widget.installed_ev onboarding.step_city onboarding.step_search onboarding.step_reveal " +
-    "onboarding.step_notify first_steps.shown").split(" "));
+    "favorites.n1 favorites.n2_5 favorites.n6 vehicles.n1 vehicles.n2 ad.consent_personal ad.consent_limited ad.att_granted " +
+    "ad.att_denied install.fresh install.update install.restored backup.on notif.setting_bilan " +
+    "widget.installed_fuel onboarding.step_city onboarding.step_search onboarding.step_reveal " +
+    "onboarding.step_notify first_steps.shown commute.shown").split(" "));
   const LABELS = {
     "app.open": "Ouvertures", "app.first_launch": "Nouvelles installations", "onboarding.completed": "Accueils terminés",
-    "mode.fuel": "Ouvertures en mode carburant", "mode.electric": "Ouvertures en mode électrique",
+    "mode.fuel": "Ouvertures en mode carburant",
     "fuel.diesel": "Gazole choisi", "fuel.e10": "E10 choisi", "fuel.sp95": "SP95 choisi", "fuel.sp98": "SP98 choisi", "fuel.e85": "E85 choisi", "fuel.gpl": "GPL choisi",
-    "screen.map": "Carte", "screen.stations": "Liste Stations", "screen.chargers": "Liste Bornes", "screen.station": "Fiche d’une station",
-    "screen.charger": "Fiche d’une borne", "screen.my_report": "Mon bilan", "screen.jaugeurs": "Jaugeurs", "screen.settings": "Réglages",
+    "screen.map": "Carte", "screen.stations": "Liste Stations", "screen.station": "Fiche d’une station",
+    "screen.my_report": "Mon bilan", "screen.jaugeurs": "Jaugeurs", "screen.settings": "Réglages",
     "screen.help": "Aide", "screen.one_offer": "Page Jauge ONE",
     "tap.directions": "Itinéraire", "tap.search": "Recherche", "tap.favorite": "Favori ajouté", "tap.alert": "Alerte de prix créée",
     "tap.fill_up": "Plein noté", "tap.price_confirm": "Prix confirmé", "tap.price_correct": "Prix corrigé", "tap.share": "Page de partage ouverte",
@@ -844,7 +749,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     "search.no_result": "Recherche sans résultat", "active.week_first": "Première visite de la semaine", "active.month_first": "Première visite du mois"
   };
   const ORDER = Object.keys(LABELS);
-  const SCREENS = ["screen.map", "screen.station", "screen.stations", "screen.chargers", "screen.charger", "screen.my_report",
+  const SCREENS = ["screen.map", "screen.station", "screen.stations", "screen.my_report",
     "screen.jaugeurs", "screen.one_offer", "screen.settings", "screen.help"];
   const ACTIONS = ["tap.directions", "tap.search", "tap.favorite", "tap.fill_up", "tap.price_confirm", "tap.price_correct", "tap.alert", "tap.share"];
   const FUELS = [["fuel.diesel", "Gazole"], ["fuel.e10", "E10"], ["fuel.sp95", "SP95"], ["fuel.sp98", "SP98"], ["fuel.e85", "E85"], ["fuel.gpl", "GPL"]];
@@ -934,7 +839,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     const icon = { good: "✓", warn: "!", bad: "!", info: "i" }[level];
     return '<span class="st ' + level + '"><i aria-hidden="true">' + icon + "</i>" + text + "</span>";
   }
-  // One line of « Fonctions en détail »: « Label n » items joined by « · ».
+  // One line of « Fonctions »: « Label n » items joined by « · ».
   function line(r, list) {
     const parts = list.map((x) => {
       if (typeof x === "string") return x;
@@ -958,9 +863,8 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     })(),
     cFrom: null, cTo: null,
     compare: stored(COMPARE_KEY) === "1",
-    testsOn: !ESSAI && stored(TESTS_KEY) === "1",
     metric: "app.open",
-    view: null, base: null, tests: null, prev: null
+    view: null, prev: null
   };
   (function () {
     const d = String(stored(DATES_KEY) || "").split("|");
@@ -1034,56 +938,12 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       return r;
     });
   }
-  // Production + staging (« avec mes tests »): the v2 merge, plus the v3 parts.
-  // Retention stays production only: a cell hidden on one server cannot be added.
-  function mergeV3(a, b) {
-    const m = mergeReports(a, b);
-    m.version = a.version;
-    if (a.threshold != null) m.threshold = a.threshold;
-    // Production still on v2, staging on v3: the live parts come from staging alone
-    // (production apps send only the next day's totals, so they add nothing live).
-    if (a.version !== 3 && b.version === 3) {
-      m.version = 3; m.cohorts = b.cohorts; m.hours = b.hours; m.live = b.live; m.today_totals = b.today_totals;
-      m.liveTestsOnly = true;
-      return m;
-    }
-    if (a.version !== 3) return m;
-    m.cohorts = a.cohorts;
-    const add = (x, y) => (x || []).map((v, i) => (v || 0) + (((y || [])[i]) || 0));
-    if (b.version === 3) {
-      m.hours = Object.assign({}, a.hours, { period: add(a.hours.period, b.hours.period), last_day_opens: add(a.hours.last_day_opens, b.hours.last_day_opens) });
-      const L = a.live || {}, M = b.live || {};
-      m.live = Object.assign({}, L, { current: (L.current || 0) + (M.current || 0), previous_3: add(L.previous_3 || [0, 0, 0], M.previous_3),
-        last_2_hours: (L.last_2_hours || []).map((s, i) => ({ slot: s.slot, pings: (s.pings || 0) + ((((M.last_2_hours || [])[i]) || {}).pings || 0) })) });
-      const T = a.today_totals || {}, U = b.today_totals || {};
-      m.today_totals = { day: T.day };
-      ["devices", "opens", "seconds", "first_launch", "trial"].forEach((k) => { m.today_totals[k] = (T[k] || 0) + (U[k] || 0); });
-    } else { m.hours = a.hours; m.live = a.live; m.today_totals = a.today_totals; m.stagingV2 = true; }
-    m.cohortsProdOnly = true;
-    return m;
-  }
-  function load(from, to) {
-    const code = stored(BASE_KEY);
-    const wantTests = !ESSAI && state.testsOn;
-    const testsCode = wantTests ? stored(ESSAI_KEY) : null;
-    const pBase = ask(BASE, from, to, code);
-    const pTests = wantTests && testsCode ? ask(STAGING, from, to, testsCode).then((r) => ({ ok: true, r }), (e) => ({ ok: false, e })) : Promise.resolve(null);
-    return pBase.then((base) => pTests.then((t) => {
-      let view = base, tests = null, terr = null;
-      if (t && t.ok) {
-        if (t.r.days.length === base.days.length && t.r.from === base.from) { tests = t.r; view = mergeV3(base, t.r); }
-        else terr = { status: 0 };
-      } else if (t && !t.ok) terr = t.e || { status: 0 };
-      return { view, base, tests, terr };
-    }));
-  }
+  function load(from, to) { return ask(BASE, from, to, stored(BASE_KEY)); }
 
   /* ---------- Chrome: bars, lock, status ---------- */
   function setBar() {
     document.querySelectorAll("#periode .chipb").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.p === state.p)));
     $("compare").setAttribute("aria-checked", String(state.compare));
-    $("tests").setAttribute("aria-checked", String(state.testsOn));
-    $("tests").hidden = ESSAI;
     $("dates").hidden = !(state.p === "custom" && (datesOpen || !state.view));
     if (state.p === "custom") {
       const t = todayParis();
@@ -1094,13 +954,6 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     measure();
   }
   function barMsg(text) { $("barMsg").textContent = text || ""; $("barMsg").hidden = !text; measure(); }
-  function testsForm(show, message) {
-    $("testsForm").hidden = !show;
-    $("testsMsg").hidden = !message;
-    $("testsMsg").textContent = message || "";
-    if (show) $("testsCode").value = "";
-    measure();
-  }
   function showLock(message) {
     seq++;
     $("dashboard").hidden = true; $("skeleton").hidden = true; $("statusBox").hidden = true;
@@ -1135,25 +988,15 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       else $("dashboard").setAttribute("aria-busy", "true");
       barMsg("");
     }
-    const wantTests = !ESSAI && state.testsOn;
-    if (wantTests && !stored(ESSAI_KEY)) { if ($("testsForm").hidden) testsForm(true, ""); }
-    else testsForm(false, "");
-
     const pr = prevRange(rg.from, rg.to);
-    const pPrev = state.compare ? load(pr.from, pr.to).then((x) => x.view, () => null) : Promise.resolve(null);
-    load(rg.from, rg.to).then((x) => pPrev.then((prev) => {
+    const pPrev = state.compare ? load(pr.from, pr.to).catch(() => null) : Promise.resolve(null);
+    load(rg.from, rg.to).then((report) => pPrev.then((prev) => {
       if (id !== seq) return;
-      const msgs = [];
-      if (x.terr) {
-        if (x.terr.status === 401) { store(ESSAI_KEY, null); testsForm(true, "Ce code n’est pas le bon."); }
-        else msgs.push("Vos tests n’ont pas pu être lus : chiffres de production seuls.");
-      } else if (x.tests) testsForm(false, "");
-      if (state.compare && !prev) msgs.push("La période d’avant n’a pas pu être lue : pas de comparaison.");
-      state.base = x.base; state.tests = x.tests; state.view = x.view; state.prev = prev;
+      state.view = report; state.prev = prev;
       showStatus("");
-      barMsg(msgs.join(" "));
+      barMsg(state.compare && !prev ? "La période d’avant n’a pas pu être lue : pas de comparaison." : "");
       // « Depuis le début »: start at the first day with data, once it is known.
-      const cs = x.base.app.collection_start;
+      const cs = report.app.collection_start;
       if (cs && stored(FIRST_KEY) !== cs) {
         store(FIRST_KEY, cs);
         if (state.p === "all" && range().from !== rg.from) { refresh(); return; }
@@ -1180,9 +1023,9 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
   let lastRead = Date.now();
 
   /* ---------- Rendering helpers ---------- */
-  function testsEffective() { return ESSAI || !!state.tests; }
-  function cmpOpts() { return { testsOn: testsEffective(), cutoff: TESTS_IN_PRODUCTION_UNTIL }; }
-  function noticeActive(r) { return !ESSAI && (TESTS_IN_PRODUCTION_UNTIL === null || r.from <= TESTS_IN_PRODUCTION_UNTIL); }
+  // #essai holds test devices only: its periods compare across the cutoff.
+  function cmpOpts() { return { testsOn: ESSAI, cutoff: TESTS_IN_PRODUCTION_UNTIL }; }
+  function testsInProduction(r) { return !ESSAI && (TESTS_IN_PRODUCTION_UNTIL === null || r.from <= TESTS_IN_PRODUCTION_UNTIL); }
   function hasProvisional(r) { return r.to >= r.app.provisional_from; }
   function collected(r) { const cs = r.app.collection_start; return r.days.filter((d) => cs && d >= cs).length; }
   function avgDaily(r) { const n = collected(r); return n > 0 ? r.app.phone_days / n : null; }
@@ -1237,31 +1080,24 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
 
   /* ---------- Render ---------- */
   function render() {
-    const r = state.view, base = state.base;
+    const r = state.view;
     lastRead = Date.now();
     const app = r.app, pd = app.phone_days;
     const empty = !(pd > 0);
     const v3 = r.version === 3;
     const P0 = state.prev;
     CMP = cmpInfo();
-    const C = (m) => cnt(r, m), S = (m) => sec(r, m), F = (m) => sh(r, m);
+    const C = (m) => cnt(r, m), S = (m) => sec(r, m);
     const PC = (m) => (P0 ? cnt(P0, m) : null);
-    const health = healthItems(base.health);
+    const health = healthItems(r.health);
     const watch = health.map((i, k) => [i, k]).filter((x) => x[0].count && (x[0].level === "warn" || x[0].level === "bad"))
       .sort((a, b) => (RANK[a[0].level] - RANK[b[0].level]) || (a[1] - b[1])).map((x) => x[0]);
     const g = instant(r.generated_at);
     const today = todayParis();
     const nDays = r.days.length;
 
-    // Masthead, test notice, Santé strip and nav dot.
+    // Masthead, Santé strip and nav dot.
     $("range").textContent = periodText(r.from, r.to) + (g ? " · lu le " + dayMonth(parisDay(g)) + " à " + clock(g) : "") + (v3 ? "" : " · serveur sans le rapport v3");
-    const notice = $("testNotice");
-    if (noticeActive(r)) {
-      notice.hidden = false;
-      notice.textContent = "Jusqu’au " + longDay(TESTS_IN_PRODUCTION_UNTIL) + ", ces chiffres comprennent aussi les installations de test (vos appareils, TestFlight, la vérification d’Apple)." +
-        (state.tests ? " Le chiffre du serveur d’essai n’en donne donc qu’une partie." : "");
-    } else notice.hidden = true;
-    $("tcount").innerHTML = state.tests ? "Avec le serveur d’essai : dont <b>" + nw(r.tests.phone_days, "jour-iPhone", "jours-iPhone") + "</b> sur " + fmt(pd) + "." : "";
     measure();
     const strip = $("strip");
     if (watch.length) {
@@ -1295,9 +1131,9 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         const tot = sumArr(vals);
         body += mini(isToday ? "Ouvertures par heure, aujourd’hui" : "Ouvertures par heure, sur la période") +
           (tot ? hoursHTML(vals, isToday ? parisHour(new Date()) : -1, isToday ? "Ouvertures par heure aujourd’hui" : "Ouvertures par heure sur la période") : later("Aucune ouverture par heure reçue sur cette période (versions récentes de l’app seulement)."));
-        body += '<p class="note">« Maintenant » : iPhone qui ont l’app à l’écran dans le créneau de 5 minutes en cours (versions récentes de l’app). Les chiffres du jour suivent l’heure de Paris et ne dépendent pas de la période.' + (r.liveTestsOnly ? " Serveur d’essai seul : la production n’a pas encore ces mesures." : state.tests ? " Serveur d’essai compris." : "") + "</p>";
+        body += '<p class="note">« Maintenant » : iPhone qui ont l’app à l’écran dans le créneau de 5 minutes en cours (versions récentes de l’app). Les chiffres du jour suivent l’heure de Paris et ne dépendent pas de la période.</p>';
       }
-      out.push(card({ id: "direct", title: "En direct", live: true, isNew: true, full: true,
+      out.push(card({ id: "direct", title: "En direct", live: true, full: true,
         hint: "Les chiffres d’aujourd’hui, " + dayShort(today) + (g ? ", lus à " + clock(g) : "") + ". Actualisés toutes les 5 minutes quand la page est ouverte.", body }));
     }
 
@@ -1312,7 +1148,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       const vTot = versions.reduce((t, v) => t + v.phone_days, 0);
       const latest = versions[0];
       const fl = C("app.first_launch"), ob = C("onboarding.completed"), trials = C("one.trial_started"), paid = C("one.purchased");
-      const com = base.community;
+      const com = r.community;
       const worst = watch.some((i) => i.level === "bad") ? "bad" : watch.length ? "warn" : "good";
       let body = empty ? later(EMPTY_TEXT) : "";
       body += '<div class="kpis k6">' +
@@ -1329,6 +1165,8 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         (com && com.available ? kpi(fmt(com.contributions.total), "Contributions Jaugeurs", ks(nw(com.contributions.distinct_contributors, "contributeur", "contributeurs"))) : kpi("—", "Contributions Jaugeurs", ks("Non suivi sur ce serveur"))) +
         kpi(watch.length ? fmt(watch.length) : "OK", "Santé des données", ks(watch.length ? cap(watch[0].short) : "Rien à signaler"), worst) +
         "</div>";
+      const installs = sharePills([{ l: "Nouvelle", n: C("install.fresh"), k: "ok" }, { l: "Mise à jour", n: C("install.update"), k: "ok" }, { l: "Restaurée", n: C("install.restored"), k: "ok" }]);
+      if (installs) body += mini("Type d’installation") + installs;
       if (!empty) {
         body += '<details class="more" open><summary>Chaque jour</summary><div class="two"><div><h3 class="mini" id="phonesTitle">iPhone actifs par jour</h3><div class="chart" id="chartPhones"></div></div>' +
           '<div id="ouvertures"><div class="pick"><label for="metric">Mesure</label><select id="metric"></select></div><p class="hint" id="metricSub"></p><div id="colsMetric"></div></div></div>' +
@@ -1352,22 +1190,19 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
           return [P(c.week).dn + NB + P(c.week).ms, c.size == null ? "<" + NN + "5" : fmt(c.size),
             cohortCell(s.w0, a.w0, c.week, 1), cohortCell(s.w1, a.w1, c.week, 7), cohortCell(s.w2, a.w2, c.week, 14), cohortCell(s.w4, a.w4, c.week, 28)];
         }), { label: "Rétention par semaine d’installation" });
-        body += '<p class="note">Part des iPhone installés cette semaine-là qui ouvrent l’app chaque jour, en moyenne : 1re semaine = jours 1 à 6 après le lundi, 2e = jours 7 à 13, 3e = 14 à 20, 5e = 28 à 34. Seules les installations faites avec la nouvelle version de l’app ont une semaine ; une réinstallation compte comme une installation. « — » : masqué sous 5 iPhone.' +
-          (r.cohortsProdOnly ? " Production seule." : "") + (r.liveTestsOnly ? " Serveur d’essai seul : la production n’a pas encore cette mesure." : "") + "</p>";
+        body += '<p class="note">Part des iPhone installés cette semaine-là qui ouvrent l’app chaque jour, en moyenne : 1re semaine = jours 1 à 6 après le lundi, 2e = jours 7 à 13, 3e = 14 à 20, 5e = 28 à 34. Seules les installations faites avec la nouvelle version de l’app ont une semaine ; une réinstallation compte comme une installation. « — » : masqué sous 5 iPhone.</p>';
       }
-      out.push(card({ id: "retention", title: "Rétention", isNew: true, hint: "Part des iPhone installés une semaine donnée qui reviennent ensuite. Sans identifiant : seule la semaine d’installation est connue.", body }));
+      out.push(card({ id: "retention", title: "Rétention", hint: "Part des iPhone installés une semaine donnée qui reviennent ensuite. Sans identifiant : seule la semaine d’installation est connue.", body }));
     }
 
-    /* Parcours premier lancement */
+    /* Parcours · Premier lancement: the introduction, then the first steps */
     {
       // Every line counts a screen that appeared (once per iPhone and day); the last one, the answer to the last
       // question. « Vos données sont là. » (a copy found in iCloud) is no step everyone meets: it replaces the
-      // energy and fuel questions, so it stands for them. « Les deux » shows the fuel and the plug questions: once.
+      // fuel question, so it stands for it.
       const restored = C("onboarding.step_arrival");
-      const fuelQ = C("onboarding.step_fuel"), plugQ = C("onboarding.step_connector");
-      const names = ["Bienvenue", "Question énergie", "Carburant ou prise", "Question lieu", "Accueil terminé"];
-      const reached = [C("onboarding.step_welcome"), C("onboarding.step_energy") + restored,
-        fuelQ + plugQ - Math.min(C("onboarding.energy_both"), fuelQ, plugQ) + restored, C("onboarding.step_location"), C("onboarding.step_full")];
+      const names = ["Bienvenue", "Question carburant", "Question lieu", "Accueil terminé"];
+      const reached = [C("onboarding.step_welcome"), C("onboarding.step_fuel") + restored, C("onboarding.step_location"), C("onboarding.step_full")];
       // No screen is reached by more iPhone than the one before it.
       const vals = reached.map((v, i) => Math.min.apply(null, reached.slice(0, i + 1)));
       const b0 = vals[0];
@@ -1380,8 +1215,10 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         // The loss belongs to the screen seen without going further: the one before the line that falls.
         if (worst > 0 && Math.round(drop) >= 1) body += '<div class="drop">Plus grosse perte : sur l’écran « ' + names[worst - 1] + " », quitté sans aller plus loin (−" + Math.round(drop) + NB + "points).</div>";
         body += '<p class="note">' + fmtF(b0, true) + " " + pl(b0, "iPhone a vu", "iPhone ont vu") + " l’écran de bienvenue sur la période. Chaque ligne compte un écran affiché, une fois par iPhone et par jour ; la dernière, la réponse à la dernière question." +
-          (restored ? " Sauvegarde iCloud retrouvée sur " + fmtF(restored, true) + NB + "iPhone : " + pl(restored, "il saute", "ils sautent") + " les questions d’énergie et de carburant." : "") + "</p>";
+          (restored ? " Sauvegarde iCloud retrouvée sur " + fmtF(restored, true) + NB + "iPhone : " + pl(restored, "il saute", "ils sautent") + " la question du carburant." : "") + "</p>";
       }
+      const place = sharePills([{ l: "« Autour de moi »", n: C("onboarding.around_me"), k: "ok" }, { l: "Une ville", n: C("onboarding.city"), k: "ok" }]);
+      if (place) body += mini("Réponse à la question du lieu") + place;
       // The introduction of November 2026 goes on after the place: the wait, what the sector is worth, the
       // notifications. Only the iPhone that carry it count here, so it is read from its own first screen
       // (the wait) and never mixed with the lines above, which every version fills.
@@ -1396,7 +1233,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
           '%"></i></span><span class="pct" title="' + fmtF(x[1], true) + '">' + pct0(x[1] / sought) + "</span></div>").join("") + "</div>";
         if (skipped + late) body += pills([skipped ? pill("« Passer à la carte » " + fmtF(skipped, true), "wa") : "", late ? pill("Réponse trop lente, carte ouverte " + fmtF(late, true), "wa") : ""]);
         const seen = sharePills([{ l: "Un écart de prix", n: C("onboarding.reveal_gap"), k: "ok" }, { l: "Des prix proches", n: C("onboarding.reveal_close"), k: "ok" },
-          { l: "Des stations de recharge", n: C("onboarding.reveal_ev"), k: "ok" }, { l: "Rien à montrer", n: C("onboarding.reveal_none"), k: "wa" }]);
+          { l: "Rien à montrer", n: C("onboarding.reveal_none"), k: "wa" }]);
         if (seen) body += mini("Ce que l’écran a montré") + seen;
         const kept = C("onboarding.reveal_keep"), toMap = C("onboarding.reveal_map"), tank = C("onboarding.reveal_tank");
         const choice = sharePills([{ l: "« Garder cette station »", n: kept, k: "ok" }, { l: "« Voir la carte »", n: toMap, k: "wa" }]);
@@ -1409,67 +1246,63 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         if (cityScreen) body += mini("« Dans quelle ville ? »") + pills([pill("Écran vu " + fmtF(cityScreen, true)), pill("Ville choisie " + fmtF(cityPicked, true), "ok")]);
         body += '<p class="note">' + fmtF(sought, true) + " " + pl(sought, "iPhone a lancé", "iPhone ont lancé") + " la recherche sur la période. Les écrans sont comptés une fois par iPhone et par jour ; les réponses, à chaque fois.</p>";
       }
-      out.push(card({ id: "parcours", title: "Parcours · Premier lancement", isNew: true, hint: "Où les nouveaux utilisateurs s’arrêtent pendant l’accueil.", body }));
-
-      /* Votre Jauge : les premiers pas, dans Mon tableau de bord */
-      {
-        const shownDays = C("first_steps.shown");
-        const steps = [{ l: "Station gardée", n: C("first_steps.saved") }, { l: "Alerte de prix créée", n: C("first_steps.alert") },
-          { l: "Véhicule renseigné", n: C("first_steps.vehicle") }, { l: "Premier plein noté", n: C("first_steps.fill") }];
-        let b;
-        if (!shownDays && !steps.some((x) => x.n)) b = later("Pas encore de mesure sur cette période : elle arrive avec la version de l’app qui porte le nouvel accueil.");
-        else {
-          b = rowsHTML(steps.map((x) => Object.assign({ r: fmtF(x.n, true) }, x)));
-          b += pills([pill("Les cinq étapes terminées " + fmtF(C("first_steps.complete"), true), "ok"), pill("Étape touchée " + fmtF(C("first_steps.open"), true)),
-            C("first_steps.dismiss") ? pill("Carte fermée à la main " + fmtF(C("first_steps.dismiss"), true), "wa") : ""]);
-          b += '<p class="note">Carte « Votre Jauge » vue ' + fmtF(shownDays, true) + NB + "fois (une fois par iPhone et par jour). Chaque étape est comptée une seule fois par iPhone.</p>";
-        }
-        out.push(card({ id: "premierspas", title: "Premiers pas · Votre Jauge", isNew: true, hint: "Ce que les nouveaux utilisateurs font après l’accueil, dans Mon tableau de bord.", body: b }));
+      // The guided tour of the map, right after the introduction.
+      const tour = sharePills([{ l: "Visite guidée terminée", n: C("tour.done"), k: "ok" }, { l: "Passée", n: C("tour.skipped"), k: "wa" }]);
+      const left = sharePills([{ l: "Quittée à la bulle 1", n: C("tour.skip_1"), k: "wa" }, { l: "À la bulle 2", n: C("tour.skip_2"), k: "wa" }, { l: "À la bulle 3", n: C("tour.skip_3"), k: "wa" }]);
+      if (tour || left) body += mini("Premier contact") + tour + left;
+      // Votre Jauge: the first steps, in Mon tableau de bord.
+      const shownDays = C("first_steps.shown");
+      const steps = [{ l: "Station gardée", n: C("first_steps.saved") }, { l: "Alerte de prix créée", n: C("first_steps.alert") },
+        { l: "Véhicule renseigné", n: C("first_steps.vehicle") }, { l: "Premier plein noté", n: C("first_steps.fill") }];
+      body += mini("Premiers pas · Votre Jauge");
+      if (!shownDays && !steps.some((x) => x.n)) body += later("Pas encore de mesure sur cette période : elle arrive avec la version de l’app qui porte le nouvel accueil.");
+      else {
+        body += rowsHTML(steps.map((x) => Object.assign({ r: fmtF(x.n, true) }, x)));
+        body += pills([pill("Les cinq étapes terminées " + fmtF(C("first_steps.complete"), true), "ok"), pill("Étape touchée " + fmtF(C("first_steps.open"), true)),
+          C("first_steps.dismiss") ? pill("Carte fermée à la main " + fmtF(C("first_steps.dismiss"), true), "wa") : ""]);
+        body += '<p class="note">Carte « Votre Jauge » vue ' + fmtF(shownDays, true) + NB + "fois (une fois par iPhone et par jour). Chaque étape est comptée une seule fois par iPhone.</p>";
       }
+      out.push(card({ id: "parcours", title: "Parcours · Premier lancement", hint: "Où les nouveaux utilisateurs s’arrêtent pendant l’accueil, puis leurs premiers pas dans Mon tableau de bord.", body }));
     }
 
-    /* Jauge ONE · parcours d’achat */
+    /* Jauge ONE: the purchase path, then what opened the offer */
     {
       const fs = [["Offre vue", "one.funnel_offer"], ["Formule touchée", "one.funnel_plan"], ["Paiement lancé", "one.funnel_pay"], ["Essai ou achat réussi", "one.funnel_success"]];
       const vals = fs.map((f) => C(f[1]));
       const trials = C("one.trial_started"), paid = C("one.purchased"), visits = C("screen.one_offer");
-      let body;
+      let buy = mini("Parcours d’achat");
       if (vals[0]) {
-        body = '<div class="funnel">' + fs.map((f, i) => '<div class="fn one"><span>' + f[0] + '</span><span class="bar" aria-hidden="true"><i style="width:' + Math.min(100, vals[i] * 100 / vals[0]).toFixed(1) + '%"></i></span><span class="pct">' + fmtF(vals[i], true) + "</span></div>").join("") + "</div>";
+        buy += '<div class="funnel">' + fs.map((f, i) => '<div class="fn one"><span>' + f[0] + '</span><span class="bar" aria-hidden="true"><i style="width:' + Math.min(100, vals[i] * 100 / vals[0]).toFixed(1) + '%"></i></span><span class="pct">' + fmtF(vals[i], true) + "</span></div>").join("") + "</div>";
       } else {
-        body = later(LATER_APP) + '<div class="funnel">' + [["Page de l’offre vue", visits], ["Essai commencé", trials], ["Abonnement payé", paid]].map((f) =>
+        buy += later(LATER_APP) + '<div class="funnel">' + [["Page de l’offre vue", visits], ["Essai commencé", trials], ["Abonnement payé", paid]].map((f) =>
           '<div class="fn one"><span>' + f[0] + '</span><span class="bar" aria-hidden="true"><i style="width:' + (visits ? Math.min(100, f[1] * 100 / visits) : 0).toFixed(1) + '%"></i></span><span class="pct">' + fmt(f[1]) + "</span></div>").join("") + "</div>";
       }
       const ok = trials + paid;
-      const issues = [["one.purchase_cancelled", "annulé", "annulés", "wa"], ["one.purchase_pending", "en attente (parents)", "en attente (parents)", "wa"], ["one.purchase_failed", "échoué", "échoués", "ko"], ["one.purchase_unverified", "non vérifié", "non vérifiés", "wa"]];
-      body += mini("Issue des paiements lancés") + pills([pill(fmt(ok) + " " + pl(ok, "réussi", "réussis") + " (" + fmt(trials) + " " + pl(trials, "essai", "essais") + ", " + fmt(paid) + " " + pl(paid, "achat", "achats") + ")", "ok")]
-        .concat(issues.map((x) => C(x[0]) ? pill(fmt(C(x[0])) + " " + pl(C(x[0]), x[1], x[2]), x[3]) : ""))) ;
+      const issues = [["one.purchase_cancelled", "annulé", "annulés", "wa"], ["one.purchase_failed", "échoué", "échoués", "ko"]];
+      buy += mini("Issue des paiements lancés") + pills([pill(fmt(ok) + " " + pl(ok, "réussi", "réussis") + " (" + fmt(trials) + " " + pl(trials, "essai", "essais") + ", " + fmt(paid) + " " + pl(paid, "achat", "achats") + ")", "ok")]
+        .concat(issues.map((x) => C(x[0]) ? pill(fmt(C(x[0])) + " " + pl(C(x[0]), x[1], x[2]), x[3]) : "")));
       const an = C("one.plan_annual"), mn = C("one.plan_monthly");
-      body += mini("Formule choisie") + (an + mn ? sharePills([{ l: "Annuelle", n: an, k: "ok" }, { l: "Mensuelle", n: mn, k: "ok" }]) : '<p class="hint">Aucune formule touchée sur la période.</p>');
-      body += mini("Ce que font les membres") + pills([pill("Historique des prix affiché " + fmt(C("one.price_history"))), pill("Alerte « bon moment » activée " + fmt(C("one.good_moment"))), C("one.expired") ? pill("Abonnements expirés " + fmt(C("one.expired")), "wa") : ""]);
-      body += '<p class="note">Parcours : iPhone par jour, pas des achats. Essais convertis, résiliations et remboursements : App Store Connect fait foi.' + (noticeActive(r) ? " Vos achats de test (bac à sable) sont comptés ici." : "") +
-        (state.tests ? " Dont serveur d’essai : " + nw(count(r.tests.totals, "one.trial_started"), "essai", "essais") + "." : "") + "</p>";
-      out.push(card({ id: "one", title: "Jauge ONE · Parcours d’achat", isNew: true, hint: "De l’offre vue jusqu’à l’abonnement.", body }));
-    }
+      buy += mini("Formule choisie") + (an + mn ? sharePills([{ l: "Annuelle", n: an, k: "ok" }, { l: "Mensuelle", n: mn, k: "ok" }]) : '<p class="hint">Aucune formule touchée sur la période.</p>');
+      buy += mini("Ce que font les membres") + pills([pill("Historique des prix affiché " + fmt(C("one.price_history"))), pill("Alerte « bon moment » activée " + fmt(C("one.good_moment")))]);
+      buy += '<p class="note">Parcours : iPhone par jour, pas des achats. Essais convertis, résiliations et remboursements : App Store Connect fait foi.' + (testsInProduction(r) ? " Vos achats de test (bac à sable) sont comptés ici." : "") + "</p>";
 
-    /* Jauge ONE · d’où vient l’envie */
-    {
       const drawer = C("one.offer_drawer");
       const origins = [["Historique des prix bloqué", C("one.offer_price_history")], ["Limite de favoris atteinte", C("one.offer_favorites")], ["Tendance bloquée", C("one.offer_trend")],
         ["Bouton « sans publicité »", C("one.offer_ad_free")], ["Alertes", C("one.offer_alerts")], ["Tiroir « Mon espace »", drawer], ["Trajet", C("one.offer_trips")], ["Widget", C("one.offer_widget")],
         ["Jauge ONE (autre)", Math.max(0, C("one.offer_membership") - drawer)]];
       const tot = origins.reduce((t, o) => t + o[1], 0);
-      let body;
-      if (!tot) body = later(LATER_APP);
+      let want = mini("D’où vient l’envie");
+      if (!tot) want += later(LATER_APP);
       else {
         const s = shares(origins.map((o) => o[1]));
-        body = table(["Origine de l’offre", "Offres vues", "Part"], origins.map((o, i) => [o, i]).filter((x) => x[0][1] > 0).sort((a, b) => b[0][1] - a[0][1])
+        want += table(["Origine de l’offre", "Offres vues", "Part"], origins.map((o, i) => [o, i]).filter((x) => x[0][1] > 0).sort((a, b) => b[0][1] - a[0][1])
           .map((x) => [x[0][0], fmt(x[0][1]), s.items[x[1]].text]), { label: "Origine de l’offre Jauge ONE" });
       }
-      body += '<p class="note">Sur la période : ' + nw(C("one.trial_started"), "essai commencé", "essais commencés") + " et " + nw(C("one.purchased"), "abonnement payé", "abonnements payés") + ", toutes origines confondues : l’app ne rattache pas encore un essai à son origine.</p>";
-      body += mini("Restaurer les achats") + pills([pill(fmt(C("one.restore_found")) + " " + pl(C("one.restore_found"), "trouvé", "trouvés"), "ok"), pill(fmt(C("one.restore_none")) + " rien", "wa"),
-        C("one.restore_pending") ? pill(fmt(C("one.restore_pending")) + " en attente", "wa") : "", pill(fmt(C("one.restore_failed")) + " " + pl(C("one.restore_failed"), "échec", "échecs"), C("one.restore_failed") ? "ko" : "")]);
-      out.push(card({ id: "one-envie", title: "Jauge ONE · D’où vient l’envie", isNew: true, hint: "Ce qui a ouvert l’offre (nombre de fois).", body }));
+      want += '<p class="note">Ce qui a ouvert l’offre, en nombre de fois. Sur la période : ' + nw(trials, "essai commencé", "essais commencés") + " et " + nw(paid, "abonnement payé", "abonnements payés") + ", toutes origines confondues : l’app ne rattache pas encore un essai à son origine.</p>";
+      want += mini("Restaurer les achats") + pills([pill(fmt(C("one.restore_found")) + " " + pl(C("one.restore_found"), "trouvé", "trouvés"), "ok"), pill(fmt(C("one.restore_none")) + " rien", "wa"),
+        pill(fmt(C("one.restore_failed")) + " " + pl(C("one.restore_failed"), "échec", "échecs"), C("one.restore_failed") ? "ko" : "")]);
+      out.push(card({ id: "one", title: "Jauge ONE", full: true, hint: "De l’offre vue jusqu’à l’abonnement, et ce qui a ouvert l’offre.",
+        body: '<div class="two"><div>' + buy + "</div><div>" + want + "</div></div>" }));
     }
 
     /* Utilisation */
@@ -1487,15 +1320,14 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
           "</div><div>" + mini("Actions") + (acts.length ? acts.map((a) => hb(a.l, a.n * 100 / amax, fmt(a.n))).join("") : '<p class="hint">Aucune action sur la période.</p>') + "</div></div>";
         body += mini("Carburant choisi") + (sharePills(FUELS.map((f) => ({ l: f[1], n: C(f[0]) })).sort((a, b) => b.n - a.n)) || '<p class="hint">—</p>');
         const searches = C("search.place") + C("search.trip") || C("tap.search");
-        body += mini("Mode") + pills([sharePills([{ l: "Carburant", n: C("mode.fuel") }, { l: "Électrique", n: C("mode.electric") }]).replace(/^<div class="pills">|<\/div>$/g, ""),
-          tripsAll ? pill("Trajets : " + fmt(C("trip.failed")) + " " + pl(C("trip.failed"), "échec", "échecs") + " sur " + fmt(tripsAll), C("trip.failed") ? "wa" : "ok") : "",
+        const tripSearch = pills([tripsAll ? pill("Trajets : " + fmt(C("trip.failed")) + " " + pl(C("trip.failed"), "échec", "échecs") + " sur " + fmt(tripsAll), C("trip.failed") ? "wa" : "ok") : "",
           searches ? pill("Recherche sans résultat : " + pct(C("search.no_result"), searches), C("search.no_result") / searches > 0.1 ? "wa" : "") : ""]);
+        if (tripSearch) body += mini("Trajets et recherche") + tripSearch;
         body += mini("Rythme") + pills([pill(perPhoneDay(opens, pd) + " ouvertures par jour-iPhone"), pill(duration(appSec / pd) + " dans l’app par jour-iPhone"), pill((opens ? duration(appSec / opens) : "—") + " par ouverture")]);
         const widget = C("open.widget"), alert = C("open.alert"), shortcut = C("open.shortcut");
-        body += mini("Comment l’app est ouverte") + '<div id="rowsWays"></div>';
+        body += mini("Comment l’app est ouverte") + rowsHTML(shareItems([
+          { l: "Icône ou retour", n: Math.max(0, opens - widget - alert - shortcut) }, { l: "Widget", n: widget }, { l: "Notification", n: alert }, { l: "Siri ou raccourci", n: shortcut }]).items);
         body += '<p class="note">Chaque retour dans l’app compte comme une ouverture. La carte compte une visite à chaque retour sur elle ; la fiche d’une station ne compte que quand elle est agrandie.</p>';
-        body = body.replace('<div id="rowsWays"></div>', rowsHTML(shareItems([
-          { l: "Icône ou retour", n: Math.max(0, opens - widget - alert - shortcut) }, { l: "Widget", n: widget }, { l: "Notification", n: alert }, { l: "Siri ou raccourci", n: shortcut }]).items));
       }
       out.push(card({ id: "utilisation", title: "Utilisation", hint: "Ce que les gens font dans l’app.", body }));
     }
@@ -1518,34 +1350,109 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       const on = C("perm.notif_on"), off = C("perm.notif_off");
       const g1 = C("permission.notifications_granted"), d1 = C("permission.notifications_denied");
       body += mini("Réglages des iPhone") + pills([on + off ? pill("Notifications autorisées " + pct(on, on + off), "ok") : "", C("notif.setting_bilan") && pd ? pill("Bilan du mois activé " + pct(C("notif.setting_bilan"), pd) + " des jours-iPhone", "ok") : "",
-        g1 + d1 ? pill("Première réponse : " + fmt(g1) + " " + pl(g1, "oui", "oui") + ", " + fmt(d1) + " non") : ""]) ;
+        g1 + d1 ? pill("Première réponse : " + fmt(g1) + " " + pl(g1, "oui", "oui") + ", " + fmt(d1) + " non") : ""]);
       if (!(on + off) && !C("notif.setting_bilan") && !(g1 + d1)) body += '<p class="hint">Aucun réglage reçu sur la période.</p>';
-      out.push(card({ id: "notifications", title: "Notifications", isNew: true, hint: "Ouvertes sur l’iPhone, par type.", body }));
+      out.push(card({ id: "notifications", title: "Notifications", hint: "Ouvertes sur l’iPhone, par type.", body }));
     }
 
-    /* Communauté (v2 content) */
+    /* Communauté (filled by renderCommunity) */
     {
-      const com = base.community;
+      const com = r.community;
       const body = com && com.available
-        ? '<p class="note" id="comTests" style="margin:0 0 6px"></p><div id="comContrib"></div><div class="two"><div id="comMod"></div><div id="comIcloud"></div></div>'
+        ? '<p class="note" id="comTests" style="margin:0 0 6px"></p><div id="comContrib"></div><div class="two"><div id="comMod"></div><div id="comActions"></div></div>'
         : later("Non suivi sur ce serveur.");
       out.push(card({ id: "communaute", title: "Communauté et modération", full: true, hint: '<span id="comLecture">En direct depuis le serveur.</span>', body }));
     }
 
     /* Publicité */
     {
-      const places = [["Liste, 5e place", "comparison_fifth"], ["Liste, 12e place", "comparison_twelfth"], ["Fiche station", "station_sheet"], ["Fiche borne", "charging_details"]];
+      const places = [["Liste, 5e place", "comparison_fifth"], ["Liste, 12e place", "comparison_twelfth"], ["Fiche station", "station_sheet"]];
       const rows = places.map((p) => [p[0], C("ad." + p[1] + "_ok"), C("ad." + p[1] + "_fail"), C("ad." + p[1] + "_video")]);
-      let body;
-      if (!rows.some((x) => x[1] + x[2] + x[3])) body = later(LATER_APP);
-      else body = table(["Emplacement", "Reçues", "Échecs", "Vidéo écartée"], rows.map((x) => [x[0], fmt(x[1]), x[2] ? fmt(x[2]) + ' <small style="color:var(--muted)">(' + pct(x[2], x[1] + x[2] + x[3]) + ")</small>" : "0", fmt(x[3])]), { label: "Publicité par emplacement" });
+      let ads = mini("Par emplacement");
+      if (!rows.some((x) => x[1] + x[2] + x[3])) ads += later(LATER_APP);
+      else ads += table(["Emplacement", "Reçues", "Échecs", "Vidéo écartée"], rows.map((x) => [x[0], fmt(x[1]), x[2] ? fmt(x[2]) + ' <small style="color:var(--muted)">(' + pct(x[2], x[1] + x[2] + x[3]) + ")</small>" : "0", fmt(x[3])]), { label: "Publicité par emplacement" });
       const cp = C("ad.consent_personal"), cl = C("ad.consent_limited"), ag = C("ad.att_granted"), ad = C("ad.att_denied");
-      body += mini("Consentement") + (cp + cl + ag + ad ? pills([cp + cl ? pill("Pubs personnalisées acceptées " + pct(cp, cp + cl), "ok") : "", ag + ad ? pill("Suivi Apple (ATT) autorisé " + pct(ag, ag + ad), "ok") : ""]) : '<p class="hint">Aucun choix reçu sur la période.</p>');
-      body += '<p class="note">« Vidéo écartée » : une pub vidéo reçue puis laissée de côté (l’app n’affiche que des pubs fixes). Bouton « retirer la pub » touché ' + fmt(C("ad.remove_tap")) + " " + pl(C("ad.remove_tap"), "fois", "fois") + ". Revenus : AdMob.</p>";
-      out.push(card({ id: "publicite", title: "Publicité", isNew: true, hint: "Par emplacement : pubs reçues, échouées ou écartées (vidéo).", body }));
+      let consent = mini("Consentement") + (cp + cl + ag + ad ? pills([cp + cl ? pill("Pubs personnalisées acceptées " + pct(cp, cp + cl), "ok") : "", ag + ad ? pill("Suivi Apple (ATT) autorisé " + pct(ag, ag + ad), "ok") : ""]) : '<p class="hint">Aucun choix reçu sur la période.</p>');
+      consent += '<p class="note">« Vidéo écartée » : une pub vidéo reçue puis laissée de côté (l’app n’affiche que des pubs fixes). Bouton « retirer la pub » touché ' + fmt(C("ad.remove_tap")) + " " + pl(C("ad.remove_tap"), "fois", "fois") + ". Revenus : AdMob.</p>";
+      out.push(card({ id: "publicite", title: "Publicité", full: true, hint: "Pubs reçues, échouées ou écartées (vidéo), et ce que les gens acceptent.",
+        body: '<div class="two"><div>' + ads + "</div><div>" + consent + "</div></div>" }));
     }
 
-    /* Appareils */
+    /* Fonctions: each main feature, the home-work line, sharing, then the rest */
+    {
+      let body;
+      if (empty) body = later(EMPTY_TEXT);
+      else {
+        const st0 = ["station.from_map", "station.from_list", "station.from_favorite", "station.from_widget", "station.from_notification", "station.from_trip"];
+        const stv = st0.map((m) => C(m)), sts = shares(stv);
+        const stNames = ["carte", "liste", "favori", "widget", "notification", "trajet"];
+        const searches = C("search.place") + C("search.trip");
+        const favT = ["favorites.n0", "favorites.n1", "favorites.n2_5", "favorites.n6"].map((m) => C(m)), fs = shares(favT);
+        const rowsD = [
+          ["Carte et accueil", ["map.drawer", "map.locate", "map.market_gauge", "map.trend_locked", "map.outside_france"],
+            [["Tiroir « Mon espace » ouvert", "map.drawer"], ["« Me localiser »", "map.locate"], ["jauge du marché touchée", "map.market_gauge"], ["tendance bloquée", "map.trend_locked"], ["hors de France", "map.outside_france"]]],
+          ["Recherche et filtres", ["search.place", "search.trip", "search.recent", "filter.open24h", "filter.fresh", "filter.available", "filter.open_now", "filter.services", "filter.radius", "filter.brand", "filter.premium"],
+            [["Lieu", "search.place"], ["trajet", "search.trip"], ["recherche récente rouverte", "search.recent"], searches ? "sans résultat " + pct(C("search.no_result"), searches) : "",
+              ["filtres : 24 h/24", "filter.open24h"], ["prix frais", "filter.fresh"], ["disponible", "filter.available"], ["ouvert maintenant", "filter.open_now"], ["services", "filter.services"], ["rayon", "filter.radius"], ["enseigne", "filter.brand"], ["autres", "filter.premium"]]],
+          ["Fiche station", st0.concat(["station.other_fuel", "station.alternative"]),
+            [sts.total ? "Ouverte depuis : " + stNames.map((n, i) => stv[i] ? n + " " + sts.items[i].text : "").filter(Boolean).join(", ") : "", ["autre carburant regardé", "station.other_fuel"], ["alternative moins chère ouverte", "station.alternative"],
+              C("screen.station") && S("screen.station") ? "temps moyen " + duration(S("screen.station") / C("screen.station")) : ""]],
+          ["Trajets", ["trip.ok", "trip.failed", "trip.saved", "trip.reopened", "trip.finished", "trip.stop_chosen"],
+            [C("trip.ok") + C("trip.failed") ? "Calculés " + fmt(C("trip.ok") + C("trip.failed")) + " (réussis " + fmt(C("trip.ok")) + ")" : "", ["enregistrés", "trip.saved"], ["rouverts", "trip.reopened"], ["terminés", "trip.finished"], ["station choisie sur le trajet", "trip.stop_chosen"]]],
+          ["Alertes", ["tap.alert", "alert.deleted", "alert.check_now", "alert.page", "alert.target_price"],
+            [["Créées", "tap.alert"], ["prix cible", "alert.target_price"], ["supprimées", "alert.deleted"], ["« vérifier maintenant »", "alert.check_now"], ["page Alertes ouverte", "alert.page"]]],
+          ["Favoris", ["tap.favorite", "favorite.removed", "favorite.limit", "favorites.n0", "favorites.n1", "favorites.n2_5", "favorites.n6"],
+            [["Ajoutés", "tap.favorite"], ["retirés", "favorite.removed"], ["limite gratuite atteinte", "favorite.limit"],
+              fs.total ? "iPhone avec : 0 favori " + fs.items[0].text + ", 1 favori " + fs.items[1].text + ", 2 à 5 " + fs.items[2].text + ", 6 et plus " + fs.items[3].text : ""]],
+          ["Carnet et bilan", ["tap.fill_up", "journal.edit", "journal.delete", "journal.abandon", "bilan.notif_yes", "bilan.notif_no", "screen.my_report"],
+            [C("tap.fill_up") ? "Pleins notés " + fmt(C("tap.fill_up")) + " (" + line(r, [["depuis la fiche", "journal.from_station"], ["l’icône", "journal.from_icon"], ["Siri", "journal.from_siri"]]) + ")" : "", ["modifiés", "journal.edit"], ["supprimés", "journal.delete"], ["formulaire abandonné", "journal.abandon"], ["Mon bilan ouvert", "screen.my_report"], ["notification du bilan acceptée", "bilan.notif_yes"], ["refusée", "bilan.notif_no"]]],
+          ["Jaugeurs", ["tap.price_confirm", "tap.price_correct", "jaugeurs.signup", "jaugeurs.retained", "jaugeurs.rejected", "jaugeurs.linked_apple", "jaugeurs.progress", "jaugeurs.report_shortage"],
+            [C("tap.price_confirm") ? "Prix confirmés " + fmt(C("tap.price_confirm")) + " (retenus " + fmt(C("jaugeurs.retained")) + ", refusés " + fmt(C("jaugeurs.rejected")) + ")" : "", ["corrections", "tap.price_correct"], ["comptes créés", "jaugeurs.signup"], ["liés à Apple", "jaugeurs.linked_apple"],
+              ["signalements : rupture", "jaugeurs.report_shortage"], ["retour", "jaugeurs.report_available"], ["fermée", "jaugeurs.report_closed"], ["ouverte", "jaugeurs.report_open"], ["autre", "jaugeurs.report_other"], ["trop loin de la station", "jaugeurs.too_far"],
+              ["nouveaux statuts : Éclaireur", "jaugeurs.rank_scout"], ["Guide", "jaugeurs.rank_guide"], ["Pilier", "jaugeurs.rank_pillar"], ["« comment progresser » ouvert", "jaugeurs.progress"]]],
+          ["Réglages", ["screen.settings", "settings.data_delete"],
+            [["Page ouverte", "screen.settings"], ["« Supprimer mes données »", "settings.data_delete"]]]
+        ];
+        const nothing = '<span style="color:var(--muted)">Rien sur la période</span>';
+        body = mini("Les grandes fonctions") + table(["Fonction", "Ce qu’on voit"], rowsD.map((x) => ["<b>" + x[0] + "</b>", anyOf(r, x[1]) ? line(r, x[2]) : nothing]), { wide: true, label: "Les grandes fonctions" }) +
+          '<p class="note">Nombre de fois sur la période. « Ouverte depuis » et la répartition des favoris sont des parts ; les favoris comptent les iPhone une fois par jour.</p>';
+
+        const rowsA = [
+          ["Véhicules", anyOf(r, ["vehicles.add", "vehicles.edit", "vehicles.delete", "vehicles.activate", "vehicles.page", "vehicles.n1", "vehicles.n2"]) ? line(r, [["Ajoutés", "vehicles.add"], ["modifiés", "vehicles.edit"], ["supprimés", "vehicles.delete"], ["activés", "vehicles.activate"], ["page ouverte", "vehicles.page"]]) +
+            (pd ? " · 2 véhicules ou plus : " + pct(C("vehicles.n2"), pd) + " des jours-iPhone" : "") : ""],
+          ["Widgets", anyOf(r, ["widget.installed_fuel", "widget.open_fuel", "open.widget"]) ? line(r, [["Installés (jours-iPhone)", "widget.installed_fuel"], ["ouvertures carburant", "widget.open_fuel"], ["ouvertures par widget", "open.widget"]]) : ""],
+          ["Siri et raccourcis", anyOf(r, ["siri.nearby", "siri.fill_up", "siri.trip", "siri.saved", "siri.bilan", "shortcut.icon", "open.shortcut"]) ? line(r, [["« Autour de moi »", "siri.nearby"], ["« Noter un plein »", "siri.fill_up"], ["trajet", "siri.trip"], ["enregistrés", "siri.saved"], ["« Mon bilan »", "siri.bilan"], ["raccourci de l’icône", "shortcut.icon"]]) : ""],
+          ["Sauvegarde iCloud", anyOf(r, ["backup.on", "backup.restore", "backup.error", "backup.page"]) ? "Activée " + pct(C("backup.on"), pd) + " des jours-iPhone · " + line(r, [["restaurations", "backup.restore"], ["erreurs", "backup.error"], ["page ouverte", "backup.page"]]) : ""],
+          ["Aide", anyOf(r, ["screen.help", "help.support", "help.write"]) ? line(r, [["Aide ouverte", "screen.help"], ["assistance", "help.support"], ["« Nous écrire »", "help.write"]]) : ""],
+          ["Avis App Store", C("review.rate_tap") ? "« Noter » touché " + fmt(C("review.rate_tap")) : ""]
+        ];
+        body += mini("Autres fonctions") + (rowsA.some((x) => x[1]) ? table(["Fonction", "Ce qu’on voit"], rowsA.map((x) => ["<b>" + x[0] + "</b>", x[1] || nothing]), { wide: true, label: "Autres fonctions" }) : later(LATER_APP));
+
+        // « Maison et Travail »: the home-work line on Mon tableau de bord.
+        const commute = ["commute.shown", "commute.tap", "commute.go", "commute.trip_page", "commute.offer", "commute.set", "commute.removed"];
+        let home = mini("Trajet domicile-travail");
+        if (!anyOf(r, commute)) home += later("Pas encore de mesure sur cette période : elle arrive avec la version de l’app qui porte « Maison et Travail ».");
+        else {
+          home += rowsHTML([{ l: "Ligne affichée", n: C("commute.shown"), r: fmtF(C("commute.shown"), true) }, { l: "Ligne touchée", n: C("commute.tap") },
+            { l: "Itinéraire lancé", n: C("commute.go") }, { l: "Page du trajet ouverte", n: C("commute.trip_page") }, { l: "Offre Jauge ONE ouverte", n: C("commute.offer") }]);
+          home += pills([pill("Maison et Travail enregistrés " + fmt(C("commute.set")), "ok"), C("commute.removed") ? pill("Retirés " + fmt(C("commute.removed")), "wa") : ""]);
+          home += '<p class="note">« Ligne affichée » : une fois par iPhone et par jour (jours-iPhone) ; le reste, à chaque fois.</p>';
+        }
+
+        const kinds = [["Fiche station", "station"], ["L’app Jauge (QR code, lien)", "app"], ["Un plein (économie réalisée)", "fill_up"], ["Mon bilan", "report"], ["Statut Jaugeur", "rank"]];
+        const pages = kinds.map((k) => C("share." + k[1])), tp = sumArr(pages);
+        let shared = mini("Partages");
+        if (!tp) shared += later(LATER_APP) + (C("tap.share") ? '<p class="note">Bouton « Partager » touché ' + nw(C("tap.share"), "fois", "fois") + " (mesure d’avant).</p>" : "");
+        else {
+          shared += rowsHTML(shareItems(kinds.map((k, i) => ({ l: k[0], n: pages[i] }))).items) +
+            '<p class="note">' + nw(tp, "page de partage ouverte", "pages de partage ouvertes") + " : la feuille de partage d’iOS s’est affichée ; l’app ne sait pas si quelque chose a été envoyé.</p>";
+        }
+        body += '<div class="two"><div>' + home + "</div><div>" + shared + "</div></div>";
+      }
+      out.push(card({ id: "fonctions", title: "Fonctions", full: true, hint: "Chaque fonction de l’app, une ligne par fonction (période choisie).", body }));
+    }
+
+    /* Appareils et moments */
     {
       let body;
       if (empty) body = later(EMPTY_TEXT);
@@ -1560,10 +1467,36 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         const any = dev.some((d) => C(d[1])) || lo + la + lf;
         body = '<div class="two"><div>' + mini("Version de l’app") + rowsHTML(shareItems(vItems).items.map((x) => Object.assign(x, { c: "" }))) +
           mini("iOS") + sharePills(oses.map((o) => ({ l: "iOS " + esc(o.os) + " ·", n: o.phone_days }))) + "</div><div>" +
-          mini("Réglages de l’iPhone <span class=\"new\">NOUVEAU</span>") +
+          mini("Réglages de l’iPhone") +
           (any ? dev.map((d) => hb(d[0], C(d[1]) * 100 / pd, pct(C(d[1]), pd))).join("") +
             (lo + la + lf ? hb("Localisation OK", (lo + la) * 100 / (lo + la + lf), pct(lo + la, lo + la + lf), "", la ? "dont approximative " + pct(la, lo + la + lf) : "") : "")
             : later(LATER_APP)) + "</div></div>";
+
+        // When the app is opened: weekday, then the busiest hours.
+        const s = (app.series || {})["app.open"];
+        const wd = [0, 0, 0, 0, 0, 0, 0], seen = [0, 0, 0, 0, 0, 0, 0];
+        if (s) r.days.forEach((d, i) => { const v = s.count[i]; if (v != null) { const k = (dayDate(d).getUTCDay() + 6) % 7; wd[k] += v; seen[k]++; } });
+        const wdNames = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
+        let week = mini("Par jour de la semaine");
+        if (nDays < 7) week += '<p class="hint">À partir d’une période de 7 jours.</p>';
+        else if (!sumArr(wd)) week += '<p class="hint">Aucune ouverture sur la période.</p>';
+        else {
+          const sw = shares(wd), mx = Math.max(...wd);
+          week += wdNames.map((n, i) => hb(n, wd[i] * 100 / mx, sw.items[i].text)).join("");
+          if (seen.some((x) => x !== seen[0])) week += '<p class="note">Tous les jours de la semaine ne sont pas autant présents dans la période.</p>';
+        }
+        let hour = mini("Heure la plus active");
+        const hp = v3 && r.hours ? r.hours.period || [] : [];
+        if (!v3) hour += later(LATER_SERVER);
+        else if (!sumArr(hp)) hour += '<p class="hint">Aucune ouverture par heure reçue sur la période (versions récentes de l’app).</p>';
+        else {
+          const tot = sumArr(hp);
+          const win = []; for (let h = 0; h < 24; h += 2) win.push([h, hp[h] + hp[h + 1]]);
+          win.sort((a, b) => b[1] - a[1]);
+          hour += pills(win.slice(0, 3).filter((w) => w[1] > 0).map((w) => pill(w[0] + NB + "h – " + (w[0] + 2) + NB + "h · " + pct(w[1], tot), "ok"))) + hoursHTML(hp, -1, "Ouvertures par heure sur la période");
+        }
+        body += '<div class="two"><div>' + week + "</div><div>" + hour + "</div></div>";
+
         const th = (long, short) => short ? '<span class="vt-l">' + long + '</span><span class="vt-s">' + short + "</span>" : long;
         body += '<details class="more"><summary>Comparer les versions</summary>' + table([th("Version"), th("Jours-iPhone", "J.-i."), th("Ouvertures", "Ouv."), th("Temps"), th("Problèmes", "Pb.")],
           versions.map((v) => [esc(v.app), fmt(v.phone_days), perPhoneDay(count(v.totals, "app.open"), v.phone_days), v.phone_days > 0 ? duration(secs(v.totals, "app.open") / v.phone_days) : "—", perPhoneDay(problems(v.totals), v.phone_days)]),
@@ -1571,145 +1504,25 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         const g1 = C("permission.location_granted"), d1 = C("permission.location_denied");
         body += '<p class="note">Parts des jours-iPhone : un iPhone compte une fois par jour.' + (g1 + d1 ? " Première réponse à la localisation : " + fmt(g1) + " oui, " + fmt(d1) + " non." : "") + " Un iPad sous iPadOS se range dans la version d’iOS correspondante." + (vt < 20 ? " Moins de 20 jours-iPhone : parts à lire avec prudence." : "") + "</p>";
       }
-      out.push(card({ id: "appareils", title: "Appareils", hint: "Pour savoir sur quoi tourne l’app.", body }));
-    }
-
-    /* Partages */
-    {
-      const kinds = [["Fiche station", "station"], ["L’app Jauge (QR code, lien)", "app"], ["Un plein (économie réalisée)", "fill_up"], ["Mon bilan", "report"], ["Statut Jaugeur", "rank"]];
-      const pages = kinds.map((k) => C("share." + k[1])), people = kinds.map((k) => C("shared." + k[1]));
-      const tp = sumArr(pages), tq = sumArr(people);
-      let body;
-      if (!tp && !tq) body = later(LATER_APP) + (C("tap.share") ? '<p class="note">Bouton « Partager » touché ' + nw(C("tap.share"), "fois", "fois") + " (mesure d’avant).</p>" : "");
-      else {
-        body = '<div class="kpis k3">' + kpi(fmt(tp), "Pages de partage ouvertes") + kpi(fmtF(tq, true), "Jours-personnes") + kpi(pct(tq, pd), "Des jours-iPhone") + "</div>" +
-          table(["Ce qui est partagé", "Page de partage ouverte", "Jours-personnes"], kinds.map((k, i) => [k[0], fmt(pages[i]), fmtF(people[i], true)]), { label: "Partages par type" });
-      }
-      body += '<p class="note">« Page de partage ouverte » : la feuille de partage d’iOS s’est affichée ; l’app ne sait pas si quelque chose a été envoyé. « Jours-personnes » : personnes distinctes chaque jour, additionnées sur la période (une personne qui partage deux jours compte deux fois).</p>';
-      out.push(card({ id: "partages", title: "Partages", isNew: true, hint: "Ce que les gens ouvrent pour partager, et combien de personnes.", body }));
-    }
-
-    /* Autres fonctions */
-    {
-      const rowsA = [
-        ["Véhicules", anyOf(r, ["vehicles.add", "vehicles.delete", "vehicles.page", "vehicles.n1", "vehicles.n2"]) ? line(r, [["Ajoutés", "vehicles.add"], ["modifiés", "vehicles.edit"], ["supprimés", "vehicles.delete"], ["activés", "vehicles.activate"], ["page ouverte", "vehicles.page"]]) +
-          (pd ? " · 2 véhicules ou plus : " + pct(C("vehicles.n2"), pd) + " des jours-iPhone · électrique : " + pct(C("vehicles.ev"), pd) : "") : ""],
-        ["Widgets", anyOf(r, ["widget.installed_fuel", "widget.installed_ev", "widget.open_fuel", "widget.open_ev", "open.widget"]) ? line(r, [["Installés (jours-iPhone) : carburant", "widget.installed_fuel"], ["bornes", "widget.installed_ev"], ["ouvertures carburant", "widget.open_fuel"], ["bornes", "widget.open_ev"], ["ouvertures par widget", "open.widget"]]) : ""],
-        ["Siri et raccourcis", anyOf(r, ["siri.nearby", "siri.fill_up", "siri.trip", "siri.saved", "siri.bilan", "shortcut.icon", "open.shortcut"]) ? line(r, [["« Autour de moi »", "siri.nearby"], ["« Noter un plein »", "siri.fill_up"], ["trajet", "siri.trip"], ["enregistrés", "siri.saved"], ["« Mon bilan »", "siri.bilan"], ["raccourci de l’icône", "shortcut.icon"]]) : ""],
-        ["Sauvegarde iCloud", anyOf(r, ["backup.on", "backup.restore", "backup.error", "backup.page"]) ? "Activée " + pct(C("backup.on"), pd) + " des jours-iPhone · " + line(r, [["restaurations", "backup.restore"], ["erreurs", "backup.error"], ["page ouverte", "backup.page"]]) : ""],
-        ["Aide", anyOf(r, ["screen.help", "help.topic_prices", "help.topic_chargers", "help.topic_alerts", "help.topic_account", "help.support", "help.write"]) ? line(r, [["Aide ouverte", "screen.help"], ["thèmes : prix", "help.topic_prices"], ["bornes", "help.topic_chargers"], ["alertes", "help.topic_alerts"], ["compte", "help.topic_account"], ["assistance", "help.support"], ["« Nous écrire »", "help.write"]]) : ""],
-        ["Avis App Store", anyOf(r, ["review.prompt_favorite", "review.prompt_fill", "review.prompt_contribution", "review.rate_tap"]) ? "Demande affichée " + fmt(C("review.prompt_favorite") + C("review.prompt_fill") + C("review.prompt_contribution")) + " fois (" + line(r, [["après un favori", "review.prompt_favorite"], ["un plein", "review.prompt_fill"], ["une contribution", "review.prompt_contribution"]]) + ") · « Noter » touché " + fmt(C("review.rate_tap")) : ""]
-      ];
-      const body = rowsA.some((x) => x[1]) ? table(["Fonction", "Ce qu’on voit"], rowsA.map((x) => [x[0], x[1] || '<span style="color:var(--muted)">Rien sur la période</span>']), { wide: true, label: "Autres fonctions" }) : later(LATER_APP);
-      out.push(card({ id: "autres", title: "Autres fonctions", isNew: true, hint: "Tout le reste de l’app.", body }));
-    }
-
-    /* Fonctions en détail */
-    {
-      const st0 = ["station.from_map", "station.from_list", "station.from_favorite", "station.from_widget", "station.from_notification", "station.from_trip"];
-      const stv = st0.map((m) => C(m)), sts = shares(stv);
-      const stNames = ["carte", "liste", "favori", "widget", "notification", "trajet"];
-      const searches = C("search.place") + C("search.trip");
-      const live = C("charger.live_ok") + C("charger.live_none");
-      const favT = ["favorites.n0", "favorites.n1", "favorites.n2_5", "favorites.n6"].map((m) => C(m)), fs = shares(favT);
-      const rowsD = [
-        ["Carte et accueil", ["map.energy_switch", "map.drawer", "map.locate", "map.bubble_shown", "map.market_gauge", "map.trend_locked", "map.outside_france"],
-          [["Bascule carburant ↔ électrique", "map.energy_switch"], ["tiroir « Mon espace » ouvert", "map.drawer"], ["« Me localiser »", "map.locate"], ["bulle « moins cher à côté » vue", "map.bubble_shown"], ["ouverte", "map.bubble_opened"], ["jauge du marché touchée", "map.market_gauge"], ["tendance bloquée", "map.trend_locked"], ["hors de France", "map.outside_france"]]],
-        ["Recherche et filtres", ["search.place", "search.trip", "search.recent", "filter.open24h", "filter.fresh", "filter.radius", "filter.brand"],
-          [["Lieu", "search.place"], ["trajet", "search.trip"], ["recherche récente rouverte", "search.recent"], searches ? "sans résultat " + pct(C("search.no_result"), searches) : "",
-            ["filtres : 24 h/24", "filter.open24h"], ["prix frais", "filter.fresh"], ["disponible", "filter.available"], ["ouvert maintenant", "filter.open_now"], ["services", "filter.services"], ["rayon", "filter.radius"], ["enseigne", "filter.brand"], ["opérateur", "filter.operator"], ["autres", "filter.premium"], ["filtres effacés", "filter.cleared"]]],
-        ["Fiche station", st0.concat(["station.other_fuel", "station.alternative", "station.detour_cost", "station.week_hours"]),
-          [sts.total ? "Ouverte depuis : " + stNames.map((n, i) => stv[i] ? n + " " + sts.items[i].text : "").filter(Boolean).join(", ") : "", ["autre carburant regardé", "station.other_fuel"], ["alternative moins chère ouverte", "station.alternative"], ["« coût avec détour »", "station.detour_cost"], ["horaires de la semaine", "station.week_hours"],
-            C("screen.station") && S("screen.station") ? "temps moyen " + duration(S("screen.station") / C("screen.station")) : ""]],
-        ["Bornes", ["screen.charger", "charger.help", "charger.tariff", "charger.live_ok", "charger.live_none"],
-          [["Fiche borne", "screen.charger"], ["« comment lire ces chiffres »", "charger.help"], ["tarif opérateur ouvert", "charger.tariff"], live ? "bornes avec état en direct " + pct(C("charger.live_ok"), live) : ""]],
-        ["Trajets", ["trip.ok", "trip.failed", "trip.saved", "trip.reopened", "trip.finished", "trip.stop_chosen"],
-          [C("trip.ok") + C("trip.failed") ? "Calculés " + fmt(C("trip.ok") + C("trip.failed")) + " (réussis " + fmt(C("trip.ok")) + ")" : "", ["distance : moins de 100 km", "trip.short"], ["100 à 300 km", "trip.medium"], ["plus de 300 km", "trip.long"], ["enregistrés", "trip.saved"], ["rouverts", "trip.reopened"], ["terminés", "trip.finished"], ["arrêt choisi dans la feuille de route", "trip.stop_chosen"]]],
-        ["Alertes", ["tap.alert", "alert.deleted", "alert.reactivated", "alert.check_now", "alert.page", "alert.target_price", "alert.good_moment_kind"],
-          [["Créées", "tap.alert"], ["prix cible", "alert.target_price"], ["bon moment", "alert.good_moment_kind"], ["supprimées", "alert.deleted"], ["réactivées", "alert.reactivated"], ["« vérifier maintenant »", "alert.check_now"], ["page Alertes ouverte", "alert.page"]]],
-        ["Favoris", ["tap.favorite", "favorite.removed", "favorite.limit", "favorites.n0", "favorites.n1", "favorites.n2_5", "favorites.n6"],
-          [["Ajoutés", "tap.favorite"], ["retirés", "favorite.removed"], ["limite gratuite atteinte", "favorite.limit"],
-            fs.total ? "iPhone avec : 0 favori " + fs.items[0].text + ", 1 favori " + fs.items[1].text + ", 2 à 5 " + fs.items[2].text + ", 6 et plus " + fs.items[3].text : ""]],
-        ["Carnet et bilan", ["tap.fill_up", "journal.edit", "journal.delete", "journal.abandon", "journal.explain", "bilan.notif_yes", "bilan.notif_no", "screen.my_report"],
-          [C("tap.fill_up") ? "Pleins notés " + fmt(C("tap.fill_up")) + " (" + line(r, [["depuis la fiche", "journal.from_station"], ["l’icône", "journal.from_icon"], ["Siri", "journal.from_siri"]]) + ")" : "", ["modifiés", "journal.edit"], ["supprimés", "journal.delete"], ["formulaire abandonné", "journal.abandon"], ["« comprendre le calcul »", "journal.explain"], ["Mon bilan ouvert", "screen.my_report"], ["notification du bilan acceptée", "bilan.notif_yes"], ["refusée", "bilan.notif_no"]]],
-        ["Jaugeurs", ["tap.price_confirm", "tap.price_correct", "jaugeurs.signup", "jaugeurs.retained", "jaugeurs.rejected", "jaugeurs.linked_apple", "jaugeurs.progress", "jaugeurs.report_shortage"],
-          [C("tap.price_confirm") ? "Prix confirmés " + fmt(C("tap.price_confirm")) + " (retenus " + fmt(C("jaugeurs.retained")) + ", refusés " + fmt(C("jaugeurs.rejected")) + ")" : "", ["corrections", "tap.price_correct"], ["comptes créés", "jaugeurs.signup"], ["liés à Apple", "jaugeurs.linked_apple"],
-            ["signalements : rupture", "jaugeurs.report_shortage"], ["retour", "jaugeurs.report_available"], ["fermée", "jaugeurs.report_closed"], ["ouverte", "jaugeurs.report_open"], ["autre", "jaugeurs.report_other"], ["trop loin de la station", "jaugeurs.too_far"],
-            ["nouveaux statuts : Éclaireur", "jaugeurs.rank_scout"], ["Guide", "jaugeurs.rank_guide"], ["Pilier", "jaugeurs.rank_pillar"], ["« comment progresser » ouvert", "jaugeurs.progress"]]],
-        ["Réglages", ["screen.settings", "settings.haptic_off", "settings.privacy", "settings.data_delete"],
-          [["Page ouverte", "screen.settings"], ["retour haptique coupé", "settings.haptic_off"], ["confidentialité ouverte", "settings.privacy"], ["« Supprimer mes données »", "settings.data_delete"]]]
-      ];
-      const lines = rowsD.map((x) => ["<b>" + x[0] + "</b>", anyOf(r, x[1]) ? line(r, x[2]) : '<span style="color:var(--muted)">Rien sur la période</span>']);
-      const body = empty ? later(EMPTY_TEXT) : table(["Fonction", "Ce qu’on voit"], lines, { wide: true, label: "Fonctions en détail" }) +
-        '<p class="note">Nombre de fois sur la période. « Ouverte depuis » et la répartition des favoris sont des parts ; les favoris comptent les iPhone une fois par jour.</p>';
-      out.push(card({ id: "detail", title: "Fonctions en détail", isNew: true, full: true, hint: "Chaque grande fonction de l’app, une ligne par fonction (période choisie).", body }));
-    }
-
-    /* D’où viennent les utilisateurs */
-    {
-      const aa = C("acq.apple_ads"), ao = C("acq.other");
-      let body = "";
-      if (aa + ao) {
-        const s = shares([aa, ao]);
-        body += hb("Pub Apple Ads", aa * 100 / (aa + ao), s.items[0].text + " <small>· " + fmtF(aa, true) + "</small>") + hb("App Store (recherche, autre)", ao * 100 / (aa + ao), s.items[1].text + " <small>· " + fmtF(ao, true) + "</small>");
-      } else body += later(LATER_APP);
-      body += mini("Type d’installation") + (sharePills([{ l: "Nouvelle", n: C("install.fresh"), k: "ok" }, { l: "Mise à jour", n: C("install.update"), k: "ok" }, { l: "Restaurée", n: C("install.restored"), k: "ok" }]) || '<p class="hint">—</p>');
-      body += mini("Premier contact") + (sharePills([{ l: "Visite guidée terminée", n: C("tour.done"), k: "ok" }, { l: "Passée", n: C("tour.skipped"), k: "wa" }]) || '<p class="hint">—</p>');
-      {
-        const left = sharePills([{ l: "Quittée à la bulle 1", n: C("tour.skip_1"), k: "wa" }, { l: "À la bulle 2", n: C("tour.skip_2"), k: "wa" }, { l: "À la bulle 3", n: C("tour.skip_3"), k: "wa" }]);
-        if (left) body += left;
-      }
-      body += mini("Choix à l’accueil") + (pills([sharePills([{ l: "Carburant", n: C("onboarding.energy_fuel"), k: "ok" }, { l: "Électrique", n: C("onboarding.energy_ev"), k: "ok" }, { l: "Les deux", n: C("onboarding.energy_both"), k: "ok" }]).replace(/^<div class="pills">|<\/div>$/g, ""),
-        sharePills([{ l: "« Autour de moi »", n: C("onboarding.around_me"), k: "ok" }, { l: "Une ville", n: C("onboarding.city"), k: "ok" }]).replace(/^<div class="pills">|<\/div>$/g, "")]) || '<p class="hint">—</p>');
-      body += '<p class="note">' + nw(C("app.first_launch"), "nouvelle installation", "nouvelles installations") + " sur la période. Vues de la fiche et sources de l’App Store : App Store Connect.</p>";
-      out.push(card({ id: "origine", title: "D’où viennent les utilisateurs", isNew: true, hint: "Origine des nouvelles installations (période choisie).", body }));
-    }
-
-    /* Moments d’utilisation */
-    {
-      let body = "";
-      const s = (app.series || {})["app.open"];
-      const wd = [0, 0, 0, 0, 0, 0, 0], seen = [0, 0, 0, 0, 0, 0, 0];
-      if (s) r.days.forEach((d, i) => { const v = s.count[i]; if (v != null) { const k = (dayDate(d).getUTCDay() + 6) % 7; wd[k] += v; seen[k]++; } });
-      const names = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"];
-      body += mini("Par jour de la semaine");
-      if (nDays < 7) body += '<p class="hint">À partir d’une période de 7 jours.</p>';
-      else if (!sumArr(wd)) body += '<p class="hint">Aucune ouverture sur la période.</p>';
-      else {
-        const sw = shares(wd), mx = Math.max(...wd);
-        body += names.map((n, i) => hb(n, wd[i] * 100 / mx, sw.items[i].text)).join("");
-        if (seen.some((x) => x !== seen[0])) body += '<p class="note">Tous les jours de la semaine ne sont pas autant présents dans la période.</p>';
-      }
-      body += mini("Heure la plus active");
-      const hp = v3 && r.hours ? r.hours.period || [] : [];
-      if (!v3) body += later(LATER_SERVER);
-      else if (!sumArr(hp)) body += '<p class="hint">Aucune ouverture par heure reçue sur la période (versions récentes de l’app).</p>';
-      else {
-        const tot = sumArr(hp);
-        const win = []; for (let h = 0; h < 24; h += 2) win.push([h, hp[h] + hp[h + 1]]);
-        win.sort((a, b) => b[1] - a[1]);
-        body += pills(win.slice(0, 3).filter((w) => w[1] > 0).map((w) => pill(w[0] + NB + "h – " + (w[0] + 2) + NB + "h · " + pct(w[1], tot), "ok"))) + hoursHTML(hp, -1, "Ouvertures par heure sur la période");
-      }
-      out.push(card({ id: "moments", title: "Moments d’utilisation", isNew: true, hint: "Quand les gens ouvrent l’app (période choisie, heure de Paris).", body }));
+      out.push(card({ id: "appareils", title: "Appareils et moments", full: true, hint: "Sur quoi tourne l’app, et quand les gens l’ouvrent (période choisie, heure de Paris).", body }));
     }
 
     /* Santé */
     {
       const byKey = {}; health.forEach((i) => { byKey[i.key] = i; });
       const lvlTxt = (i) => !i ? ["—", ""] : i.level === "good" ? ["OK", "good"] : i.level === "info" ? ["—", ""] : [i.level === "bad" ? "!" : "À voir", i.level];
-      const pr = lvlTxt(byKey.prices), ch = lvlTxt(byKey.chargers);
+      const pr = lvlTxt(byKey.prices), im = lvlTxt(byKey.imports);
       const opens = C("app.open");
       const pf = C("perf.launch_fast"), pm = C("perf.launch_medium"), ps = C("perf.launch_slow"), ptot = pf + pm + ps;
       const median = ptot ? (pf / ptot >= 0.5 ? "< 1,5 s" : (pf + pm) / ptot >= 0.5 ? "1,5 à 3 s" : "> 3 s") : "—";
       let body = '<div class="kpis k6">' +
         kpi(pr[0], "Prix carburant" + (byKey.prices && byKey.prices.pill ? " (" + byKey.prices.pill.toLowerCase() + ")" : ""), "", pr[1]) +
-        kpi(ch[0], "Bornes" + (byKey.chargers && byKey.chargers.pill ? " (" + byKey.chargers.pill.toLowerCase() + ")" : ""), "", ch[1]) +
+        kpi(im[0], "Imports des prix officiels", "", im[1]) +
         kpi(pct(C("error.server_unreachable"), opens), "Visites avec « serveur injoignable »") +
-        kpi(pct(C("app.offline"), opens), "Visites hors ligne <span class=\"new\">NOUVEAU</span>") +
+        kpi(pct(C("app.offline"), opens), "Visites hors ligne") +
         kpi(fmt(C("one.purchase_failed")), "Achats en échec", "", C("one.purchase_failed") ? "warn" : "") +
-        kpi(median, "Temps de lancement médian <span class=\"new\">NOUVEAU</span>", ptot ? ks(pct(pf, ptot) + " sous 1,5 s") : ks("Avec la mise à jour de l’app")) + "</div>";
-      const errs = [["Trajet (calcul)", "err.trip", ["trip.ok", "trip.failed"]], ["Disponibilité des bornes", "err.charger_live", ["charger.live_ok", "charger.live_none", "err.charger_live"]],
-        ["Tarifs des bornes", "err.charger_tariff", ["charger.tariff", "err.charger_tariff"]], ["Historique des prix", "err.history", ["one.price_history", "err.history"]],
+        kpi(median, "Temps de lancement médian", ptot ? ks(pct(pf, ptot) + " sous 1,5 s") : ks("Avec la mise à jour de l’app")) + "</div>";
+      const errs = [["Trajet (calcul)", "err.trip", ["trip.ok", "trip.failed"]], ["Historique des prix", "err.history", ["one.price_history", "err.history"]],
         ["Détail d’une station", "err.station", ["screen.station", "err.station"]], ["Recherche (réseau)", "err.search", ["search.place", "search.trip", "err.search"]],
         ["Jaugeurs (envoi d’une contribution)", "err.jaugeurs", ["tap.price_confirm", "tap.price_correct", "err.jaugeurs"]], ["Sauvegarde iCloud", "err.backup", ["backup.restore", "backup.page", "err.backup"]]];
       const errRows = errs.map((e) => {
@@ -1717,32 +1530,30 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         const k = rate == null ? "" : rate < 0.03 ? "ok" : rate < 0.1 ? "wa" : "ko";
         return [e[0], fmt(n), rate == null ? "—" : '<span class="pill ' + k + '">' + pct(n, d) + "</span>"];
       });
-      const left = mini("Erreurs par fonction <span class=\"new\">NOUVEAU</span>") + table(["Fonction", "Échecs", "Taux"], errRows, { label: "Erreurs par fonction" }) +
+      const left = mini("Erreurs par fonction") + table(["Fonction", "Échecs", "Taux"], errRows, { label: "Erreurs par fonction" }) +
         '<p class="note">Taux : échecs ÷ (essais réussis + échecs) de la même fonction, quand l’app compte les deux.</p>' +
         mini("Problèmes rencontrés (par jour-iPhone)") + table(["Problème", "Nombre", "Par jour-iPhone"], PROBLEMS.map((p) => [p[1], fmt(C(p[0])), perPhoneDay(C(p[0]), pd)]), { label: "Problèmes rencontrés dans l’app" });
       const fresh = health.filter((i) => i.key !== "database").map((i, k) => [i, k]).sort((a, b) => (RANK[a[0].level] - RANK[b[0].level]) || (a[1] - b[1])).map((x) => x[0]);
-      const ref = instant(base.health && base.health.checked_at);
+      const ref = instant(r.health && r.health.checked_at);
       let right = mini("Serveur") + '<p class="hint" style="margin:0 0 6px">État actuel' + (ref ? ", lu " + when(ref, ref) : "") + " ; ne dépend pas de la période.</p>" +
         '<div class="fresh">' + fresh.map((i) => '<div class="f" data-health="' + i.key + '" data-level="' + i.level + '"><h4>' + i.title + "</h4>" + st(i.level, i.pill) + (i.text ? "<p>" + esc(i.text) + "</p>" : "") + "</div>").join("") + "</div>";
       const dbi = byKey.database;
       if (dbi) {
-        const db = base.health.database, tables = db.tables || {};
-        const names = [["irve_points", "bornes"], ["official_prices", "prix officiels"], ["price_history", "historique des prix"], ["projections", "projections"]]
-          .filter((x) => tables[x[0]] != null).map((x, i) => (i ? x[1] : cap(x[1])) + " " + mo(tables[x[0]]));
+        const db = r.health.database, tables = db.tables || {};
+        const names = [["official_prices", "prix officiels"], ["price_history", "historique des prix"], ["projections", "projections"]]
+          .filter((x) => tables[x[0]] != null).map((x) => x[1] + " " + mo(tables[x[0]]));
         right += '<div data-health="database" data-level="' + dbi.level + '"><div class="meter-h"><span>Base de données</span><b>' + mo(db.bytes) + " sur 8" + NB + "Go</b></div>" +
           '<div class="meter ' + dbi.level + '" role="img" aria-label="' + Math.round(dbi.share * 100) + ' % de la base utilisée"><i style="width:' + Math.min(100, dbi.share * 100).toFixed(1) + '%"></i></div>' +
-          st(dbi.level, dbi.pill) + '<p class="note">Offre Pro de Supabase : 8' + NB + "Go par projet ; le disque s’agrandit tout seul au-delà." + (names.length ? " " + names.join(", ") + "." : "") + "</p></div>";
+          st(dbi.level, dbi.pill) + '<p class="note">Offre Pro de Supabase : 8' + NB + "Go par projet ; le disque s’agrandit tout seul au-delà." + (names.length ? " Dont " + names.join(", ") + "." : "") + "</p></div>";
       }
-      const basePd = base.app.phone_days || 0;
-      right += '<p class="note">Résumés de statistiques reçus et comptés sur la période' + (ESSAI ? "" : " (production)") + " : " + fmt(basePd) + (state.tests ? ", plus " + fmt(state.tests.app.phone_days) + " sur le serveur d’essai" : "") + ".</p>";
-      right += mini("iPhone <span class=\"new\">NOUVEAU</span>") + table(["Indicateur", "Valeur"], [
+      right += '<p class="note">Résumés de statistiques reçus et comptés sur la période' + (ESSAI ? "" : " (production)") + " : " + fmt(pd) + ".</p>";
+      right += mini("iPhone") + table(["Indicateur", "Valeur"], [
         ["Plantages et blocages", '<a href="https://appstoreconnect.apple.com/apps/6819886839" target="_blank" rel="noopener noreferrer">App Store Connect ↗</a>'],
         ["Lancement : moins de 1,5 s", ptot ? pct(pf, ptot) : "—"], ["Lancement : 1,5 à 3 s", ptot ? pct(pm, ptot) : "—"], ["Lancement : plus de 3 s", ptot ? '<span class="pill ' + (ps / ptot > 0.1 ? "wa" : "ok") + '">' + pct(ps, ptot) + "</span>" : "—"],
-        ["Carte lente (plus de 3 s)", C("map.energy_switch") ? '<span class="pill ' + (C("map.slow") / C("map.energy_switch") > 0.05 ? "wa" : "ok") + '">' + pct(C("map.slow"), C("map.energy_switch")) + " des bascules</span>" : fmt(C("map.slow"))],
         ["Hors ligne / serveur injoignable", fmt(C("app.offline")) + " / " + fmt(C("error.server_unreachable"))]], { label: "Santé côté iPhone" });
       right += '<p class="note">« Hors ligne » : l’iPhone n’avait pas de réseau. « Serveur injoignable » : le réseau marchait mais le serveur n’a pas répondu.</p>';
       body += '<div class="two" style="margin-top:6px"><div>' + left + "</div><div>" + right + "</div></div>";
-      body += '<p class="note">Seuils : liste des bornes (publiée chaque lundi) en orange après 8 jours sans publication, en rouge après 14 ; imports en orange au-delà de 2 % de cycles en échec sur les dernières 24 h, en rouge au-delà de 10 % ; prix officiels en orange après 1 h sans import réussi ou dès un échec, en rouge après 6 h ou import coupé ; base de données en orange à 70 %, en rouge à 90 %.</p>';
+      body += '<p class="note">Seuils : imports en orange au-delà de 2 % de cycles en échec sur les dernières 24 h, en rouge au-delà de 10 % ; prix officiels en orange après 1 h sans import réussi ou dès un échec, en rouge après 6 h ou import coupé ; base de données en orange à 70 %, en rouge à 90 %.</p>';
       out.push(card({ id: "sante", title: "Santé", full: true, hint: watch.length ? nw(watch.length, "point", "points") + " à surveiller : " + watch.map((i) => i.short).join(", ") + "." : "Ce qui marche, ce qui casse : côté serveur et côté iPhone. Rien à signaler.", body }));
     }
 
@@ -1757,10 +1568,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       "</div>" }));
 
     $("grid").innerHTML = out.join("");
-    if (base.community && base.community.available) {
-      renderCommunity(base.community);
-      $("comTests").textContent = ESSAI ? "Chiffres du serveur d’essai." : "L’interrupteur des tests ne s’applique pas ici : chiffres du serveur de production, vos propres contributions comprises.";
-    }
+    if (r.community && r.community.available) renderCommunity(r.community);
     if (!empty) renderDays(r);
     typo($("dashboard")); typo($("range").parentNode); typo($("periode"));
     measure();
@@ -1839,18 +1647,18 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       { l: "Éclaireur", n: byRank.eclaireur || 0, s: "dès 10 retenues" },
       { l: "Guide", n: byRank.guide || 0, s: "dès 50 retenues" },
       { l: "Pilier", n: byRank.pilier || 0, s: "dès 200 retenues" }]);
-    return '<h4 class="mini">Statuts aujourd’hui <span class="new">NOUVEAU</span></h4>' +
+    return '<h4 class="mini">Statuts aujourd’hui</h4>' +
       '<div class="rows" data-total-units="' + x.sh.U + '">' + rowsHTML(x.items) + "</div>" +
       '<p class="note">Selon les contributions retenues depuis le début' + NB + ": ne suit pas la période.</p>";
   }
 
   function renderCommunity(com) {
     const sec = $("communaute");
-    $("comTests").textContent = ESSAI ? "Chiffres du serveur d’essai." : "L’interrupteur des tests ne s’applique pas ici : chiffres du serveur, vos propres contributions comprises.";
+    $("comTests").textContent = ESSAI ? "Chiffres du serveur d’essai." : "Chiffres du serveur de production, vos propres contributions comprises.";
     const available = !!(com && com.available);
     sec.classList.toggle("is-empty", !available);
     if (!available) { $("comLecture").textContent = ""; return; }
-    const k = com.contributions, prof = com.profiles || {}, mod = com.moderation || {}, ic = com.icloud || {};
+    const k = com.contributions, prof = com.profiles || {}, mod = com.moderation || {};
     const distinct = nw(k.distinct_contributors, "contributeur différent", "contributeurs différents");
     $("comLecture").textContent = nw(k.total, "contribution", "contributions") + " de " + distinct + " sur la période" +
       (mod.available ? (mod.to_review ? " ; " + fmt(mod.to_review) + " à revoir." : " ; rien à revoir.") : ".") +
@@ -1861,7 +1669,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       kpi(fmt(prof.total || 0), pl(prof.total || 0, "profil Jaugeur", "profils Jaugeurs") + " · " + fmt(prof.new_in_period || 0) + " " + pl(prof.new_in_period || 0, "créé", "créés") + " sur la période, " + fmt(prof.blocked || 0) + " " + pl(prof.blocked || 0, "bloqué", "bloqués")) + "</div>" +
       ranksHTML(prof.by_rank);
     if (k.detail_shown && Array.isArray(k.by_day)) {
-      const days = state.base.days;
+      const days = state.view.days;
       let pts = days.map((d, i) => ({ day: d, from: d, to: d, value: k.by_day[i] == null ? 0 : k.by_day[i], key: "value", text: "" }));
       if (pts.length > 31) pts = weekly(pts).map((p) => Object.assign(p, { key: p.key === "part" ? "part" : "value" }));
       html += pts.length > 1 ? '<div id="comDays">' + colsHTML(pts, { label: "Contributions par " + (days.length > 31 ? "semaine" : "jour") }) + "</div>" : "";
@@ -1876,38 +1684,24 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       shareRows($("comFuel"), FUELS.map((f) => ({ l: f[1], n: (k.by_fuel || {})[f[1] === "Gazole" ? "Diesel" : f[1]] || 0 })).sort((a, b) => b.n - a.n));
     }
 
-    // Moderation
+    // Moderation: status and states on the left, actions on the right.
     const bs = k.by_state || {};
     let m = '<h3 class="mini">Modération</h3>';
     if (mod.available) m += "<div>" + (mod.to_review ? st("warn", nw(mod.to_review, "contribution", "contributions") + " à revoir") : st("good", "Rien à revoir")) + "</div>";
     m += '<h4 class="mini">' + "État des contributions de la période</h4>" + '<div class="rows" id="comStates"></div>';
+    let acts = "";
     if (mod.available) {
       const a = mod.actions || {};
-      const since = mod.actions_from && mod.actions_from > state.base.from ? " depuis le " + dayMonth(mod.actions_from) : "";
-      m += '<h4 class="mini">' + "Actions de modération" + since + "</h4>" + '<div class="rows">' + rowsHTML([
+      const since = mod.actions_from && mod.actions_from > state.view.from ? " depuis le " + dayMonth(mod.actions_from) : "";
+      acts = '<h4 class="mini">' + "Actions de modération" + since + "</h4>" + '<div class="rows">' + rowsHTML([
         { l: "Contributions rejetées", n: a.reject || 0 }, { l: "Revues levées, contribution gardée", n: a.allow_review || 0 },
         { l: "Auteurs bloqués", n: a.block_author || 0 }, { l: "Auteurs débloqués", n: a.unblock_author || 0 }]) + "</div>" +
         (since ? '<p class="note">Le journal de modération est gardé 90 jours.</p>' : "");
     } else m += '<p class="note">Modération : non suivie sur ce serveur.</p>';
     $("comMod").innerHTML = m;
+    $("comActions").innerHTML = acts;
     shareRows($("comStates"), [["retained", "Retenues"], ["pending", "En attente"], ["rejected", "Rejetées"], ["expired", "Expirées"], ["withdrawn", "Retirées"], ["superseded", "Remplacées"]]
       .map((x) => ({ l: x[1], n: bs[x[0]] || 0 })));
-
-    // iCloud signalements, rolling 48 hours.
-    const icCard = $("comIcloud");
-    icCard.hidden = !ic.available;
-    if (ic.available) {
-      let s = '<h3 class="mini">Signalements iCloud — 48 dernières heures</h3>' +
-        '<p class="hint">La passerelle ne garde ses traces que 2 jours : cette carte ne suit pas la période.</p>' +
-        '<div class="kpis k3">' + kpi(fmt(ic.total), pl(ic.total, "signalement", "signalements")) + kpi(fmt(ic.distinct_contributors), pl(ic.distinct_contributors, "contributeur différent", "contributeurs différents")) + "</div>";
-      if (ic.detail_shown && ic.by_kind) s += '<div class="rows" id="icKinds"></div>';
-      else s += '<p class="later" data-threshold>Détail par type : affiché à partir de ' + fmt(com.threshold || 5) + " contributeurs différents sur ces 48 heures. Ici" + NB + ":" + NB + fmt(ic.distinct_contributors) + ".</p>";
-      icCard.innerHTML = s;
-      if (ic.detail_shown && ic.by_kind) {
-        shareRows($("icKinds"), [["price", "Prix constaté"], ["shortage", "Rupture"], ["available", "De nouveau disponible"], ["open", "Station accessible"], ["closed", "Fermeture exceptionnelle"]]
-          .map((x) => ({ l: x[1], n: ic.by_kind[x[0]] || 0 })));
-      }
-    }
   }
 
   /* ---------- Santé ---------- */
@@ -1917,25 +1711,6 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     const ref = instant(h.checked_at) || new Date();
     const items = [];
     const off = (title) => ({ title, level: "info", pill: "Non suivi sur ce serveur", text: "", count: false });
-    // Chargers list
-    const ch = h.chargers || {};
-    if (!ch.available) items.push(Object.assign(off("Liste des bornes de recharge"), { key: "chargers" }));
-    else {
-      const pub = instant(ch.last_published_at);
-      const age = pub ? Math.floor((ref - pub) / 86400000) : null;
-      // Published every Monday since 17/10: a week old is normal.
-      const level = age == null || age >= 14 ? "bad" : age >= 8 ? "warn" : "good";
-      let text = pub ? "Dernière publication " + when(pub, ref) + " (" + nw(ch.last_published_points || 0, "point", "points") + ")." : "Aucune publication réussie gardée.";
-      const at = ch.last_attempt;
-      if (at && at.status !== "published") {
-        const d = instant(at.created_at);
-        const what = { expired: "expiré sans publication", failed: "échec" + (at.error ? " (" + at.error + ")" : ""), pending: "en attente", queued: "en file d’attente" }[at.status] || at.status;
-        text += " Essai du " + (d ? dayMonth(parisDay(d)) : "?") + " : " + what + ".";
-      }
-      items.push({ key: "chargers", title: "Liste des bornes de recharge", level, count: true,
-        pill: age == null ? "Jamais publiée" : age < 2 ? "À jour" : age < 8 ? "À jour · " + nw(age, "jour", "jours") : "Il y a " + nw(age, "jour", "jours"),
-        short: age == null ? "liste des bornes jamais publiée" : "liste des bornes publiée il y a " + nw(age, "jour", "jours"), text });
-    }
     // Official import cycles over 7 days
     const oi = h.official_import || {};
     if (!oi.available) items.push(Object.assign(off("Imports des prix officiels"), { key: "imports" }));
@@ -2073,8 +1848,8 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
   });
   $("forget").addEventListener("click", () => {
     store(CODE_KEY, null); store(ESSAI_KEY, null);
-    cache.clear(); state.view = null; state.base = null; state.tests = null; state.prev = null;
-    testsForm(false, ""); barMsg("");
+    cache.clear(); state.view = null; state.prev = null;
+    barMsg("");
     showLock("");
   });
   $("retry").addEventListener("click", () => refresh());
@@ -2110,27 +1885,6 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
   $("compare").addEventListener("click", () => {
     state.compare = !state.compare;
     store(COMPARE_KEY, state.compare ? "1" : null);
-    refresh();
-  });
-  $("tests").addEventListener("click", () => {
-    state.testsOn = !state.testsOn;
-    store(TESTS_KEY, state.testsOn ? "1" : null);
-    if (!state.testsOn) testsForm(false, "");
-    refresh();
-    if (!$("testsForm").hidden) { try { $("testsCode").focus(); } catch (e) {} }
-  });
-  $("testsForm").addEventListener("submit", (event) => {
-    event.preventDefault();
-    const value = $("testsCode").value.trim();
-    if (value.length < 32) { testsForm(true, "Le code fait au moins 32 caractères. Copiez-le en entier."); return; }
-    store(ESSAI_KEY, value);
-    testsForm(false, "");
-    refresh();
-  });
-  $("testsCancel").addEventListener("click", () => {
-    state.testsOn = false;
-    store(TESTS_KEY, null);
-    testsForm(false, "");
     refresh();
   });
   // « En direct »: read again every 5 minutes while the page is shown.
