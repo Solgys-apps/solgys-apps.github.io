@@ -71,16 +71,13 @@ h1 b{color:var(--yellow)}
 .range{margin:4px 0 0;color:var(--band-muted);font-size:13.5px}
 .staging{background:var(--yellow);color:var(--on-yellow);font-weight:700;font-size:13px;text-align:center;padding:7px 16px}
 
-/* Sticky block: section menu (navy) and period bar (white) */
+/* Sticky period bar */
 .stick{position:sticky;top:0;z-index:20}
-.nav{background:var(--band);border-bottom:1px solid var(--band-line);padding-top:env(safe-area-inset-top,0px)}
 .hscroll{position:relative;display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;padding-block:7px}
 .hscroll::-webkit-scrollbar{display:none}
-.nav a{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 13px;border-radius:99px;background:var(--chip);color:var(--chip-fg);font:600 13px/1 var(--font-text);text-decoration:none;white-space:nowrap}
-.nav a[aria-current="location"]{background:var(--yellow);color:var(--on-yellow)}
 .navdot{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;border-radius:99px;background:var(--warn-bg);color:var(--warn);font:800 11px/1 var(--font-text)}
 .navdot.bad{background:var(--bad-bg);color:var(--bad)}
-.period{background:var(--card);border-bottom:1px solid var(--line)}
+.period{background:var(--card);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
 .per-l{flex:none;font:700 11.5px/1 var(--font-text);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-right:2px}
 .chipb{flex:none;min-height:36px;padding:0 13px;border-radius:99px;border:1px solid var(--line);background:var(--soft);color:var(--fg);font:600 13px/1 var(--font-text);cursor:pointer;white-space:nowrap}
 .chipb[aria-pressed="true"]{background:var(--sel);border-color:var(--sel);color:var(--on-sel)}
@@ -117,15 +114,44 @@ button.ghost{min-height:40px;font:600 14px var(--font-text);padding:0 14px;borde
 #dashboard{transition:opacity .2s}
 #dashboard[aria-busy="true"]{opacity:.55}
 
-/* Notices */
-.strip{display:flex;align-items:center;gap:10px;min-height:44px;margin-top:12px;padding:8px 12px;border-radius:12px;background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--fg);text-decoration:none;font-size:13.5px}
-.strip.bad{background:var(--bad-bg);border-color:var(--bad)}
-.strip-i{flex:none;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--warn);color:var(--card);font:800 13px/1 var(--font-text)}
-.strip.bad .strip-i{background:var(--bad)}
-.strip strong{color:var(--warn)}
-.strip.bad strong{color:var(--bad)}
+/* Three levels: the essentials (tiles), one question at a time (tabs), the detail on demand */
+.sect{margin:20px 0 8px;font:700 12px/1.3 var(--font-text);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.liveline{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;margin-top:12px;padding:9px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--fg);font:400 13.5px/1.35 var(--font-text);text-align:left;cursor:pointer}
+.liveline b{font-weight:700}
+.liveline > span:nth-child(2){flex:1 1 auto;min-width:0}
+.liveline .go{flex:none;color:var(--link);font-weight:700;white-space:nowrap}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:760px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}}
+.tile{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;margin:0;padding:14px 14px 13px;border-radius:16px;border:1px solid var(--line);background:var(--card);color:var(--fg);font:inherit;text-align:left}
+button.tile{cursor:pointer}
+.tile .v{font:800 34px/1.05 var(--font-display);letter-spacing:-.02em;font-variant-numeric:tabular-nums;max-width:100%;overflow-wrap:anywhere}
+.tile .v.good{color:var(--good)} .tile .v.warn{color:var(--warn)} .tile .v.bad{color:var(--bad)}
+.tile .l{font:600 14px/1.25 var(--font-text)}
+.tile .t,.r .t{font-size:12.5px;line-height:1.3;font-weight:600;color:var(--muted)}
+.t.up{color:var(--good)} .t.down{color:var(--bad)}
+.tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding:2px 16px 4px}
+.tabs::-webkit-scrollbar{display:none}
+@media (min-width:640px){.tabs{margin-inline:0;padding-inline:0}}
+.tab{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:42px;padding:0 16px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--muted);font:600 14.5px/1 var(--font-text);cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--sel);border-color:var(--sel);color:var(--on-sel)}
+.panel{margin:12px 0 32px;padding:18px 16px 8px;border-radius:16px;border:1px solid var(--line);background:var(--card);min-width:0}
+@media (min-width:640px){.panel{padding:22px 22px 10px}}
+.q{margin:0;font:800 21px/1.25 var(--font-display);letter-spacing:-.01em}
+.ans{margin:6px 0 8px;color:var(--muted);font-size:14.5px;line-height:1.45}
+.kv.big li{align-items:center;padding:11px 0;font-size:15px}
+.kv.big li b{font:800 18px/1.2 var(--font-display)}
+.kv .r{display:flex;flex-direction:column;align-items:flex-end;gap:1px;text-align:right;flex:none;max-width:60%}
+.kv li > span:first-child{min-width:0}
+.pchart{margin-top:16px}
+.pchart .mini{margin-top:0}
+.more-b{display:inline-flex;align-items:center;gap:9px;min-height:44px;margin-top:10px;padding:0;border:0;background:none;color:var(--link);font:700 15px/1 var(--font-text);cursor:pointer}
+.more-b::after{content:"";width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg)}
+.more-b[aria-expanded="true"]::after{transform:translateY(2px) rotate(-135deg)}
+.detail{margin-top:4px}
+.panel .detail.grid{padding-block:0 8px;gap:0 28px}
+.detail .card{background:none;border:0;border-top:1px solid var(--line);border-radius:0;padding:18px 0 8px;scroll-margin-top:calc(var(--stick-h) + 12px)}
 
-/* Cards */
+/* Cards (the detail of each question) */
 .grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;padding-block:14px 32px}
 @media (min-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding-block:22px 40px}.full{grid-column:1/-1}}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 14px;min-width:0;scroll-margin-top:calc(var(--stick-h) + 12px)}
@@ -145,6 +171,7 @@ button.ghost{min-height:40px;font:600 14px var(--font-text);padding:0 14px;borde
 .kv li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
 .kv li b{font-variant-numeric:tabular-nums;white-space:nowrap}
 .kv li.none{color:var(--muted);border-bottom:0}
+.kv .sub{display:block;margin-top:2px;font-size:12.5px;line-height:1.3;font-weight:400;color:var(--muted)}
 @media (min-width:640px){.two{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}}
 .two > div{min-width:0}
 
@@ -301,23 +328,6 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
 <div class="staging" id="stagingBanner" hidden>Serveur d’essai · ces chiffres ne viennent pas des vrais utilisateurs</div>
 
 <div class="stick" id="stick" hidden>
-  <nav class="nav" aria-label="Rubriques du tableau de bord">
-    <div class="wrap hscroll" id="navIn">
-      <a href="#direct">En direct</a>
-      <a href="#essentiel">L’essentiel</a>
-      <a href="#retention">Rétention</a>
-      <a href="#parcours">Parcours</a>
-      <a href="#one">Jauge ONE</a>
-      <a href="#utilisation">Utilisation</a>
-      <a href="#notifications">Notifications</a>
-      <a href="#communaute">Communauté</a>
-      <a href="#publicite">Publicité</a>
-      <a href="#fonctions">Fonctions</a>
-      <a href="#appareils">Appareils</a>
-      <a href="#sante" id="navSante">Santé</a>
-      <a href="#ailleurs">Ailleurs</a>
-    </div>
-  </nav>
   <div class="period" id="periode">
     <div class="wrap hscroll" role="group" aria-label="Période">
       <span class="per-l" aria-hidden="true">Période</span>
@@ -362,8 +372,18 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
 
   <div id="dashboard" hidden>
     <div class="wrap">
-      <a class="strip" id="strip" href="#sante" hidden></a>
-      <div class="grid" id="grid"></div>
+      <button type="button" class="liveline" id="liveline" hidden></button>
+      <h2 class="sect" id="h-tiles">L’essentiel en un coup d’œil</h2>
+      <div class="tiles" id="tiles" role="group" aria-labelledby="h-tiles"></div>
+      <h2 class="sect" id="h-tabs">Une question à la fois</h2>
+      <div class="tabs" id="tabs" role="tablist" aria-labelledby="h-tabs">
+        <button type="button" class="tab" role="tab" id="t-utilisateurs" data-tab="utilisateurs" aria-controls="p-utilisateurs" aria-selected="true">Utilisateurs</button>
+        <button type="button" class="tab" role="tab" id="t-usage" data-tab="usage" aria-controls="p-usage" aria-selected="false" tabindex="-1">Usage</button>
+        <button type="button" class="tab" role="tab" id="t-argent" data-tab="argent" aria-controls="p-argent" aria-selected="false" tabindex="-1">Argent</button>
+        <button type="button" class="tab" role="tab" id="t-jaugeurs" data-tab="jaugeurs" aria-controls="p-jaugeurs" aria-selected="false" tabindex="-1">Jaugeurs</button>
+        <button type="button" class="tab" role="tab" id="t-technique" data-tab="technique" aria-controls="p-technique" aria-selected="false" tabindex="-1">Technique</button>
+      </div>
+      <div id="panels"></div>
     </div>
   </div>
 </main>
@@ -371,7 +391,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
 <footer class="foot" id="foot" hidden>
   <div class="wrap">
     <h2>Confidentialité</h2>
-    <p><strong>Totaux anonymes</strong> par jour, par heure et par créneau de 5 minutes, par version de l’app et d’iOS. Aucun identifiant, aucune position, aucune station, aucun texte saisi, aucun montant. Effacés après 25 mois (créneaux « en direct » : 2 jours). Chacun peut couper la collecte dans Mon tableau de bord › Réglages › Confidentialité › Statistiques anonymes.</p>
+    <p><strong>Totaux anonymes</strong> par jour, par heure et par tranche de 5 minutes, par version de l’app et d’iOS. Aucun identifiant, aucune position, aucune station, aucun texte saisi, aucun montant. Effacés après 25 mois (chiffres « en direct » : 2 jours). Chacun peut couper la collecte dans Mon tableau de bord › Réglages › Confidentialité › Statistiques anonymes.</p>
     <p>Rétention : sans identifiant, seule la semaine d’installation est connue. Une semaine de moins de 5 installations, ou une case sous 5 iPhone en moyenne, reste masquée par le serveur ; un nombre sous 5 pour toute la période peut s’afficher « < 5 ».</p>
     <p>Communauté et Santé : totaux et états calculés par le serveur à chaque lecture, jamais un profil, un contributeur ni une station.</p>
     <button type="button" class="forget" id="forget">Oublier le code sur cet appareil</button>
@@ -398,7 +418,8 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
   const BASE_KEY = ESSAI ? ESSAI_KEY : CODE_KEY;
   const BASE = ESSAI ? STAGING : PROD;
   const PERIOD_KEY = "jauge.stats.period", COMPARE_KEY = "jauge.stats.compare";
-  const FIRST_KEY = "jauge.stats.first", DATES_KEY = "jauge.stats.dates";
+  const FIRST_KEY = "jauge.stats.first", DATES_KEY = "jauge.stats.dates", TAB_KEY = "jauge.stats.tab";
+  const TABS = ["utilisateurs", "usage", "argent", "jaugeurs", "technique"];
   const $ = (id) => document.getElementById(id);
   const root = document.documentElement;
   let reduceMotion = false;
@@ -876,8 +897,11 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       return v === "1" ? "yesterday" : v === "365" ? "all" : "7";
     })(),
     cFrom: null, cTo: null,
-    compare: stored(COMPARE_KEY) === "1",
+    // On unless the viewer turned it off: the tiles show the trend.
+    compare: stored(COMPARE_KEY) !== "0",
     metric: "app.open",
+    tab: (() => { const v = stored(TAB_KEY); return TABS.includes(v) ? v : "utilisateurs"; })(),
+    open: Object.create(null),
     view: null, prev: null
   };
   (function () {
@@ -1067,9 +1091,35 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     const p = Math.round((now - before) * 100 / before);
     return '<div class="d ' + (p > 0 ? "up" : p < 0 ? "down" : "") + '">' + (p > 0 ? "+" : p < 0 ? "−" : "±") + Math.abs(p) + NN + "%" + tail + "</div>";
   }
+  // Trend of a tile or a row, in plain words: « +12 % par rapport à la période d’avant », « stable ».
+  function trendWords() { return state.p === "today" ? "par rapport à hier" : state.p === "yesterday" ? "par rapport à avant-hier" : "par rapport à la période d’avant"; }
+  function trend(now, before, long) {
+    const c = CMP;
+    if (!c) return "";
+    if (!c.ok) return long ? '<span class="t" title="' + esc(c.why) + '">pas de comparaison possible</span>' : "";
+    if (now == null || before == null || !isFinite(now) || !isFinite(before)) return "";
+    if (!(before > 0)) return now > 0 ? (long ? '<span class="t">rien sur la période d’avant</span>' : "") : '<span class="t">stable</span>';
+    const p = Math.round((now - before) * 100 / before);
+    if (!p) return '<span class="t">stable</span>';
+    return '<span class="t ' + (p > 0 ? "up" : "down") + '">' + (p > 0 ? "+" : "−") + Math.abs(p) + NN + "%" + (long ? " " + trendWords() : "") + "</span>";
+  }
+  function tile(v, l, extra, cls, go) {
+    const tag = go ? 'button type="button" data-go="' + go + '"' : "div";
+    return "<" + tag + ' class="tile"><span class="v' + (cls ? " " + cls : "") + '">' + v + '</span><span class="l">' + l + "</span>" + (extra || "") + "</" + (go ? "button" : "div") + ">";
+  }
+  // rows: [label, value, trend, line under the label]
+  function panelHTML(id, question, answer, rows, chart, detail) {
+    const open = !!state.open[id];
+    return '<section class="panel" id="p-' + id + '" role="tabpanel" aria-labelledby="t-' + id + '"' + (state.tab === id ? "" : " hidden") + ">" +
+      '<h2 class="q">' + question + '</h2><p class="ans">' + answer + "</p>" +
+      (rows.length ? '<ul class="kv big">' + rows.map((x) => "<li><span>" + x[0] + (x[3] ? '<span class="sub">' + x[3] + "</span>" : "") + '</span><span class="r"><b>' + x[1] + "</b>" + (x[2] || "") + "</span></li>").join("") + "</ul>" : "") +
+      (chart ? '<div class="pchart">' + chart + "</div>" : "") +
+      '<button type="button" class="more-b" data-more="' + id + '" aria-expanded="' + open + '" aria-controls="d-' + id + '">' + (open ? "Masquer le détail" : "Voir le détail") + "</button>" +
+      '<div class="detail grid" id="d-' + id + '"' + (open ? "" : " hidden") + ">" + detail.join("") + "</div></section>";
+  }
   function liveSpark(values) {
     const W = 96, H = 26, n = values.length || 1, g = 1, bw = (W - g * (n - 1)) / n, max = Math.max(1, ...values);
-    let s = '<svg viewBox="0 0 ' + W + " " + H + '" width="' + W + '" height="' + H + '" role="img" aria-label="' + esc("Ces 2 dernières heures, par créneau de 5 minutes : " + values.map(fmt).join(", ")) + '">';
+    let s = '<svg viewBox="0 0 ' + W + " " + H + '" width="' + W + '" height="' + H + '" role="img" aria-label="' + esc("Ces 2 dernières heures, par tranche de 5 minutes : " + values.map(fmt).join(", ")) + '">';
     values.forEach((v, i) => {
       const x = (i * (bw + g)).toFixed(2), h = v > 0 ? Math.max(3, v / max * (H - 1)) : 2;
       s += '<rect x="' + x + '" y="' + (H - h).toFixed(1) + '" width="' + bw.toFixed(2) + '" height="' + h.toFixed(1) + '" class="' + (v > 0 ? (i === n - 1 ? "sp-now" : "sp-bar") : "sp-zero") + '"/>';
@@ -1110,33 +1160,27 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     const today = todayParis();
     const nDays = r.days.length;
 
-    // Masthead, Santé strip and nav dot.
-    $("range").textContent = periodText(r.from, r.to) + (g ? " · lu le " + dayMonth(parisDay(g)) + " à " + clock(g) : "") + (v3 ? "" : " · serveur sans le rapport v3");
+    $("range").textContent = periodText(r.from, r.to) + (g ? " · lu le " + dayMonth(parisDay(g)) + " à " + clock(g) : "") + (v3 ? "" : " · serveur pas encore à jour");
     measure();
-    const strip = $("strip");
-    if (watch.length) {
-      strip.hidden = false;
-      strip.className = "strip" + (watch.some((i) => i.level === "bad") ? " bad" : "");
-      strip.innerHTML = '<span class="strip-i" aria-hidden="true">!</span><span><strong>' + nw(watch.length, "point", "points") + " à surveiller</strong> : " + watch.map((i) => i.short).join(", ") + "</span>";
-    } else strip.hidden = true;
-    $("navSante").innerHTML = "Santé" + (watch.length ? ' <span class="navdot' + (watch.some((i) => i.level === "bad") ? " bad" : "") + '" aria-hidden="true">' + watch.length + '</span><span class="sr">, ' + nw(watch.length, "point", "points") + " à surveiller</span>" : "");
 
-    const out = [];
+    // The detail of each question: the former cards, by theme.
+    const D = { utilisateurs: [], usage: [], argent: [], jaugeurs: [], technique: [] };
+    let oneFunnel = "";
 
     /* En direct */
     {
       let body;
-      if (!v3) body = later(LATER_SERVER + " iPhone actifs en ce moment, chiffres du jour et ouvertures par heure.");
+      if (!v3) body = later(LATER_SERVER + " Personnes dans l’app en ce moment, chiffres du jour et ouvertures par heure.");
       else {
         const L = r.live || {}, T = r.today_totals || {};
         const slots = (L.last_2_hours || []).map((s) => s.pings || 0);
         const slot = instant(L.current_slot);
         const prev3 = (L.previous_3 || []).map(fmt);
         body = '<div class="kpis k6">' +
-          kpi(fmt(L.current || 0) + (slots.length ? liveSpark(slots) : ""), "iPhone actifs maintenant", ks((slot ? "Créneau de 5 min commencé à " + clock(slot) : "Créneau en cours") + (prev3.length ? " · avant : " + prev3.join(", ") : ""))) +
-          kpi(fmt(T.devices || 0), "iPhone actifs aujourd’hui") +
+          kpi(fmt(L.current || 0) + (slots.length ? liveSpark(slots) : ""), "Dans l’app en ce moment", ks((slot ? "Depuis " + clock(slot) : "Ces 5 dernières minutes") + (prev3.length ? " · avant : " + prev3.join(", ") : ""))) +
+          kpi(fmt(T.devices || 0), "Utilisateurs aujourd’hui") +
           kpi(fmt(T.opens || 0), "Ouvertures aujourd’hui") +
-          kpi(fmt(T.first_launch || 0), "Nouvelles installations") +
+          kpi(fmt(T.first_launch || 0), "Nouveaux utilisateurs aujourd’hui") +
           kpi(T.opens ? duration(T.seconds / T.opens) : "—", "Durée moyenne d’une visite") +
           kpi(fmt(T.trial || 0), pl(T.trial || 0, "Essai Jauge ONE démarré", "Essais Jauge ONE démarrés")) + "</div>";
         const h = r.hours || {};
@@ -1145,9 +1189,9 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         const tot = sumArr(vals);
         body += mini(isToday ? "Ouvertures par heure, aujourd’hui" : "Ouvertures par heure, sur la période") +
           (tot ? hoursHTML(vals, isToday ? parisHour(new Date()) : -1, isToday ? "Ouvertures par heure aujourd’hui" : "Ouvertures par heure sur la période") : later("Aucune ouverture par heure reçue sur cette période (versions récentes de l’app seulement)."));
-        body += '<p class="note">« Maintenant » : iPhone qui ont l’app à l’écran dans le créneau de 5 minutes en cours (versions récentes de l’app). Les chiffres du jour suivent l’heure de Paris et ne dépendent pas de la période.</p>';
+        body += '<p class="note">« En ce moment » : personnes qui ont l’app à l’écran dans les 5 dernières minutes (versions récentes de l’app). Les chiffres du jour suivent l’heure de Paris et ne dépendent pas de la période choisie.</p>';
       }
-      out.push(card({ id: "direct", title: "En direct", live: true, full: true,
+      D.technique.push(card({ id: "direct", title: "En direct", live: true, full: true,
         hint: "Les chiffres d’aujourd’hui, " + dayShort(today) + (g ? ", lus à " + clock(g) : "") + ". Actualisés toutes les 5 minutes quand la page est ouverte.", body }));
     }
 
@@ -1161,35 +1205,25 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       const versions = (app.by_app_version || []).filter((v) => v.phone_days > 0).sort(versionDesc);
       const vTot = versions.reduce((t, v) => t + v.phone_days, 0);
       const latest = versions[0];
-      const fl = C("app.first_launch"), ob = C("onboarding.completed"), trials = C("one.trial_started"), paid = C("one.purchased");
-      const com = r.community;
-      const worst = watch.some((i) => i.level === "bad") ? "bad" : watch.length ? "warn" : "good";
+      const fl = C("app.first_launch"), ob = C("onboarding.completed");
       let body = empty ? later(EMPTY_TEXT) : "";
       body += '<div class="kpis k6">' +
-        kpi(empty ? "—" : dec(avg), "Actifs par jour (moyenne)", delta(avg, pavg, "pct", true) + (nDays > 1 && !empty && collected(r) < nDays ? ks("Sur " + nw(collected(r), "jour", "jours") + " de collecte") : "")) +
-        kpi(hasActive ? fmtF(wk, true) : "—", "Actifs (première visite de la semaine)", hasActive ? delta(wk, PC("active.week_first")) : ks("Avec la mise à jour de l’app")) +
-        kpi(hasActive ? fmtF(mo1, true) : "—", "Actifs (première visite du mois)", hasActive ? delta(mo1, PC("active.month_first")) : ks("Avec la mise à jour de l’app")) +
-        kpi(fid == null ? "—" : pct0(fid), "Fidélité (actifs jour ÷ mois)", fid == null ? ks(nDays < 28 ? "Sur une période de 30 jours ou plus" : "Avec la mise à jour de l’app") : delta(fid, pfid, "pts")) +
-        kpi(wk > 0 ? dec1(opens / wk) : "—", "Visites par actif et par semaine", wk > 0 ? delta(opens / wk, P0 && PC("active.week_first") > 0 ? PC("app.open") / PC("active.week_first") : null) : ks("Ouvertures ÷ actifs de la semaine")) +
-        kpi(latest && vTot ? pct0(latest.phone_days / vTot) : "—", "En version à jour" + (latest ? " (" + esc(latest.app) + ")" : "")) +
-        kpi(empty ? "—" : fmt(opens), "Ouvertures de l’app", delta(opens, PC("app.open"))) +
-        kpi(opens ? duration(seconds / opens) : "—", "Durée moyenne d’une visite", P0 && PC("app.open") ? delta(seconds / opens, sec(P0, "app.open") / PC("app.open")) : "") +
-        kpi(fmt(fl), "Nouvelles installations", delta(fl, PC("app.first_launch")) + ks(nw(ob, "accueil terminé", "accueils terminés"))) +
-        kpi(fmt(trials), "Essais Jauge ONE", delta(trials, PC("one.trial_started")) + ks(nw(paid, "abonnement payé", "abonnements payés"))) +
-        (com && com.available ? kpi(fmt(com.contributions.total), "Contributions Jaugeurs", ks(nw(com.contributions.distinct_contributors, "contributeur", "contributeurs"))) : kpi("—", "Contributions Jaugeurs", ks("Non suivi sur ce serveur"))) +
-        kpi(watch.length ? fmt(watch.length) : "OK", "Santé des données", ks(watch.length ? cap(watch[0].short) : "Rien à signaler"), worst) +
+        kpi(empty ? "—" : dec(avg), "Utilisateurs par jour (moyenne)", delta(avg, pavg, "pct", true) + (nDays > 1 && !empty && collected(r) < nDays ? ks("Sur " + nw(collected(r), "jour", "jours") + " de collecte") : "")) +
+        kpi(hasActive ? fmtF(wk, true) : "—", "Utilisateurs venus dans la semaine", hasActive ? delta(wk, PC("active.week_first")) : ks("Avec la mise à jour de l’app")) +
+        kpi(hasActive ? fmtF(mo1, true) : "—", "Utilisateurs venus dans le mois", hasActive ? delta(mo1, PC("active.month_first")) : ks("Avec la mise à jour de l’app")) +
+        kpi(fid == null ? "—" : pct0(fid), "Utilisateurs du mois présents chaque jour", fid == null ? ks(nDays < 28 ? "Sur une période de 30 jours ou plus" : "Avec la mise à jour de l’app") : delta(fid, pfid, "pts")) +
+        kpi(wk > 0 ? dec1(opens / wk) : "—", "Visites par utilisateur et par semaine", wk > 0 ? delta(opens / wk, P0 && PC("active.week_first") > 0 ? PC("app.open") / PC("active.week_first") : null) : ks("Ouvertures ÷ utilisateurs de la semaine")) +
+        kpi(latest && vTot ? pct0(latest.phone_days / vTot) : "—", "Ont la dernière version" + (latest ? " (" + esc(latest.app) + ")" : "")) +
+        kpi(fmt(fl), "Nouveaux utilisateurs (installations)", delta(fl, PC("app.first_launch")) + ks(nw(ob, "accueil terminé", "accueils terminés"))) +
         "</div>";
       const installs = sharePills([{ l: "Nouvelle", n: C("install.fresh"), k: "ok" }, { l: "Mise à jour", n: C("install.update"), k: "ok" }, { l: "Restaurée", n: C("install.restored"), k: "ok" }]);
       if (installs) body += mini("Type d’installation") + installs;
-      if (!empty) {
-        body += '<details class="more" open><summary>Chaque jour</summary><div class="two"><div><h3 class="mini" id="phonesTitle">iPhone actifs par jour</h3><div class="chart" id="chartPhones"></div></div>' +
-          '<div id="ouvertures"><div class="pick"><label for="metric">Mesure</label><select id="metric"></select></div><p class="hint" id="metricSub"></p><div id="colsMetric"></div></div></div>' +
-          '<div class="ckey" id="dayKey"></div><p class="note" id="dayNote"></p></details>';
-      }
-      body += '<p class="note">Un actif est un iPhone qui ouvre l’app ce jour-là. « Première visite de la semaine / du mois » : un iPhone compte une fois, le premier jour où il ouvre l’app dans la semaine (du lundi au dimanche) ou le mois ; additionnées sur la période.</p>';
+      body += '<p class="note">Un utilisateur compte une fois par jour où il ouvre l’app. « Venus dans la semaine / dans le mois » : chacun compte une fois, le premier jour où il ouvre l’app dans la semaine (du lundi au dimanche) ou dans le mois ; additionnés sur la période.</p>';
       const P = P0 ? prevRange(r.from, r.to) : null;
-      out.push(card({ id: "essentiel", title: "L’essentiel", full: true,
+      D.utilisateurs.push(card({ id: "essentiel", title: "Les chiffres des utilisateurs", full: true,
         hint: periodText(r.from, r.to) + (CMP && CMP.ok && P ? " · comparé à " + (P.from === P.to ? longDay(P.from) : rangeMid(P.from, P.to).replace(/^Du/, "du")) + "." : "."), body }));
+      if (!empty) D.utilisateurs.push(card({ id: "ouvertures", title: "Chaque jour, au choix", full: true, hint: "Choisissez ce que vous voulez voir jour par jour.",
+        body: '<div class="pick"><label for="metric">Mesure</label><select id="metric"></select></div><p class="hint" id="metricSub"></p><div id="colsMetric"></div>' }));
     }
 
     /* Rétention */
@@ -1199,14 +1233,14 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       if (!v3) body = later(LATER_SERVER);
       else if (!cohorts.length) body = later("Aucune semaine d’installation dans cette période.");
       else {
-        body = table(["Installés la semaine du", "iPhone", "1re sem.", "2e sem.", "3e sem.", "5e sem."], cohorts.slice().reverse().map((c) => {
+        body = table(["Installés la semaine du", "Nouveaux", "1re sem.", "2e sem.", "3e sem.", "5e sem."], cohorts.slice().reverse().map((c) => {
           const a = c.active || {}, s = c.share || {};
           return [P(c.week).dn + NB + P(c.week).ms, c.size == null ? "<" + NN + "5" : fmt(c.size),
             cohortCell(s.w0, a.w0, c.week, 1), cohortCell(s.w1, a.w1, c.week, 7), cohortCell(s.w2, a.w2, c.week, 14), cohortCell(s.w4, a.w4, c.week, 28)];
         }), { label: "Rétention par semaine d’installation" });
-        body += '<p class="note">Part des iPhone installés cette semaine-là qui ouvrent l’app chaque jour, en moyenne : 1re semaine = jours 1 à 6 après le lundi, 2e = jours 7 à 13, 3e = 14 à 20, 5e = 28 à 34. Seules les installations faites avec la nouvelle version de l’app ont une semaine ; une réinstallation compte comme une installation. « — » : masqué sous 5 iPhone.</p>';
+        body += '<p class="note">Part des personnes installées cette semaine-là qui ouvrent l’app chaque jour, en moyenne : 1re semaine = jours 1 à 6 après le lundi, 2e = jours 7 à 13, 3e = 14 à 20, 5e = 28 à 34. Seules les installations faites avec la nouvelle version de l’app ont une semaine ; une réinstallation compte comme une installation. « — » : masqué sous 5 personnes.</p>';
       }
-      out.push(card({ id: "retention", title: "Rétention", hint: "Part des iPhone installés une semaine donnée qui reviennent ensuite. Sans identifiant : seule la semaine d’installation est connue.", body }));
+      D.utilisateurs.push(card({ id: "retention", title: "Reviennent-ils après l’installation ?", hint: "Part des nouveaux d’une semaine qui ouvrent encore l’app les semaines suivantes. Sans identifiant : seule la semaine d’installation est connue.", body }));
     }
 
     /* Parcours · Premier lancement: the introduction, then the first steps */
@@ -1276,7 +1310,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
           C("first_steps.dismiss") ? pill("Carte fermée à la main " + fmtF(C("first_steps.dismiss"), true), "wa") : ""]);
         body += '<p class="note">Carte « Votre Jauge » vue ' + fmtF(shownDays, true) + NB + "fois (une fois par iPhone et par jour). Chaque étape est comptée une seule fois par iPhone.</p>";
       }
-      out.push(card({ id: "parcours", title: "Parcours · Premier lancement", hint: "Où les nouveaux utilisateurs s’arrêtent pendant l’accueil, puis leurs premiers pas dans Mon tableau de bord.", body }));
+      D.utilisateurs.push(card({ id: "parcours", title: "Le premier lancement", hint: "Où les nouveaux utilisateurs s’arrêtent pendant l’accueil, puis leurs premiers pas dans Mon tableau de bord.", body }));
     }
 
     /* Jauge ONE: the purchase path, then what opened the offer */
@@ -1284,11 +1318,11 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       const fs = [["Offre vue", "one.funnel_offer"], ["Formule touchée", "one.funnel_plan"], ["Paiement lancé", "one.funnel_pay"], ["Essai ou achat réussi", "one.funnel_success"]];
       const vals = fs.map((f) => C(f[1]));
       const trials = C("one.trial_started"), paid = C("one.purchased"), visits = C("screen.one_offer");
-      let buy = mini("Parcours d’achat");
+      let buy = "";
       if (vals[0]) {
-        buy += '<div class="funnel">' + fs.map((f, i) => '<div class="fn one"><span>' + f[0] + '</span><span class="bar" aria-hidden="true"><i style="width:' + Math.min(100, vals[i] * 100 / vals[0]).toFixed(1) + '%"></i></span><span class="pct">' + fmtF(vals[i], true) + "</span></div>").join("") + "</div>";
+        oneFunnel = '<div class="funnel">' + fs.map((f, i) => '<div class="fn one"><span>' + f[0] + '</span><span class="bar" aria-hidden="true"><i style="width:' + Math.min(100, vals[i] * 100 / vals[0]).toFixed(1) + '%"></i></span><span class="pct">' + fmtF(vals[i], true) + "</span></div>").join("") + "</div>";
       } else {
-        buy += later(LATER_APP) + '<div class="funnel">' + [["Page de l’offre vue", visits], ["Essai commencé", trials], ["Abonnement payé", paid]].map((f) =>
+        oneFunnel = later(LATER_APP) + '<div class="funnel">' + [["Page de l’offre vue", visits], ["Essai commencé", trials], ["Abonnement payé", paid]].map((f) =>
           '<div class="fn one"><span>' + f[0] + '</span><span class="bar" aria-hidden="true"><i style="width:' + (visits ? Math.min(100, f[1] * 100 / visits) : 0).toFixed(1) + '%"></i></span><span class="pct">' + fmt(f[1]) + "</span></div>").join("") + "</div>";
       }
       const ok = trials + paid;
@@ -1315,7 +1349,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       want += '<p class="note">Ce qui a ouvert l’offre, en nombre de fois. Sur la période : ' + nw(trials, "essai commencé", "essais commencés") + " et " + nw(paid, "abonnement payé", "abonnements payés") + ", toutes origines confondues : l’app ne rattache pas encore un essai à son origine.</p>";
       want += mini("Restaurer les achats") + pills([pill(fmt(C("one.restore_found")) + " " + pl(C("one.restore_found"), "trouvé", "trouvés"), "ok"), pill(fmt(C("one.restore_none")) + " rien", "wa"),
         pill(fmt(C("one.restore_failed")) + " " + pl(C("one.restore_failed"), "échec", "échecs"), C("one.restore_failed") ? "ko" : "")]);
-      out.push(card({ id: "one", title: "Jauge ONE", full: true, hint: "De l’offre vue jusqu’à l’abonnement, et ce qui a ouvert l’offre.",
+      D.argent.push(card({ id: "one", title: "Jauge ONE", full: true, hint: "De l’offre vue jusqu’à l’abonnement, et ce qui a ouvert l’offre.",
         body: '<div class="two"><div>' + buy + "</div><div>" + want + "</div></div>" }));
     }
 
@@ -1337,13 +1371,13 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         const tripSearch = pills([tripsAll ? pill("Trajets : " + fmt(C("trip.failed")) + " " + pl(C("trip.failed"), "échec", "échecs") + " sur " + fmt(tripsAll), C("trip.failed") ? "wa" : "ok") : "",
           searches ? pill("Recherche sans résultat : " + pct(C("search.no_result"), searches), C("search.no_result") / searches > 0.1 ? "wa" : "") : ""]);
         if (tripSearch) body += mini("Trajets et recherche") + tripSearch;
-        body += mini("Rythme") + pills([pill(perPhoneDay(opens, pd) + " ouvertures par jour-iPhone"), pill(duration(appSec / pd) + " dans l’app par jour-iPhone"), pill((opens ? duration(appSec / opens) : "—") + " par ouverture")]);
+        body += mini("Rythme") + pills([pill(perPhoneDay(opens, pd) + " ouvertures par utilisateur et par jour"), pill(duration(appSec / pd) + " dans l’app par utilisateur et par jour"), pill((opens ? duration(appSec / opens) : "—") + " par ouverture")]);
         const widget = C("open.widget"), alert = C("open.alert"), shortcut = C("open.shortcut");
         body += mini("Comment l’app est ouverte") + rowsHTML(shareItems([
           { l: "Icône ou retour", n: Math.max(0, opens - widget - alert - shortcut) }, { l: "Widget", n: widget }, { l: "Notification", n: alert }, { l: "Siri ou raccourci", n: shortcut }]).items);
         body += '<p class="note">Chaque retour dans l’app compte comme une ouverture. La carte compte une visite à chaque retour sur elle ; la fiche d’une station ne compte que quand elle est agrandie.</p>';
       }
-      out.push(card({ id: "utilisation", title: "Utilisation", hint: "Ce que les gens font dans l’app.", body }));
+      D.usage.push(card({ id: "utilisation", title: "Écrans et actions", hint: "Ce que les gens regardent et touchent dans l’app.", body }));
     }
 
     /* Notifications */
@@ -1363,10 +1397,10 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         (C("notif.received") ? " Reçues pendant que l’app était ouverte : " + fmt(C("notif.received")) + "." : "") + "</p>";
       const on = C("perm.notif_on"), off = C("perm.notif_off");
       const g1 = C("permission.notifications_granted"), d1 = C("permission.notifications_denied");
-      body += mini("Réglages des iPhone") + pills([on + off ? pill("Notifications autorisées " + pct(on, on + off), "ok") : "", C("notif.setting_bilan") && pd ? pill("Bilan du mois activé " + pct(C("notif.setting_bilan"), pd) + " des jours-iPhone", "ok") : "",
+      body += mini("Réglages des iPhone") + pills([on + off ? pill("Notifications autorisées " + pct(on, on + off), "ok") : "", C("notif.setting_bilan") && pd ? pill("Bilan du mois activé " + pct(C("notif.setting_bilan"), pd) + " des utilisateurs", "ok") : "",
         g1 + d1 ? pill("Première réponse : " + fmt(g1) + " " + pl(g1, "oui", "oui") + ", " + fmt(d1) + " non") : ""]);
       if (!(on + off) && !C("notif.setting_bilan") && !(g1 + d1)) body += '<p class="hint">Aucun réglage reçu sur la période.</p>';
-      out.push(card({ id: "notifications", title: "Notifications", hint: "Ouvertes sur l’iPhone, par type.", body }));
+      D.usage.push(card({ id: "notifications", title: "Notifications", hint: "Ouvertes sur l’iPhone, par type.", body }));
     }
 
     /* Communauté (filled by renderCommunity) */
@@ -1375,7 +1409,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       const body = com && com.available
         ? '<p class="note" id="comTests" style="margin:0 0 6px"></p><div id="comContrib"></div><div class="two"><div id="comMod"></div><div id="comActions"></div></div>'
         : later("Non suivi sur ce serveur.");
-      out.push(card({ id: "communaute", title: "Communauté et modération", full: true, hint: '<span id="comLecture">En direct depuis le serveur.</span>', body }));
+      D.jaugeurs.push(card({ id: "communaute", title: "Communauté et modération", full: true, hint: '<span id="comLecture">En direct depuis le serveur.</span>', body }));
     }
 
     /* Publicité */
@@ -1388,7 +1422,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       const cp = C("ad.consent_personal"), cl = C("ad.consent_limited"), ag = C("ad.att_granted"), ad = C("ad.att_denied");
       let consent = mini("Consentement") + (cp + cl + ag + ad ? pills([cp + cl ? pill("Pubs personnalisées acceptées " + pct(cp, cp + cl), "ok") : "", ag + ad ? pill("Suivi Apple (ATT) autorisé " + pct(ag, ag + ad), "ok") : ""]) : '<p class="hint">Aucun choix reçu sur la période.</p>');
       consent += '<p class="note">« Vidéo écartée » : une pub vidéo reçue puis laissée de côté (l’app n’affiche que des pubs fixes). Bouton « retirer la pub » touché ' + fmt(C("ad.remove_tap")) + " " + pl(C("ad.remove_tap"), "fois", "fois") + ". Revenus : AdMob.</p>";
-      out.push(card({ id: "publicite", title: "Publicité", full: true, hint: "Pubs reçues, échouées ou écartées (vidéo), et ce que les gens acceptent.",
+      D.argent.push(card({ id: "publicite", title: "Publicité", full: true, hint: "Pubs reçues, échouées ou écartées (vidéo), et ce que les gens acceptent.",
         body: '<div class="two"><div>' + ads + "</div><div>" + consent + "</div></div>" }));
     }
 
@@ -1451,7 +1485,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         body = '<div class="fgrid">' + groups.join("") + "</div>" +
           '<p class="note">Nombre de fois sur la période ; les zéros ne sont pas affichés. « Utilisateurs avec… » : part des iPhone actifs, jour par jour.</p>';
       }
-      out.push(card({ id: "fonctions", title: "Fonctions", full: true, hint: "Ce que les gens font dans l’app, sur la période choisie.", body }));
+      D.usage.push(card({ id: "fonctions", title: "Toutes les fonctions", full: true, hint: "Ce que les gens font dans l’app, sur la période choisie.", body }));
     }
 
     /* Appareils et moments */
@@ -1499,14 +1533,15 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         }
         body += '<div class="two"><div>' + week + "</div><div>" + hour + "</div></div>";
 
+        const vShares = shares(versions.map((v) => v.phone_days));
         const th = (long, short) => short ? '<span class="vt-l">' + long + '</span><span class="vt-s">' + short + "</span>" : long;
-        body += '<details class="more"><summary>Comparer les versions</summary>' + table([th("Version"), th("Jours-iPhone", "J.-i."), th("Ouvertures", "Ouv."), th("Temps"), th("Problèmes", "Pb.")],
-          versions.map((v) => [esc(v.app), fmt(v.phone_days), perPhoneDay(count(v.totals, "app.open"), v.phone_days), v.phone_days > 0 ? duration(secs(v.totals, "app.open") / v.phone_days) : "—", perPhoneDay(problems(v.totals), v.phone_days)]),
-          { label: "Comparaison des versions", caption: '<span class="vt-l">Par jour-iPhone, sauf la deuxième colonne.</span><span class="vt-s">Par jour-iPhone, sauf J.-i. (jours-iPhone).</span>' }) + "</details>";
+        body += '<details class="more"><summary>Comparer les versions</summary>' + table([th("Version"), th("Part des utilisateurs", "Part"), th("Ouvertures", "Ouv."), th("Temps"), th("Problèmes", "Pb.")],
+          versions.map((v, i) => [esc(v.app), vShares.items[i].text, perPhoneDay(count(v.totals, "app.open"), v.phone_days), v.phone_days > 0 ? duration(secs(v.totals, "app.open") / v.phone_days) : "—", perPhoneDay(problems(v.totals), v.phone_days)]),
+          { label: "Comparaison des versions", caption: "Par utilisateur et par jour, sauf la deuxième colonne." }) + "</details>";
         const g1 = C("permission.location_granted"), d1 = C("permission.location_denied");
-        body += '<p class="note">Parts des jours-iPhone : un iPhone compte une fois par jour.' + (g1 + d1 ? " Première réponse à la localisation : " + fmt(g1) + " oui, " + fmt(d1) + " non." : "") + " Un iPad sous iPadOS se range dans la version d’iOS correspondante." + (vt < 20 ? " Moins de 20 jours-iPhone : parts à lire avec prudence." : "") + "</p>";
+        body += '<p class="note">Parts des utilisateurs : chacun compte une fois par jour.' + (g1 + d1 ? " Première réponse à la localisation : " + fmt(g1) + " oui, " + fmt(d1) + " non." : "") + " Un iPad sous iPadOS se range dans la version d’iOS correspondante." + (vt < 20 ? " Très peu d’utilisateurs : parts à lire avec prudence." : "") + "</p>";
       }
-      out.push(card({ id: "appareils", title: "Appareils et moments", full: true, hint: "Sur quoi tourne l’app, et quand les gens l’ouvrent (période choisie, heure de Paris).", body }));
+      D.utilisateurs.push(card({ id: "appareils", title: "Appareils et moments", full: true, hint: "Sur quoi tourne l’app, et quand les gens l’ouvrent (période choisie, heure de Paris).", body }));
     }
 
     /* Santé */
@@ -1534,7 +1569,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       });
       const left = mini("Erreurs par fonction") + table(["Fonction", "Échecs", "Taux"], errRows, { label: "Erreurs par fonction" }) +
         '<p class="note">Taux : échecs ÷ (essais réussis + échecs) de la même fonction, quand l’app compte les deux.</p>' +
-        mini("Problèmes rencontrés (par jour-iPhone)") + table(["Problème", "Nombre", "Par jour-iPhone"], PROBLEMS.map((p) => [p[1], fmt(C(p[0])), perPhoneDay(C(p[0]), pd)]), { label: "Problèmes rencontrés dans l’app" });
+        mini("Problèmes rencontrés") + table(["Problème", "Nombre", "Par utilisateur et par jour"], PROBLEMS.map((p) => [p[1], fmt(C(p[0])), perPhoneDay(C(p[0]), pd)]), { label: "Problèmes rencontrés dans l’app" });
       const fresh = health.filter((i) => i.key !== "database").map((i, k) => [i, k]).sort((a, b) => (RANK[a[0].level] - RANK[b[0].level]) || (a[1] - b[1])).map((x) => x[0]);
       const ref = instant(r.health && r.health.checked_at);
       let right = mini("Serveur") + '<p class="hint" style="margin:0 0 6px">État actuel' + (ref ? ", lu " + when(ref, ref) : "") + " ; ne dépend pas de la période.</p>" +
@@ -1556,11 +1591,11 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       right += '<p class="note">« Hors ligne » : l’iPhone n’avait pas de réseau. « Serveur injoignable » : le réseau marchait mais le serveur n’a pas répondu.</p>';
       body += '<div class="two" style="margin-top:6px"><div>' + left + "</div><div>" + right + "</div></div>";
       body += '<p class="note">Seuils : imports en orange au-delà de 2 % de cycles en échec sur les dernières 24 h, en rouge au-delà de 10 % ; prix officiels en orange après 1 h sans import réussi ou dès un échec, en rouge après 6 h ou import coupé ; base de données en orange à 70 %, en rouge à 90 %.</p>';
-      out.push(card({ id: "sante", title: "Santé", full: true, hint: watch.length ? nw(watch.length, "point", "points") + " à surveiller : " + watch.map((i) => i.short).join(", ") + "." : "Ce qui marche, ce qui casse : côté serveur et côté iPhone. Rien à signaler.", body }));
+      D.technique.push(card({ id: "sante", title: "Santé", full: true, hint: watch.length ? nw(watch.length, "point", "points") + " à surveiller : " + watch.map((i) => i.short).join(", ") + "." : "Ce qui marche, ce qui casse : côté serveur et côté iPhone. Rien à signaler.", body }));
     }
 
     /* Ailleurs */
-    out.push(card({ id: "ailleurs", title: "Ailleurs", full: true, hint: "Ce que l’app ne mesure pas, là où ça se lit déjà.", body: '<div class="aways">' +
+    D.technique.push(card({ id: "ailleurs", title: "Ailleurs", full: true, hint: "Ce que l’app ne mesure pas, là où ça se lit déjà.", body: '<div class="aways">' +
       '<a class="away" href="https://appstoreconnect.apple.com/analytics" target="_blank" rel="noopener noreferrer"><span>Téléchargements, suppressions, vues de la fiche, sources, notes</span><span class="where">App Store Connect › Analytics ↗</span></a>' +
       '<a class="away" href="https://appstoreconnect.apple.com/apps/6819886839/distribution/subscriptions" target="_blank" rel="noopener noreferrer"><span>Essais convertis, résiliations, remboursements</span><span class="where">App Store Connect › Abonnements ↗</span></a>' +
       '<a class="away" href="https://appstoreconnect.apple.com/trends" target="_blank" rel="noopener noreferrer"><span>Revenus des abonnements</span><span class="where">App Store Connect › Tendances ↗</span></a>' +
@@ -1569,12 +1604,125 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       '<a class="away" href="https://supabase.com/dashboard/project/qxqpbgmcrsufmcxbopwf/usage" target="_blank" rel="noopener noreferrer"><span>Trafic, appels de fonctions</span><span class="where">Supabase › Usage ↗</span></a>' +
       "</div>" }));
 
-    $("grid").innerHTML = out.join("");
+    /* Level 1: the essentials, four tiles */
+    {
+      const avg = avgDaily(r), pavg = P0 ? avgDaily(P0) : null;
+      const fl = C("app.first_launch"), trials = C("one.trial_started"), paid = C("one.purchased");
+      const worst = watch.some((i) => i.level === "bad") ? "bad" : watch.length ? "warn" : "good";
+      $("tiles").innerHTML =
+        tile(empty ? "—" : dec(avg), "Utilisateurs par jour", empty ? "" : trend(avg, pavg, true)) +
+        tile(fmt(fl), "Nouveaux utilisateurs", trend(fl, PC("app.first_launch"), true)) +
+        tile(fmt(trials), pl(trials, "Essai Jauge ONE", "Essais Jauge ONE"), trend(trials, PC("one.trial_started"), true) +
+          (paid ? '<span class="t">+ ' + nw(paid, "abonnement payé", "abonnements payés") + "</span>" : "")) +
+        tile(watch.length ? fmt(watch.length) : "OK", "Santé du service",
+          '<span class="t ' + (watch.length ? "down" : "up") + '">' + (watch.length ? nw(watch.length, "point", "points") + " à surveiller" : "rien à signaler") + "</span>" +
+          '<span class="sr"> : voir l’onglet Technique</span>', worst, "technique");
+      // « En direct »: one slim line; its detail is in Technique.
+      const ll = $("liveline");
+      if (v3) {
+        const L = r.live || {}, TT = r.today_totals || {};
+        ll.hidden = false;
+        ll.innerHTML = '<span class="livedot" aria-hidden="true"></span><span><b>En direct</b> · ' + fmt(L.current || 0) + " dans l’app en ce moment · " +
+          nw(TT.devices || 0, "utilisateur", "utilisateurs") + " aujourd’hui</span>" + '<span class="go" aria-hidden="true">›</span>';
+      } else ll.hidden = true;
+    }
+
+    /* Level 2: one question per tab; level 3: its detail */
+    const panels = [];
+    {
+      // Utilisateurs
+      const avg = avgDaily(r), wk = C("active.week_first"), opens = C("app.open");
+      const cohorts = (r.cohorts || []).slice().reverse();
+      const c1 = cohorts.find((c) => c.share && c.share.w1 != null), c0 = !c1 && cohorts.find((c) => c.share && c.share.w0 != null);
+      const coh = c1 ? { c: c1, v: c1.share.w1, n: "2e" } : c0 ? { c: c0, v: c0.share.w0, n: "1re" } : null;
+      const restored = C("onboarding.step_arrival");
+      const reached = [C("onboarding.step_welcome"), C("onboarding.step_fuel") + restored, C("onboarding.step_location"), C("onboarding.step_full")];
+      const fv = reached.map((v, i) => Math.min.apply(null, reached.slice(0, i + 1)));
+      const rows = [];
+      if (coh) rows.push(["Nouveaux revenus chaque jour, " + coh.n + " semaine", pct0(coh.v), "", "installés la semaine du " + P(coh.c.week).dn + NB + P(coh.c.week).ms]);
+      if (wk > 0) rows.push(["Visites par utilisateur et par semaine", dec1(opens / wk), trend(opens / wk, P0 && PC("active.week_first") > 0 ? PC("app.open") / PC("active.week_first") : null)]);
+      if (fv[0]) rows.push(["Nouveaux qui terminent l’accueil", pct0(fv[3] / fv[0]), "", "sur " + fmtF(fv[0], true) + " qui l’ont commencé"]);
+      else if (C("app.first_launch")) rows.push(["Accueils terminés", fmt(C("onboarding.completed")), "", "sur " + nw(C("app.first_launch"), "installation", "installations")]);
+      let ans = EMPTY_TEXT;
+      if (!empty) {
+        ans = "En moyenne " + dec(avg) + " " + pl(avg, "utilisateur", "utilisateurs") + " par jour" +
+          (wk > 0 ? ", qui ouvrent l’app " + dec1(opens / wk) + " fois par semaine chacun" : "") + "." +
+          (coh ? " Parmi les nouveaux de la semaine du " + dayMonth(coh.c.week) + ", " + pct0(coh.v) + " ouvrent l’app chaque jour la " + coh.n + " semaine." : "");
+      }
+      const chart = empty ? "" : '<h3 class="mini" id="phonesTitle">Utilisateurs par jour</h3><div class="chart" id="chartPhones"></div><div class="ckey" id="dayKey"></div><p class="note" id="dayNote"></p>';
+      panels.push(panelHTML("utilisateurs", "Est-ce que les gens reviennent ?", ans, rows, chart, D.utilisateurs));
+    }
+    {
+      // Usage
+      const opens = C("app.open"), seconds = S("app.open");
+      const acts = ACTIONS.map((m) => ({ l: label(m), n: C(m) })).concat([{ l: "Trajet calculé", n: C("trip.ok") + C("trip.failed") }]).filter((a) => a.n > 0).sort((a, b) => b.n - a.n);
+      const top = acts[0];
+      const rows = empty ? [] : [
+        ["Ouvertures de l’app", fmt(opens), trend(opens, PC("app.open"))],
+        ["Durée moyenne d’une visite", opens ? duration(seconds / opens) : "—", P0 && PC("app.open") && opens ? trend(seconds / opens, sec(P0, "app.open") / PC("app.open")) : ""]];
+      if (top) rows.push(["Ce qu’ils font le plus", esc(top.l), "", nw(top.n, "fois", "fois") + " sur la période"]);
+      const ans = empty ? EMPTY_TEXT : nw(opens, "ouverture", "ouvertures") + " de l’app sur la période" + (opens ? ", " + duration(seconds / opens) + " par visite en moyenne" : "") +
+        (top ? ". Le geste le plus fréquent : « " + esc(top.l) + " »." : ".");
+      let chart = "";
+      const s = (app.series || {})["app.open"];
+      if (!empty && s && nDays > 1) {
+        const pts = dayPoints(r, s.count);
+        chart = mini(nDays > 31 ? "Ouvertures par semaine" : "Ouvertures par jour") + colsHTML(nDays > 31 ? weekly(pts) : pts, { label: nDays > 31 ? "Ouvertures par semaine" : "Ouvertures par jour" });
+      }
+      panels.push(panelHTML("usage", "Que font les gens dans l’app ?", ans, rows, chart, D.usage));
+    }
+    {
+      // Argent
+      const trials = C("one.trial_started"), paid = C("one.purchased");
+      const adMetrics = ["comparison_fifth", "comparison_twelfth", "station_sheet"];
+      const ads = sumArr(adMetrics.map((p) => C("ad." + p + "_ok"))), adsAny = adMetrics.some((p) => C("ad." + p + "_ok") + C("ad." + p + "_fail") + C("ad." + p + "_video"));
+      const pads = P0 ? sumArr(adMetrics.map((p) => PC("ad." + p + "_ok"))) : null;
+      const rows = [["Essais gratuits commencés", fmt(trials), trend(trials, PC("one.trial_started"))], ["Abonnements payés", fmt(paid), trend(paid, PC("one.purchased"))],
+        ["Pubs reçues dans l’app", adsAny ? fmt(ads) : "—", adsAny ? trend(ads, pads) : ""]];
+      const ans = cap(nw(trials, "essai gratuit commencé", "essais gratuits commencés")) + " et " + nw(paid, "abonnement payé", "abonnements payés") + " sur la période" +
+        (adsAny ? ", " + nw(ads, "pub reçue", "pubs reçues") + " dans l’app" : "") + ". Les montants en euros sont dans App Store Connect et AdMob.";
+      panels.push(panelHTML("argent", "Jauge ONE et la publicité rapportent-ils ?", ans, rows, mini("De l’offre à l’abonnement") + oneFunnel, D.argent));
+    }
+    {
+      // Jaugeurs
+      const com = r.community;
+      let ans = "Non suivi sur ce serveur.", rows = [], chart = "";
+      if (com && com.available) {
+        const k = com.contributions || {}, prof = com.profiles || {}, mod = com.moderation || {};
+        rows = [["Contributions", fmt(k.total || 0)], ["Personnes qui ont contribué", fmt(k.distinct_contributors || 0)], ["Profils Jaugeurs", fmt(prof.total || 0), "", fmt(prof.new_in_period || 0) + " " + pl(prof.new_in_period || 0, "créé", "créés") + " sur la période"]];
+        if (mod.available) rows.push(["Contributions à revoir", mod.to_review ? st("warn", fmt(mod.to_review)) : st("good", "Aucune")]);
+        ans = (k.total ? cap(nw(k.total, "contribution", "contributions")) + " de " + nw(k.distinct_contributors || 0, "personne", "personnes") + " sur la période" : "Aucune contribution sur la période") +
+          (mod.available ? (mod.to_review ? " ; " + fmt(mod.to_review) + " à revoir." : " ; rien à revoir.") : ".") + (com.enabled === false ? " Contributions coupées sur ce serveur." : "");
+        if (k.detail_shown && Array.isArray(k.by_day) && r.days.length > 1) {
+          let pts = r.days.map((d, i) => ({ day: d, from: d, to: d, value: k.by_day[i] == null ? 0 : k.by_day[i], key: "value", text: "" }));
+          if (pts.length > 31) pts = weekly(pts).map((p) => Object.assign(p, { key: p.key === "part" ? "part" : "value" }));
+          chart = mini("Contributions par " + (r.days.length > 31 ? "semaine" : "jour")) + '<div id="comDays">' + colsHTML(pts, { label: "Contributions par " + (r.days.length > 31 ? "semaine" : "jour") }) + "</div>";
+        }
+      }
+      panels.push(panelHTML("jaugeurs", "La communauté participe-t-elle ?", ans, rows, chart, D.jaugeurs));
+    }
+    {
+      // Technique
+      const byKey = {}; health.forEach((i) => { byKey[i.key] = i; });
+      const opens = C("app.open");
+      const pf = C("perf.launch_fast"), pm = C("perf.launch_medium"), ps = C("perf.launch_slow"), ptot = pf + pm + ps;
+      const rows = [["prices", "Prix des carburants"], ["imports", "Imports des prix officiels"], ["database", "Base de données"]]
+        .filter((x) => byKey[x[0]]).map((x) => [x[1], st(byKey[x[0]].level, byKey[x[0]].pill)]);
+      if (opens) rows.push(["Visites sans réponse du serveur", pct(C("error.server_unreachable"), opens)]);
+      if (ptot) rows.push(["Lancement de l’app, en général", pf / ptot >= 0.5 ? "< 1,5 s" : (pf + pm) / ptot >= 0.5 ? "1,5 à 3 s" : "> 3 s"]);
+      const ans = watch.length ? "Pas tout à fait : " + nw(watch.length, "point", "points") + " à surveiller (" + watch.map((i) => i.short).join(", ") + ")."
+        : "Oui : rien à signaler, ni sur le serveur ni dans l’app.";
+      panels.push(panelHTML("technique", "L’app fonctionne-t-elle bien ?", ans, rows, "", D.technique));
+    }
+    $("panels").innerHTML = panels.join("");
+    const tt = $("t-technique");
+    tt.innerHTML = "Technique" + (watch.length ? ' <span class="navdot' + (watch.some((i) => i.level === "bad") ? " bad" : "") + '" aria-hidden="true">' + watch.length + '</span><span class="sr">, ' + nw(watch.length, "point", "points") + " à surveiller</span>" : "");
     if (r.community && r.community.available) renderCommunity(r.community);
     if (!empty) renderDays(r);
     typo($("dashboard")); typo($("range").parentNode); typo($("periode"));
     measure();
-    observeSections();
+    showTab(state.tab);
+    if (pendingScroll) { const el = $(pendingScroll); pendingScroll = null; if (el) el.scrollIntoView({ block: "start" }); }
   }
 
   // « Chaque jour »: active iPhones (line) and any metric (columns).
@@ -1589,13 +1737,13 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     $("metric").addEventListener("change", () => { state.metric = $("metric").value; renderMetric(state.view); typo($("ouvertures")); });
 
     const weeklyView = r.days.length > 31;
-    $("phonesTitle").textContent = weeklyView ? "Jours-iPhone par semaine" : "iPhone actifs par jour";
+    $("phonesTitle").textContent = weeklyView ? "Utilisateurs par semaine (chacun compte une fois par jour)" : "Utilisateurs par jour";
     const phonePts = dayPoints(r);
     if (r.days.length === 1) {
       const p = phonePts[0];
       $("chartPhones").innerHTML = '<div class="kpis">' + kpi(p.value == null ? "—" : fmt(p.value), dayShort(p.day) + (p.key !== "value" ? ", " + p.text : "")) + "</div>";
       $("chartPhones")._chart = null;
-    } else lineChart($("chartPhones"), weeklyView ? weekly(phonePts) : phonePts, weeklyView ? "Jours-iPhone par semaine" : "iPhone actifs par jour");
+    } else lineChart($("chartPhones"), weeklyView ? weekly(phonePts) : phonePts, weeklyView ? "Utilisateurs par semaine" : "Utilisateurs par jour");
     renderMetric(r);
     const states = new Set(phonePts.map((p) => p.key));
     const key = [];
@@ -1627,7 +1775,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     const total = kind === "seconds" ? sec(r, m) : cnt(r, m);
     const pts = dayPoints(r, values);
     const name = kind === "seconds" ? (m === "app.open" ? "Temps passé dans l’app" : "Durée : " + label(m)) : (MENU_NAME[m] || label(m));
-    $("metricSub").textContent = fmtValue(total) + " sur la période" + (app.phone_days > 0 ? ", " + (kind === "seconds" ? duration(total / app.phone_days) : dec1(total / app.phone_days)) + " par jour-iPhone" : "") +
+    $("metricSub").textContent = fmtValue(total) + " sur la période" + (app.phone_days > 0 ? ", " + (kind === "seconds" ? duration(total / app.phone_days) : dec1(total / app.phone_days)) + " par utilisateur et par jour" : "") +
       (r.days.length > 31 ? ". Sommes par semaine." : ".");
     if (r.days.length === 1) {
       const p = pts[0];
@@ -1669,10 +1817,6 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       kpi(fmt(prof.total || 0), pl(prof.total || 0, "profil Jaugeur", "profils Jaugeurs") + " · " + fmt(prof.new_in_period || 0) + " " + pl(prof.new_in_period || 0, "créé", "créés") + " sur la période, " + fmt(prof.blocked || 0) + " " + pl(prof.blocked || 0, "bloqué", "bloqués")) + "</div>" +
       ranksHTML(prof.by_rank);
     if (k.detail_shown && Array.isArray(k.by_day)) {
-      const days = state.view.days;
-      let pts = days.map((d, i) => ({ day: d, from: d, to: d, value: k.by_day[i] == null ? 0 : k.by_day[i], key: "value", text: "" }));
-      if (pts.length > 31) pts = weekly(pts).map((p) => Object.assign(p, { key: p.key === "part" ? "part" : "value" }));
-      html += pts.length > 1 ? '<div id="comDays">' + colsHTML(pts, { label: "Contributions par " + (days.length > 31 ? "semaine" : "jour") }) + "</div>" : "";
       html += '<div class="two"><div><h4 class="mini">Par type</h4><div class="rows" id="comKind"></div></div><div><h4 class="mini">Par carburant</h4><div class="rows" id="comFuel"></div></div></div>';
     } else {
       html += '<p class="later" data-threshold>Détail par jour et par type : affiché à partir de ' + fmt(com.threshold || 5) + " contributeurs différents sur la période. Ici" + NB + ":" + NB + fmt(k.distinct_contributors) + ".</p>";
@@ -1795,27 +1939,81 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
   /* ---------- Sticky offset, section nav ---------- */
   const stick = $("stick");
   function measure() { root.style.setProperty("--stick-h", (stick.hidden ? 0 : stick.offsetHeight) + "px"); }
-  const links = [].slice.call(document.querySelectorAll("#navIn a"));
-  function setCurrent(id) {
-    const navIn = $("navIn");
-    links.forEach((a) => {
-      const match = a.getAttribute("href") === "#" + id;
-      if (match) a.setAttribute("aria-current", "location"); else a.removeAttribute("aria-current");
-      if (match && navIn.scrollWidth > navIn.clientWidth) {
-        const left = Math.max(0, a.offsetLeft - 16);
-        try { navIn.scrollTo({ left, behavior: reduceMotion ? "auto" : "smooth" }); } catch (e) { navIn.scrollLeft = left; }
+  /* ---------- Tabs and details ---------- */
+  // A bare #token opens a tab (or the tab holding that former card, detail open).
+  const HASH = { essentiel: "utilisateurs", ouvertures: "utilisateurs", retention: "utilisateurs", parcours: "utilisateurs", appareils: "utilisateurs",
+    utilisation: "usage", notifications: "usage", fonctions: "usage", one: "argent", publicite: "argent", communaute: "jaugeurs",
+    direct: "technique", sante: "technique", ailleurs: "technique" };
+  let pendingScroll = null;
+  function fromHash() {
+    if (ESSAI) return false;
+    const h = decodeURIComponent(location.hash.slice(1)).toLowerCase();
+    if (TABS.includes(h)) { state.tab = h; return true; }
+    if (HASH[h]) { state.tab = HASH[h]; state.open[HASH[h]] = true; pendingScroll = h; return true; }
+    return false;
+  }
+  function showTab(id, focus) {
+    state.tab = id;
+    document.querySelectorAll("#tabs .tab").forEach((b) => {
+      const on = b.dataset.tab === id;
+      b.setAttribute("aria-selected", String(on));
+      b.tabIndex = on ? 0 : -1;
+      if (on) {
+        if (focus) b.focus();
+        const box = $("tabs");
+        if (box.scrollWidth > box.clientWidth) {
+          const left = Math.max(0, b.offsetLeft - box.offsetLeft - 16);
+          if (b.offsetLeft - box.offsetLeft < box.scrollLeft || b.offsetLeft - box.offsetLeft + b.offsetWidth > box.scrollLeft + box.clientWidth) box.scrollLeft = left;
+        }
       }
     });
+    document.querySelectorAll("#panels .panel").forEach((p) => { p.hidden = p.id !== "p-" + id; });
+    redraw();
   }
-  let io = null;
-  function observeSections() {
-    if (!("IntersectionObserver" in window)) return;
-    if (io) io.disconnect();
-    io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) setCurrent(e.target.id); });
-    }, { rootMargin: "-30% 0px -65% 0px" });
-    links.forEach((a) => { const sec = document.getElementById(a.getAttribute("href").slice(1)); if (sec) io.observe(sec); });
+  function selectTab(id, focus) { if (!TABS.includes(id)) return; store(TAB_KEY, id); showTab(id, focus); }
+  function setOpen(id, open) {
+    state.open[id] = open;
+    const b = document.querySelector('#panels [data-more="' + id + '"]'), d = $("d-" + id);
+    if (!b || !d) return;
+    b.setAttribute("aria-expanded", String(open));
+    b.textContent = open ? "Masquer le détail" : "Voir le détail";
+    d.hidden = !open;
+    redraw();
   }
+  $("tabs").addEventListener("click", (event) => {
+    const b = event.target.closest && event.target.closest(".tab");
+    if (b) selectTab(b.dataset.tab);
+  });
+  $("tabs").addEventListener("keydown", (event) => {
+    const i = TABS.indexOf(state.tab);
+    let n = -1;
+    if (event.key === "ArrowRight") n = (i + 1) % TABS.length;
+    else if (event.key === "ArrowLeft") n = (i + TABS.length - 1) % TABS.length;
+    else if (event.key === "Home") n = 0;
+    else if (event.key === "End") n = TABS.length - 1;
+    if (n < 0) return;
+    event.preventDefault();
+    selectTab(TABS[n], true);
+  });
+  $("panels").addEventListener("click", (event) => {
+    const b = event.target.closest && event.target.closest("[data-more]");
+    if (b) setOpen(b.dataset.more, b.getAttribute("aria-expanded") !== "true");
+  });
+  $("tiles").addEventListener("click", (event) => {
+    const b = event.target.closest && event.target.closest("[data-go]");
+    if (!b) return;
+    selectTab(b.dataset.go);
+    $("tabs").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  });
+  $("liveline").addEventListener("click", () => {
+    selectTab("technique");
+    setOpen("technique", true);
+    const d = $("direct");
+    if (d) d.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  });
+  window.addEventListener("hashchange", () => { if (fromHash() && state.view) render(); });
+  fromHash();
+  showTab(state.tab);
   // In #essai, in-page links scroll without replacing the hash (a reload stays on staging).
   if (ESSAI) {
     document.addEventListener("click", (event) => {
@@ -1832,7 +2030,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     const el = $("chartPhones");
     if (el && el._chart && String(Math.round(el.clientWidth)) !== el.dataset.w) lineChart(el, el._chart.points, el._chart.title);
   }
-  if ("ResizeObserver" in window) { const ro = new ResizeObserver(redraw); ro.observe(stick); ro.observe($("grid")); }
+  if ("ResizeObserver" in window) { const ro = new ResizeObserver(redraw); ro.observe(stick); ro.observe($("panels")); }
   else window.addEventListener("resize", redraw);
 
   /* ---------- Events ---------- */
@@ -1884,7 +2082,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
   });
   $("compare").addEventListener("click", () => {
     state.compare = !state.compare;
-    store(COMPARE_KEY, state.compare ? "1" : null);
+    store(COMPARE_KEY, state.compare ? "1" : "0");
     refresh();
   });
   // « En direct »: read again every 5 minutes while the page is shown.
