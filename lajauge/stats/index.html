@@ -763,7 +763,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     "favorites.n1 favorites.n2_5 favorites.n6 vehicles.n1 vehicles.n2 ad.consent_personal ad.consent_limited ad.att_granted " +
     "ad.att_denied install.fresh install.update install.restored backup.on notif.setting_bilan " +
     "widget.installed_fuel onboarding.step_city onboarding.step_search onboarding.step_reveal " +
-    "onboarding.step_notify first_steps.shown commute.shown").split(" "));
+    "onboarding.step_notify first_steps.shown commute.shown podium.shown").split(" "));
   const LABELS = {
     "app.open": "Ouvertures", "app.first_launch": "Nouvelles installations", "onboarding.completed": "Accueils terminés",
     "mode.fuel": "Ouvertures en mode carburant",
@@ -1339,7 +1339,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
 
       const drawer = C("one.offer_drawer");
       const origins = [["Historique des prix bloqué", C("one.offer_price_history")], ["Limite de favoris atteinte", C("one.offer_favorites")], ["Tendance bloquée", C("one.offer_trend")],
-        ["Bouton « sans publicité »", C("one.offer_ad_free")], ["Alertes", C("one.offer_alerts")], ["Tableau de bord", drawer], ["Trajet", C("one.offer_trips")], ["Widget", C("one.offer_widget")],
+        ["Bouton « sans publicité »", C("one.offer_ad_free")], ["Alertes", C("one.offer_alerts")], ["Tableau de bord", drawer], ["Trajet", C("one.offer_trips")], ["Widget", C("one.offer_widget")], ["Podium du mois", C("one.offer_podium")],
         ["Jauge ONE (autre)", Math.max(0, C("one.offer_membership") - drawer)]];
       const tot = origins.reduce((t, o) => t + o[1], 0);
       let want = mini("D’où vient l’envie");
@@ -1386,7 +1386,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     /* Notifications */
     {
       const types = [["Prix cible atteint", "notif.open_target_price"], ["Bon moment (ONE)", "notif.open_good_moment"], ["Rupture d’un favori", "notif.open_shortage"],
-        ["Retour d’un carburant", "notif.open_restock"], ["Nouveau statut Jaugeur", "notif.open_rank"], ["Bilan du mois", "notif.open_monthly"], ["Conseil", "notif.open_info"],
+        ["Retour d’un carburant", "notif.open_restock"], ["Nouveau statut Jaugeur", "notif.open_rank"], ["Bilan du mois", "notif.open_monthly"], ["Podium du mois", "notif.open_podium"], ["Conseil", "notif.open_info"],
         ["Conseil départs", "notif.open_departure"], ["Vacances scolaires", "notif.open_holidays"], ["Alerte prévue sur l’iPhone", "notif.open_local"]];
       const vals = types.map((t) => C(t[1])), tot = sumArr(vals);
       let body;
@@ -1489,6 +1489,9 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
           group("Trajet domicile-travail", [N("Ligne affichée sur le tableau de bord", "commute.shown"), N("Ligne touchée", "commute.tap"),
             N("Itinéraire lancé", "commute.go"), N("Page Trajet ouverte", "commute.trip_page"), N("Offre Jauge ONE ouverte", "commute.offer"),
             N("Adresses enregistrées", "commute.set"), N("Adresses retirées", "commute.removed")], "Pas encore de mesure : arrive avec la version 1.8"),
+          group("Podium du mois", [share("Utilisateurs qui voient le podium", C("podium.shown"), pd), N("Classement ouvert", "podium.open"),
+            N("« Tout le classement » touché (sans Jauge ONE)", "podium.one_tap"), N("Page Jauge ONE ouverte depuis le classement", "one.offer_podium"),
+            N("Podium partagé", "podium.share"), N("Ouvert depuis la notification du 1er", "notif.open_podium")], "Pas encore de mesure : arrive avec la version qui contient le podium"),
           group("Budget", [N("Budget fixé ou modifié", "budget.set"), N("Alerte « 80 % du budget » envoyée", "budget.alert80"),
             N("Budget dépassé", "budget.over")], "Pas encore de budget fixé sur la période"),
           group("Entretien", [N("Rappels ajoutés", "upkeep.add"), N("dont par date", "upkeep.by_date"), N("dont par kilométrage", "upkeep.by_km"),
