@@ -1386,7 +1386,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     /* Notifications */
     {
       const types = [["Prix cible atteint", "notif.open_target_price"], ["Bon moment (ONE)", "notif.open_good_moment"], ["Rupture d’un favori", "notif.open_shortage"],
-        ["Retour d’un carburant", "notif.open_restock"], ["Nouveau statut Jaugeur", "notif.open_rank"], ["Bilan du mois", "notif.open_monthly"], ["Podium du mois", "notif.open_podium"], ["Conseil", "notif.open_info"],
+        ["Retour d’un carburant", "notif.open_restock"], ["Station fermée", "notif.open_closed"], ["Station rouverte", "notif.open_reopened"], ["Nouveau statut Jaugeur", "notif.open_rank"], ["Bilan du mois", "notif.open_monthly"], ["Podium du mois", "notif.open_podium"], ["Conseil", "notif.open_info"],
         ["Conseil départs", "notif.open_departure"], ["Vacances scolaires", "notif.open_holidays"], ["Alerte prévue sur l’iPhone", "notif.open_local"]];
       const vals = types.map((t) => C(t[1])), tot = sumArr(vals);
       let body;
