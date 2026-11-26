@@ -1291,8 +1291,10 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
         if (choice) body += mini("Ce qu’ils ont choisi") + choice + (tank ? pills([pill("Réservoir modifié " + fmtF(tank, true) + NB + "fois")]) : "");
         const asked = C("onboarding.step_notify");
         const answer = sharePills([{ l: "« Oui, me prévenir »", n: C("onboarding.notify_yes"), k: "ok" }, { l: "« Non merci »", n: C("onboarding.notify_no"), k: "wa" }]);
+        const alertMade = C("onboarding.notify_alert");
         if (asked) body += mini("« Voulez-vous être prévenu ? »") + (answer || '<p class="hint">—</p>') +
-          '<p class="note">Proposé à ' + fmtF(asked, true) + NB + "iPhone, après « Garder cette station ».</p>";
+          (alertMade ? pills([pill("Alerte de prix créée " + fmtF(alertMade, true) + NB + "fois", "ok")]) : "") +
+          '<p class="note">Proposé à ' + fmtF(asked, true) + NB + "iPhone, après le prix trouvé (avant la 1.8 : seulement après « Garder cette station »).</p>";
         const cityScreen = C("onboarding.step_city"), cityPicked = C("onboarding.city_picked");
         if (cityScreen) body += mini("« Dans quelle ville ? »") + pills([pill("Écran vu " + fmtF(cityScreen, true)), pill("Ville choisie " + fmtF(cityPicked, true), "ok")]);
         body += '<p class="note">' + fmtF(sought, true) + " " + pl(sought, "iPhone a lancé", "iPhone ont lancé") + " la recherche sur la période. Les écrans sont comptés une fois par iPhone et par jour ; les réponses, à chaque fois.</p>";
