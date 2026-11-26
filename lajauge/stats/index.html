@@ -763,8 +763,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     "favorites.n1 favorites.n2_5 favorites.n6 vehicles.n1 vehicles.n2 ad.consent_personal ad.consent_limited ad.att_granted " +
     "ad.att_denied install.fresh install.update install.restored backup.on notif.setting_bilan notif.setting_rank " +
     "widget.installed_fuel onboarding.step_city onboarding.step_search onboarding.step_reveal " +
-    "onboarding.step_notify first_steps.shown commute.shown podium.shown podium.zone_favorite podium.zone_home " +
-    "podium.zone_work podium.zone_station podium.zone_here").split(" "));
+    "onboarding.step_notify first_steps.shown commute.shown podium.shown").split(" "));
   const LABELS = {
     "app.open": "Ouvertures", "app.first_launch": "Nouvelles installations", "onboarding.completed": "Accueils terminés",
     "mode.fuel": "Ouvertures en mode carburant",
@@ -1500,9 +1499,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
             N("« Tout le classement » touché (sans Jauge ONE)", "podium.one_tap"), N("Page Jauge ONE ouverte depuis le classement", "one.offer_podium"),
             N("« Voir avec une courte vidéo » touché", "podium.video_tap"), N("Vidéo regardée : classement débloqué", "podium.video_reward"), N("Pas de vidéo disponible", "podium.video_unavailable"),
             N("Podium partagé", "podium.share"), N("Ouvert depuis la notification du 1er", "notif.open_podium"),
-            share("Zone : près du favori", C("podium.zone_favorite"), pd), share("Zone : près de Maison", C("podium.zone_home"), pd),
-            share("Zone : près du Travail", C("podium.zone_work"), pd), share("Zone : près de la station du carnet", C("podium.zone_station"), pd),
-            share("Zone : autour de la personne", C("podium.zone_here"), pd), N("« Changer » la zone touché", "podium.zone_change")], "Pas encore de mesure : arrive avec la version qui contient le podium"),
+            N("« Ma position » touché", "podium.position_tap"), N("Podium refait pour une autre ville", "podium.position_moved")], "Pas encore de mesure : arrive avec la version qui contient le podium"),
           group("Budget", [N("Budget fixé ou modifié", "budget.set"), N("Alerte « 80 % du budget » envoyée", "budget.alert80"),
             N("Budget dépassé", "budget.over")], "Pas encore de budget fixé sur la période"),
           group("Entretien", [N("Rappels ajoutés", "upkeep.add"), N("dont par date", "upkeep.by_date"), N("dont par kilométrage", "upkeep.by_km"),
