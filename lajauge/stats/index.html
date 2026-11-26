@@ -761,7 +761,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
     "one.funnel_pay one.funnel_success device.dark device.large_text " +
     "device.voiceover device.ipad perm.location_on perm.location_approx perm.location_off perm.notif_on perm.notif_off favorites.n0 " +
     "favorites.n1 favorites.n2_5 favorites.n6 vehicles.n1 vehicles.n2 ad.consent_personal ad.consent_limited ad.att_granted " +
-    "ad.att_denied install.fresh install.update install.restored backup.on notif.setting_bilan " +
+    "ad.att_denied install.fresh install.update install.restored backup.on notif.setting_bilan notif.setting_rank " +
     "widget.installed_fuel onboarding.step_city onboarding.step_search onboarding.step_reveal " +
     "onboarding.step_notify first_steps.shown commute.shown podium.shown").split(" "));
   const LABELS = {
@@ -1401,6 +1401,7 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
       const on = C("perm.notif_on"), off = C("perm.notif_off");
       const g1 = C("permission.notifications_granted"), d1 = C("permission.notifications_denied");
       body += mini("Réglages des iPhone") + pills([on + off ? pill("Notifications autorisées " + pct(on, on + off), "ok") : "", C("notif.setting_bilan") && pd ? pill("Bilan du mois activé " + pct(C("notif.setting_bilan"), pd) + " des utilisateurs", "ok") : "",
+        C("notif.setting_rank") ? pill("« Nouveau statut Jaugeur » activé : " + C("notif.setting_rank") + " jours-iPhone", "ok") : "",
         g1 + d1 ? pill("Première réponse : " + fmt(g1) + " " + pl(g1, "oui", "oui") + ", " + fmt(d1) + " non") : ""]);
       if (!(on + off) && !C("notif.setting_bilan") && !(g1 + d1)) body += '<p class="hint">Aucun réglage reçu sur la période.</p>';
       D.usage.push(card({ id: "notifications", title: "Notifications", hint: "Ouvertes sur l’iPhone, par type.", body }));
@@ -1469,6 +1470,8 @@ details.more[open] > summary::after{transform:translateY(2px) rotate(-135deg)}
             N("Mon bilan ouvert", "screen.my_report"), N("Notification du bilan acceptée", "bilan.notif_yes"), N("Notification du bilan refusée", "bilan.notif_no")]),
           group("Jaugeurs", [N("Prix confirmés", "tap.price_confirm"), N("Prix validés", "jaugeurs.retained"), N("Prix refusés", "jaugeurs.rejected"),
             N("Prix corrigés", "tap.price_correct"), N("Comptes Jaugeur créés", "jaugeurs.signup"), N("Comptes liés à Apple", "jaugeurs.linked_apple"),
+            N("Règles acceptées (1.8)", "jaugeurs.rules_accepted"), N("Signalements retirés (1.8)", "jaugeurs.report_withdrawn"),
+            N("Prix retirés (1.8)", "jaugeurs.price_withdrawn"), N("Profils Jaugeur supprimés (1.8)", "jaugeurs.profile_deleted"),
             N("Rupture signalée", "jaugeurs.report_shortage"), N("Carburant revenu signalé", "jaugeurs.report_available"), N("Station fermée signalée", "jaugeurs.report_closed"),
             N("Station ouverte signalée", "jaugeurs.report_open"), N("Autre problème signalé", "jaugeurs.report_other"), N("Envois en échec (contribution ou signalement)", "jaugeurs.error"), N("Trop loin de la station", "jaugeurs.too_far"),
             N("Nouveaux Éclaireurs", "jaugeurs.rank_scout"), N("Nouveaux Guides", "jaugeurs.rank_guide"), N("Nouveaux Piliers", "jaugeurs.rank_pillar"),
